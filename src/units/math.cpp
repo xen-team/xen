@@ -1,0 +1,37 @@
+#include "math.hpp"
+
+#include <random>
+
+namespace xen {
+static std::random_device RandomDevice;
+static std::mt19937 RandomGenerator(RandomDevice());
+
+template<typename T>
+T Math::random(T min, T max) {
+	std::uniform_real_distribution<T> dist(min, max);
+	return dist(RandomGenerator);
+}
+
+template<typename T>
+T Math::random_normal(T standardDeviation, T mean) {
+	std::normal_distribution<T> dist(mean, standardDeviation);
+	return dist(RandomGenerator);
+}
+
+template<typename T>
+T Math::random_log(T min, T max) {
+	auto const logLower = std::log(min);
+	auto const logUpper = std::log(max);
+	auto const raw = random(min, max);
+
+	auto result = std::exp(raw * (logUpper - logLower) + logLower);
+
+	if (result < min) {
+		result = min;
+	} else if (result > max) {
+		result = max;
+	}
+
+	return result;
+}
+}

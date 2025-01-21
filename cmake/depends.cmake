@@ -1,0 +1,8 @@
+include(cmake/glad.cmake)
+include(cmake/glfw.cmake)
+include(cmake/opengl.cmake)
+include(cmake/glm.cmake)
+include(cmake/imgui.cmake)
+include(cmake/stb_image.cmake)
+include(cmake/rocket.cmake)
+include(cmake/magic_enum.cmake)

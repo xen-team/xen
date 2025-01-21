@@ -1,0 +1,4 @@
+set(GLM_BUILD_INSTALL OFF CACHE BOOL "" FORCE)
+set(GLM_ENABLE_CXX_20 ON CACHE BOOL "" FORCE)
+
+add_subdirectory(depends/glm)
