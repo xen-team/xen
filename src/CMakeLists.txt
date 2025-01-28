@@ -1,4 +1,6 @@
-list(APPEND xen_header_files
+set(HEADERS
+    core.hpp
+
     debug/log.hpp
 
     engine/module.hpp
@@ -6,7 +8,7 @@ list(APPEND xen_header_files
 
     system/monitor.hpp
     system/window.hpp
-    system/window_manager.hpp
+    system/windows.hpp
 
     units/math.hpp
     units/vector2.hpp
@@ -16,35 +18,70 @@ list(APPEND xen_header_files
     units/time.inl
 
     utils/classes.hpp
+    utils/enumerate.hpp
+    utils/json_factory.hpp
+
+    files/json.hpp
+
+    input/input_axis.hpp
+    input/input_button.hpp
+    input/input_scheme.hpp
+    input/joysticks.hpp
+    input/inputs.hpp
+    input/input_delay.hpp
+    input/buttons/axis_button.hpp
+    input/buttons/combo_button.hpp
+    input/buttons/joystick_button.hpp
+    input/buttons/keyboard_button.hpp
+    input/buttons/mouse_button.hpp
+    input/axes/button_axis.hpp
+    input/axes/combo_axis.hpp
+    input/axes/joystick_axis.hpp
+    input/axes/joystick_hat.hpp
+    input/axes/mouse_axis.hpp
+
+    prec.hpp
 )
 
-list(APPEND xen_source_files
-    main.cpp
-
+set(SOURCES
     debug/log.cpp
 
     engine/engine.cpp
 
     system/monitor.cpp
     system/window.cpp
-    system/window_manager.cpp
+    system/windows.cpp
 
     units/math.cpp
     units/vector2.cpp
     units/elapsed_time.cpp
+
+    files/json.cpp
+
+    input/input_scheme.cpp
+    input/joysticks.cpp
+    input/inputs.cpp
+    input/input_delay.cpp
+    input/buttons/axis_button.cpp
+    input/buttons/combo_button.cpp
+    input/buttons/joystick_button.cpp
+    input/buttons/keyboard_button.cpp
+    input/buttons/mouse_button.cpp
+    input/axes/button_axis.cpp
+    input/axes/combo_axis.cpp
+    input/axes/joystick_axis.cpp
+    input/axes/joystick_hat.cpp
+    input/axes/mouse_axis.cpp
 )
+
+source_group(${SOURCES})
+source_group(${HEADERS})
 
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/depends)
 
-# find_package(charo CONFIG REQUIRED)
-
-add_executable(${PROJECT_NAME} ${xen_header_files} ${xen_source_files})
-
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glad glfw glm imgui stb_image rocket magic_enum)
-
+add_library(xen ${SOURCES} ${HEADERS})
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glad glfw glm imgui stb_image rocket magic_enum bitsery json)
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
-
-# target_link_libraries(sfec PRIVATE charo::charo)
 
 # if(MSVC)
 #     get_target_property(charo_dll charo::charo IMPORTED_LOCATION_RELEASE)

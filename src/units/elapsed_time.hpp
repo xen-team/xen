@@ -1,22 +1,23 @@
 #pragma once
 
+#include "core.hpp"
 #include "time.hpp"
 
 namespace xen {
-class ElapsedTime {
+class XEN_API ElapsedTime {
 private:
-	Time start_time;
-	Time interval;
+    Time start_time;
+    Time interval;
 
 public:
-	explicit ElapsedTime(const Time &interval = -1s);
+    explicit ElapsedTime(Time const& interval = -1s);
 
-	uint32_t get_elapsed();
+    uint32_t get_elapsed();
 
-	const Time &get_start_time() const { return start_time; }
-	void set_start_time(const Time &startTime) { this->start_time = startTime; }
+    [[nodiscard]] Time const& get_start_time() const { return start_time; }
+    void set_start_time(Time const& startTime) { this->start_time = startTime; }
 
-	const Time &get_interval() const { return interval; }
-	void set_interval(const Time &interval) { this->interval = interval; }
+    [[nodiscard]] Time const& get_interval() const { return interval; }
+    void set_interval(Time const& interval) { this->interval = interval; }
 };
 }

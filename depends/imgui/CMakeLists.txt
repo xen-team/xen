@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.6)
 project(imgui)
 
 add_library(imgui STATIC
+	include/imgui/imgui_internal.h
 	include/imgui/imgui.h
 	include/imgui/imgui_internal.h
 	include/imgui/imgui_extension.hpp
@@ -12,7 +13,6 @@ add_library(imgui STATIC
 	src/imgui_draw.cpp
 	src/imgui_widgets.cpp
 	src/imstb_rectpack.h
-	src/imstb_truetype.h
 	src/imgui_tables.cpp
 	src/imgui_demo.cpp
 	src/imgui_impl_glfw.cpp
@@ -23,3 +23,6 @@ add_library(imgui STATIC
 )
 
 target_include_directories(imgui PUBLIC include/)
+
+
+target_link_libraries(imgui glfw)
