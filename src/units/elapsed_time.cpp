@@ -3,19 +3,17 @@
 #include <cmath>
 
 namespace xen {
-ElapsedTime::ElapsedTime(const Time &interval) :
-	start_time(Time::now()),
-	interval(interval) {
-}
+ElapsedTime::ElapsedTime(Time const& interval) : start_time(Time::now()), interval(interval) {}
 
-uint32_t ElapsedTime::get_elapsed() {
-	auto const now = Time::now();
-	auto const elapsed = static_cast<uint32_t>(std::floor((now - start_time) / interval));
+uint32_t ElapsedTime::get_elapsed()
+{
+    auto const now = Time::now();
+    auto const elapsed = static_cast<uint32_t>(std::floor((now - start_time) / interval));
 
-	if (elapsed != 0.0f) {
-		start_time = now;
-	}
+    if (elapsed != 0u) {
+        start_time = now;
+    }
 
-	return elapsed;
+    return elapsed;
 }
 }

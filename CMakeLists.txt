@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(xen VERSION 0.0.1 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -16,10 +16,10 @@ option(XEN_WARNINGS_ERRORS        "XEN: Threat warnings as errors"       OFF)
 
 option(XEN_OPTIMIZE               "XEN: Enable some optimizations"       OFF)
 
-option(XEN_STATIC                 "XEN: Build static libs"               OFF)
+option(XEN_STATIC                 "XEN: Enable static libs"               OFF)
 
 # option(XEN_TESTS                "XEN: enable tests"                    OFF)
-# option(XEN_EXAMPLES                "XEN: enable tests"                    OFF)
+option(XEN_EXAMPLES                "XEN: Build examples"                    OFF)
 
 if(DEFINED ENV{WAYLAND_DISPLAY})
     message(STATUS "Detected Wayland")
@@ -60,10 +60,14 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "RelWithDebInfo")
 endif ()
 
+string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
+
+target_compile_definitions(xen PRIVATE XEN_${CMAKE_BUILD_TYPE})
+
 # -ffunction-sections -fdata-sections -fno-unwind-tables -fno-asynchronous-unwind-tables ????
 if(XEN_OPTIMIZE AND XEN_BUILD_TYPE EQUAL "Release")
     if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        target_compile_options(${PROJECT_NAME} PRIVATE -O2)
+        target_compile_options(xen PRIVATE -O2)
     elseif (MSVC)
         # using Visual Studio C++
     endif()
@@ -74,9 +78,9 @@ endif()
 
 if (XEN_WARNINGS)
     if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+        target_compile_options(xen PRIVATE -Wall -Wextra -Wpedantic)
     else (MSVC)
-        target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)
+        target_compile_options(xen PRIVATE /W4 /WX)
     endif()
 endif()
 
@@ -88,16 +92,20 @@ if(XEN_OPTIMIZE)
 
     if(supported)
         message(STATUS "IPO / LTO enabled")
-        set_property(TARGET ${PROJECT_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+        set_property(TARGET xen PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
     else()
         message(STATUS "IPO / LTO not supported: <${error}>")
     endif()
 endif()
 
-target_precompile_headers(${PROJECT_NAME} PUBLIC src/stdafx.hpp)
+target_precompile_headers(xen PUBLIC src/prec.hpp)
 
 if(WIN32)
-	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
+	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT xen)
+endif()
+
+if (XEN_EXAMPLES)
+    include(examples/examples.cmake)
 endif()
 
 # set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")

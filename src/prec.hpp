@@ -1,0 +1,21 @@
+#pragma once
+
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <map>
+#include <deque>
+#include <set>
+#include <array>
+#include <limits>
+#include <memory>
+#include <chrono>
+#include <thread>
+#include <mutex>
+#include <atomic>
+#include <deque>
+#include <iostream>
+#include <sstream>
+#include <istream>
+#include <ostream>
