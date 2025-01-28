@@ -4,7 +4,7 @@
 #include "utils/json_factory.hpp"
 
 #include <rocket.hpp>
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 
 namespace xen {
 class XEN_API InputAxis : public JsonFactory<InputAxis>, public virtual rocket::trackable {

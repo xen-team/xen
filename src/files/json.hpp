@@ -4,7 +4,7 @@
 
 #include <filesystem>
 #include "debug/log.hpp"
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 #include <utility>
 
 namespace xen {
@@ -49,6 +49,6 @@ public:
         f << std::setw(4) << out;
     }
 
-    std::filesystem::path get_path() const { return file_path; }
+    [[nodiscard]] std::filesystem::path get_path() const { return file_path; }
 };
 }
