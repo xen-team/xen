@@ -68,7 +68,7 @@ public:
         inline static std::string name;
 
     public:
-        std::string get_type_name() const override { return name; }
+        [[nodiscard]] std::string get_type_name() const override { return name; }
 
         void save_base(nlohmann::json& j)
         {

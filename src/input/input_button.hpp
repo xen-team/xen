@@ -4,7 +4,7 @@
 #include "input_axis.hpp"
 #include "system/window.hpp"
 #include "utils/json_factory.hpp"
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 
 namespace xen {
 class XEN_API InputButton : public JsonFactory<InputButton>, public virtual rocket::trackable {
