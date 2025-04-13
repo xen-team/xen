@@ -78,7 +78,7 @@ private:
 };
 
 class XEN_API Joysticks : public Module::Registrar<Joysticks> {
-    inline static bool const registered = Register(Stage::Pre, Depends<Windows>());
+    inline static bool const registered = Register("Joysticks", Stage::Pre, Depends<Windows>());
 
 private:
     std::array<Joystick, magic_enum::enum_count<JoystickPort>()> joysticks;

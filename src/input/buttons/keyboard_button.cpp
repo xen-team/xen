@@ -29,15 +29,4 @@ InputAxis::ArgumentDescription KeyboardInputButton::get_argument_desc() const
         {.name = "key", .type = "int", .description = "The key on the keyboard being checked"}
     };
 }
-
-void KeyboardInputButton::save(nlohmann::json& j)
-{
-    save_base(j);
-    save_value(j, "key", key);
-}
-void KeyboardInputButton::load(nlohmann::json const& j)
-{
-    load_base(j);
-    load_value(j, "key", key);
-}
 }

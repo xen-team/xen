@@ -19,7 +19,16 @@ public:
     [[nodiscard]] Key get_key() const { return key; }
     void set_key(Key key) { this->key = key; }
 
-    void save(nlohmann::json& j) override;
-    void load(nlohmann::json const& j) override;
+    friend void to_json(json& j, KeyboardInputButton const& p)
+    {
+        to_json(j["inverted"], p.inverted);
+        to_json(j["key"], p.key);
+    }
+
+    friend void from_json(json const& j, KeyboardInputButton& p)
+    {
+        from_json(j["inverted"], p.inverted);
+        from_json(j["key"], p.key);
+    }
 };
 }

@@ -15,6 +15,7 @@ public:
     class ModuleData {
     public:
         std::function<std::unique_ptr<Base>()> create;
+        std::string_view name;
         typename Base::Stage stage;
         std::vector<std::type_index> depends;
     };
@@ -39,6 +40,9 @@ public:
     template <typename T>
     class Registrar : public Base {
     public:
+        std::string_view name;
+
+    public:
         virtual ~Registrar()
         {
             if (static_cast<T*>(this) == module_instance) {
@@ -48,16 +52,18 @@ public:
 
         static T* get() { return module_instance; }
 
+        [[nodiscard]] std::string_view get_name() const { return name; }
+
     protected:
         template <typename... Args>
-        static bool Register(typename Base::Stage stage, Depends<Args...>&& depends = {})
+        static bool Register(std::string_view name, typename Base::Stage stage, Depends<Args...>&& depends = {})
         {
             ModuleFactory::registry()[std::type_index(typeid(T))] = {
                 []() {
                     module_instance = new T();
                     return std::unique_ptr<Base>(module_instance);
                 },
-                stage, depends.get()
+                name, stage, depends.get()
             };
             return true;
         }
@@ -69,7 +75,7 @@ public:
 
 class XEN_API Module : public ModuleFactory<Module>, NonCopyable {
 public:
-    enum class Stage : uint8_t { Never, Always, Pre, Normal, Post, Render };
+    enum class Stage : uint8_t { Never, Always, Pre, Normal, Post, PreRender, Render, PostRender };
 
     using StageIndex = std::pair<Stage, std::type_index>;
 

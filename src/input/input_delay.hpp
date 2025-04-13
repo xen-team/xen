@@ -1,6 +1,6 @@
 #pragma once
 
-#include "units/elapsed_time.hpp"
+#include "utils/elapsed_time.hpp"
 
 namespace xen {
 class XEN_API InputDelay {

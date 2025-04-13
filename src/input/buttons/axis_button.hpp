@@ -26,7 +26,20 @@ public:
     [[nodiscard]] float get_max() const { return max; }
     void set_max(float max) { this->max = max; }
 
-    void save(nlohmann::json& j) override;
-    void load(nlohmann::json const& j) override;
+    friend void to_json(json& j, AxisInputButton const& p)
+    {
+        to_json(j["inverted"], p.inverted);
+        to_json(j["axis"], p.axis);
+        to_json(j["min"], p.min);
+        to_json(j["max"], p.max);
+    }
+
+    friend void from_json(json const& j, AxisInputButton& p)
+    {
+        from_json(j["inverted"], p.inverted);
+        from_json(j["buttons"], p.axis);
+        from_json(j["min"], p.min);
+        from_json(j["max"], p.max);
+    }
 };
 }

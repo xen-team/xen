@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core.hpp"
-#include "units/vector2.hpp"
+#include "math/vector2.hpp"
 
 struct GLFWmonitor;
 struct GLFWvidmode;

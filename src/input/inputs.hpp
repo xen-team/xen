@@ -4,7 +4,7 @@
 
 namespace xen {
 class XEN_API Inputs : public Module::Registrar<Inputs> {
-    inline static bool const registered = Register(Stage::Pre, Depends<Windows, Joysticks>());
+    inline static bool const registered = Register("Inputs", Stage::Pre, Depends<Windows, Joysticks>());
 
 private:
     std::map<std::string, std::unique_ptr<InputScheme>> schemes;

@@ -4,9 +4,10 @@
 #include "utils/json_factory.hpp"
 
 #include <rocket.hpp>
-#include <nlohmann/json.hpp>
 
 namespace xen {
+enum class Axis : uint8_t { X, Y };
+
 class XEN_API InputAxis : public JsonFactory<InputAxis>, public virtual rocket::trackable {
 protected:
     float scale = 1.0f;
@@ -34,18 +35,5 @@ public:
 
     [[nodiscard]] float get_offset() const { return offset; }
     void set_offset(float offset) { this->offset = offset; }
-
-protected:
-    void base_save(nlohmann::json& j) override
-    {
-        save_value(j, "scale", scale);
-        save_value(j, "offset", offset);
-    }
-
-    void base_load(nlohmann::json const& j) override
-    {
-        load_value(j, "scale", scale);
-        load_value(j, "offset", offset);
-    }
 };
 }

@@ -11,9 +11,9 @@ namespace xen {
 using json = nlohmann::json;
 
 template <typename T>
-concept serializable = requires(T a, nlohmann::json j) {
-    a.load(j);
-    a.save(j);
+concept serializable = requires(T a, json j) {
+    to_json(j, a);
+    from_json(j, a);
 };
 
 class XEN_API JsonFile {
@@ -33,7 +33,8 @@ public:
 
         json in;
         f >> in;
-        data.load(in);
+
+        from_json(in, data);
     }
 
     void write(serializable auto& data) noexcept
@@ -45,7 +46,7 @@ public:
         }
 
         json out;
-        data.save(out);
+        to_json(out, data);
         f << std::setw(4) << out;
     }
 

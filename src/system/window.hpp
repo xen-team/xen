@@ -1,7 +1,7 @@
 #pragma once
 
 #include "monitor.hpp"
-#include "units/vector2.hpp"
+#include "math/vector2.hpp"
 
 #include <filesystem>
 #include <rocket.hpp>
@@ -220,6 +220,16 @@ public:
     ~Window();
 
     void update();
+
+    static void bind();
+
+    static void clear_all();
+
+    static void clear_color();
+
+    static void clear_depth();
+
+    static void clear_stencil();
 
     [[nodiscard]] Vector2ui const& get_size() const { return size; }
 

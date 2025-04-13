@@ -26,7 +26,18 @@ public:
     [[nodiscard]] JoystickButton get_button() const { return button; }
     void set_button(JoystickButton button) { this->button = button; }
 
-    void save(nlohmann::json& j) override;
-    void load(nlohmann::json const& j) override;
+    friend void to_json(json& j, JoystickInputButton const& p)
+    {
+        to_json(j["inverted"], p.inverted);
+        to_json(j["port"], p.get_port());
+        to_json(j["button"], p.button);
+    }
+
+    friend void from_json(json const& j, JoystickInputButton& p)
+    {
+        from_json(j["inverted"], p.inverted);
+        p.set_port(j["port"].get<JoystickPort>());
+        from_json(j["button"], p.button);
+    }
 };
 }

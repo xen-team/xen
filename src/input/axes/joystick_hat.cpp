@@ -60,23 +60,4 @@ void JoystickHatInput::set_port(JoystickPort port)
         }
     });
 }
-
-void JoystickHatInput::save(nlohmann::json& j)
-{
-    j["type"] = "joystick_hat";
-    j["scale"] = scale;
-    j["inverted"] = inverted;
-    j["port"] = get_port();
-    j["hat"] = hat;
-    j["hat_flags"] = hat_flags;
-}
-void JoystickHatInput::load(nlohmann::json const& j)
-{
-    j.at("scale").get_to(scale);
-    j.at("inverted").get_to(inverted);
-    j.at("scale").get_to(scale);
-    set_port(j.at("port").template get<JoystickPort>());
-    j.at("hat").get_to(hat);
-    j.at("hat_flags").get_to(hat_flags);
-}
 }

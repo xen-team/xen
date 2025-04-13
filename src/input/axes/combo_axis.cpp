@@ -49,25 +49,4 @@ void ComboInputAxis::connect_axes()
         connect_axis(axis);
     }
 }
-
-void ComboInputAxis::save(nlohmann::json& j)
-{
-    save_base(j);
-    for (auto [i, axis] : enumerate(axes)) {
-        axis->save(j["axes"][std::to_string(i)]);
-    }
-}
-void ComboInputAxis::load(nlohmann::json const& j)
-{
-    load_base(j);
-    if (!j.contains("axes")) {
-        return;
-    }
-
-    for (auto const& [i, axis] : enumerate(j["axes"])) {
-        axes.emplace_back(create_by_type(axis));
-        axes[i]->load(axis);
-    }
-    connect_axes();
-}
 }

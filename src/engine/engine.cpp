@@ -1,5 +1,8 @@
 #include "engine.hpp"
 
+#include <algorithm>
+#include <ranges>
+
 #include "debug/log.hpp"
 // #include "Config.hpp"
 
@@ -19,19 +22,19 @@ Engine::Engine() : // version{ACID_VERSION_MAJOR, ACID_VERSION_MINOR, ACID_VERSI
     // ACID_COMPILED_COMPILER, "\n\n");
 #endif
 
-    Log::out("Engine module creation started.\n");
+    Log::out("Engine module creation started.");
     for (auto it = Module::registry().cbegin(); it != Module::registry().cend(); ++it) {
         create_module(it);
     }
-    Log::out("Engine module creation ended.\n");
+    Log::out("Engine module creation ended.");
 }
 
 Engine::~Engine()
 {
     app = nullptr;
 
-    for (auto it = modules.rbegin(); it != modules.rend(); ++it) {
-        destroy_module(it->first);
+    for (auto& module : std::ranges::reverse_view(modules)) {
+        destroy_module(module.first);
     }
 
     Log::close_log();
@@ -55,7 +58,9 @@ void Engine::process_rendering()
     if (elapsed_render.get_elapsed() != 0) {
         fps.update(Time::now());
 
+        update_stage(Module::Stage::PreRender);
         update_stage(Module::Stage::Render);
+        update_stage(Module::Stage::PostRender);
 
         delta_render.update();
     }
@@ -72,6 +77,9 @@ int32_t Engine::run()
 
             app->update();
         }
+
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         update_stage(Module::Stage::Always);
 
@@ -95,12 +103,13 @@ void Engine::create_module(Module::RegistryMapT::const_iterator it)
         return;
     }
 
-    Log::out("Created module ", module_id.name(), '\n');
+    Log::out("Created module ", module_data.name);
 
     for (auto const depend_id : module_data.depends) {
         if (depend_id != module_id) {
-            Log::out("Detected dependency: ", depend_id.name(), " from ", module_id.name(), '\n');
-            create_module(Module::registry().find(depend_id));
+            auto const depend = Module::registry().find(depend_id);
+            Log::out("Detected dependency: ", depend->second.name, " from ", module_data.name);
+            create_module(depend);
         }
     }
 
@@ -120,7 +129,7 @@ void Engine::destroy_module(std::type_index id)
             continue;
         }
 
-        if (std::find(registrar.depends.begin(), registrar.depends.end(), id) != registrar.depends.end()) {
+        if (std::ranges::find(registrar.depends, id) != registrar.depends.end()) {
             destroy_module(registrar_id);
         }
     }

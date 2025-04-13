@@ -59,10 +59,31 @@ public:
     }
 
     template <typename... Args>
+    static void vout(std::string_view format, Args... args)
+    {
+        write(std::vformat(format, std::make_format_args(args...)));
+    }
+
+    template <typename... Args>
+    static void
+    vout(std::string_view const& style, std::string_view const& colour, std::string_view format, Args... args)
+    {
+        write(style, colour, std::vformat(format, std::make_format_args(args...)), Styles::Default);
+    }
+
+    template <typename... Args>
     static void debug([[maybe_unused]] Args... args)
     {
 #ifdef XEN_DEBUG
         out(Styles::Default, Colors::LightBlue, args...);
+#endif
+    }
+
+    template <typename... Args>
+    static void vdebug(std::string_view format, Args... args)
+    {
+#ifdef XEN_DEBUG
+        vout(Styles::Default, Colors::LightBlue, format, args...);
 #endif
     }
 
@@ -73,9 +94,21 @@ public:
     }
 
     template <typename... Args>
+    static void vinfo(std::string_view format, Args... args)
+    {
+        vout(Styles::Default, Colors::Green, format, args...);
+    }
+
+    template <typename... Args>
     static void warning(Args... args)
     {
         out(Styles::Default, Colors::Yellow, args...);
+    }
+
+    template <typename... Args>
+    static void vwarning(std::string_view format, Args... args)
+    {
+        vout(Styles::Default, Colors::Yellow, format, args...);
     }
 
     template <typename... Args>
@@ -85,10 +118,25 @@ public:
     }
 
     template <typename... Args>
+    static void verror(std::string_view format, Args... args)
+    {
+        vout(Styles::Default, Colors::Red, format, args...);
+    }
+
+    template <typename... Args>
     static void rt_assert(bool expr, Args... args)
     {
         if (expr) {
             out(Styles::Default, Colors::Magenta, args...);
+            assert(false);
+        }
+    }
+
+    template <typename... Args>
+    static void vrt_assert(bool expr, std::string_view format, Args... args)
+    {
+        if (expr) {
+            vout(Styles::Default, Colors::Magenta, format, args...);
             assert(false);
         }
     }
@@ -109,6 +157,7 @@ private:
         if (fs.is_open()) {
             ((fs << std::forward<Args>(args)), ...);
         }
+        std::cerr << '\n';
     }
 };
 }

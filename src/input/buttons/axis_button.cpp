@@ -31,19 +31,4 @@ void AxisInputButton::set_axis(std::unique_ptr<InputAxis>&& axis)
 {
     this->axis = std::move(axis);
 }
-
-void AxisInputButton::save(nlohmann::json& j)
-{
-    save_base(j);
-    save_value(j, "min", min);
-    save_value(j, "max", max);
-    axis->save(j["axis"]);
-}
-void AxisInputButton::load(nlohmann::json const& j)
-{
-    load_base(j);
-    load_value(j, "min", min);
-    load_value(j, "max", max);
-    axis = JsonFactory<InputAxis>::create(j["axis"]);
-}
 }

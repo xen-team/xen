@@ -54,12 +54,17 @@ Windows::Windows()
     // Set the monitor callback
     glfwSetMonitorCallback(callback_monitor);
 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+
     // The window will stay hidden until after creation.
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
     // Fixes 16 bit stencil bits in macOS.
     glfwWindowHint(GLFW_STENCIL_BITS, 8);
     // No stereo view!
     glfwWindowHint(GLFW_STEREO, GLFW_FALSE);
+
+    glfwWindowHint(GLFW_DOUBLEBUFFER, true);
 
     // Get connected monitors.
     int32_t monitors_count = 0;
@@ -103,18 +108,17 @@ Window* Windows::add_window()
 
 Window const* Windows::get_window(WindowId id) const
 {
-    if (id >= windows.size()) {
-        return nullptr;
-    }
-    return windows[id].get();
+    return (id >= windows.size() ? nullptr : windows[id].get());
 }
 
 Window* Windows::get_window(WindowId id)
 {
-    if (id >= windows.size()) {
-        return nullptr;
-    }
-    return windows[id].get();
+    return (id >= windows.size() ? nullptr : windows[id].get());
+}
+
+Window* Windows::get_main_window()
+{
+    return (windows.empty() ? nullptr : windows[0].get());
 }
 
 void Windows::set_focused_window(WindowId id)

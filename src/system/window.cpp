@@ -2,7 +2,7 @@
 
 #include "debug/log.hpp"
 #include "engine/engine.hpp"
-#include "units/math.hpp"
+#include "math/math.hpp"
 #include "windows.hpp"
 
 #include <GLFW/glfw3.h>
@@ -202,8 +202,8 @@ void Window::update()
     mouse_scroll_delta = delta * (mouse_last_scroll - mouse_scroll);
     mouse_last_scroll = mouse_scroll;
 
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glfwMakeContextCurrent(window);
     glfwSwapBuffers(window);
     glfwPollEvents();
@@ -408,10 +408,33 @@ Monitor const* Window::get_current_monitor() const
         );
     }
 
-    if (ranked_monitor.begin()->first > 0) {
-        return ranked_monitor.begin()->second;
-    }
+    return ranked_monitor.begin()->second;
 
-    return nullptr;
+    // return nullptr;
+}
+
+void Window::bind()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Window::clear_all()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+}
+
+void Window::clear_color()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void Window::clear_depth()
+{
+    glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+void Window::clear_stencil()
+{
+    glClear(GL_STENCIL_BUFFER_BIT);
 }
 }

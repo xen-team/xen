@@ -21,18 +21,15 @@ public:
         AxisMap axes;
         ButtonMap buttons;
 
-        void save(nlohmann::json& j)
+        friend void to_json(nlohmann::json& j, InputSchemeData const& data)
         {
-            for (auto& [name, button] : buttons) {
-                button->save(j[name]);
-            }
+            to_json(j["buttons"], data.buttons);
+            to_json(j["axes"], data.axes);
         }
-        void load(nlohmann::json const& j)
+        friend void from_json(nlohmann::json const& j, InputSchemeData& data)
         {
-            for (auto const& [key, value] : j.items()) {
-                auto button = buttons.emplace(key, JsonFactory<InputButton>::create(value));
-                button.first->second->load(j[key]);
-            }
+            from_json(j["buttons"], data.buttons);
+            from_json(j["axes"], data.axes);
         }
     };
 
@@ -55,7 +52,11 @@ public:
 
     void write() { file.write(data); }
 
-    void read() { file.read(data); }
+    void read()
+    {
+        Windows::get()->get_focused_window()->on_mouse_pos.clear();
+        file.read(data);
+    }
 
 private:
     void move_signals(InputScheme* other);
