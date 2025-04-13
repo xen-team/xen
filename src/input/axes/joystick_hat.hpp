@@ -39,8 +39,23 @@ public:
     [[nodiscard]] JoystickHatValues const& get_hat_flags() const { return hat_flags; }
     void set_hat_flags(JoystickHatValues hat_flags) { this->hat_flags = hat_flags; }
 
-    void save(nlohmann::json& j) override;
-    void load(nlohmann::json const& j) override;
+    friend void to_json(json& j, JoystickHatInput const& p)
+    {
+        to_json(j["scale"], p.scale);
+        to_json(j["inverted"], p.inverted);
+        to_json(j["port"], p.get_port());
+        to_json(j["hat"], p.hat);
+        to_json(j["hat_flags"], p.hat_flags);
+    }
+
+    friend void from_json(json const& j, JoystickHatInput& p)
+    {
+        from_json(j["scale"], p.scale);
+        from_json(j["inverted"], p.inverted);
+        p.set_port(j["port"].get<JoystickPort>());
+        from_json(j["hat"], p.hat);
+        from_json(j["hat_flags"], p.hat_flags);
+    }
 };
 
 using JoystickHatInputAxis = JoystickHatInput;

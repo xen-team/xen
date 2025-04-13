@@ -31,16 +31,4 @@ InputAxis::ArgumentDescription MouseInputButton::get_argument_desc() const
         {.name = "key", .type = "int", .description = "The mouse button on the mouse being checked"}
     };
 }
-
-void MouseInputButton::save(nlohmann::json& j)
-{
-    save_base(j);
-    save_value(j, "button", button);
-}
-
-void MouseInputButton::load(nlohmann::json const& j)
-{
-    load_base(j);
-    load_value(j, "button", button);
-}
 }

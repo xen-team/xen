@@ -5,7 +5,7 @@
 
 namespace xen {
 class XEN_API ComboInputAxis : public InputAxis::Registrar<ComboInputAxis>, NonCopyable {
-    inline static bool const registered = Register("compound");
+    inline static bool const registered = Register("combo");
 
 private:
     std::vector<std::unique_ptr<InputAxis>> axes;
@@ -29,8 +29,18 @@ public:
     InputAxis* add_axis(std::unique_ptr<InputAxis>&& axis);
     void remove_axis(InputAxis* axis);
 
-    void save(nlohmann::json& j) override;
-    void load(nlohmann::json const& j) override;
+    friend void to_json(json& j, ComboInputAxis const& p)
+    {
+        to_json(j["scale"], p.scale);
+        to_json(j["axes"], p.axes);
+    }
+
+    friend void from_json(json const& j, ComboInputAxis& p)
+    {
+        from_json(j["scale"], p.scale);
+        from_json(j["axes"], p.axes);
+        p.connect_axes();
+    }
 
 private:
     void connect_axis(std::unique_ptr<InputAxis>& axis);

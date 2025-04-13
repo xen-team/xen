@@ -45,8 +45,20 @@ public:
     [[nodiscard]] bool is_check_all() const { return check_all; }
     void set_check_all(bool check_all) { this->check_all = check_all; }
 
-    void save(nlohmann::json& j) override;
-    void load(nlohmann::json const& j) override;
+    friend void to_json(json& j, ComboInputButton const& p)
+    {
+        to_json(j["inverted"], p.inverted);
+        to_json(j["buttons"], p.buttons);
+        to_json(j["check_all"], p.check_all);
+    }
+
+    friend void from_json(json const& j, ComboInputButton& p)
+    {
+        from_json(j["inverted"], p.inverted);
+        from_json(j["buttons"], p.buttons);
+        from_json(j["check_all"], p.check_all);
+        p.connect_buttons();
+    }
 
 private:
     void connect_button(std::unique_ptr<InputButton>& button);

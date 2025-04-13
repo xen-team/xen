@@ -26,7 +26,18 @@ public:
     [[nodiscard]] JoystickAxis get_axis() const { return axis; }
     void set_axis(JoystickAxis axis) { this->axis = axis; }
 
-    void save(nlohmann::json& j) override;
-    void load(nlohmann::json const& j) override;
+    friend void to_json(json& j, JoystickInputAxis const& p)
+    {
+        to_json(j["scale"], p.scale);
+        to_json(j["port"], p.get_port());
+        to_json(j["axis"], p.axis);
+    }
+
+    friend void from_json(json const& j, JoystickInputAxis& p)
+    {
+        from_json(j["scale"], p.scale);
+        p.set_port(j["port"].get<JoystickPort>());
+        from_json(j["axis"], p.axis);
+    }
 };
 }

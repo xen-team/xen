@@ -30,17 +30,4 @@ InputAxis::ArgumentDescription JoystickInputButton::get_argument_desc() const
         {.name = "axis", .type = "bool", .description = "The button on the joystick being checked"}
     };
 }
-
-void JoystickInputButton::save(nlohmann::json& j)
-{
-    save_base(j);
-    save_value(j, "port", get_port());
-    save_value(j, "button", button);
-}
-void JoystickInputButton::load(nlohmann::json const& j)
-{
-    load_base(j);
-    set_port(get_value<JoystickPort>(j, "port"));
-    load_value(j, "button", button);
-}
 }

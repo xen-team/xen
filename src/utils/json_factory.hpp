@@ -7,6 +7,8 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 
+using json = nlohmann::json;
+
 namespace xen {
 template <typename Base, typename... Args>
 class JsonFactory {
@@ -34,7 +36,7 @@ public:
         return it->second(std::forward<Args>(args)...);
     }
 
-    static TCreateReturn create(nlohmann::json const& j)
+    static TCreateReturn create(json const& j)
     {
         auto name = j["type"].template get<std::string>();
         auto it = registry().find(name);
@@ -47,21 +49,6 @@ public:
 
     [[nodiscard]] virtual std::string get_type_name() const { return ""; }
 
-    template <typename U>
-    static void save_value(nlohmann::json& j, std::string_view name, U const& v)
-    {
-        j[name] = v;
-    }
-
-    template <typename U>
-    static void load_value(nlohmann::json const& j, std::string_view name, U& v)
-    {
-        j.at(name).get_to(v);
-    }
-
-    virtual void save(nlohmann::json& j) { base_save(j); }
-    virtual void load(nlohmann::json const& j) { base_load(j); }
-
     template <typename T>
     class Registrar : public Base {
     protected:
@@ -69,13 +56,6 @@ public:
 
     public:
         [[nodiscard]] std::string get_type_name() const override { return name; }
-
-        void save_base(nlohmann::json& j)
-        {
-            Base::base_save(j);
-            j["type"] = name;
-        }
-        void load_base(nlohmann::json const& j) { Base::base_load(j); }
 
     protected:
         static bool Register(std::string const& name)
@@ -91,29 +71,34 @@ public:
         {
             return JsonFactory<Base>::create(name, args...);
         }
-        TCreateReturn create_by_type(nlohmann::json const& j) { return JsonFactory<Base>::create(j); }
+        TCreateReturn create_by_type(json const& j) { return JsonFactory<Base>::create(j); }
 
-        template <typename U>
-        static void save_value(nlohmann::json& j, std::string_view name, U const& v)
+        void raw_save(json& j) const override
         {
-            j[name] = v;
+            j = *dynamic_cast<T const*>(this);
+            j["type"] = name;
         }
 
-        template <typename U>
-        static void load_value(nlohmann::json const& j, std::string_view name, U& v)
-        {
-            j.at(name).get_to(v);
-        }
-
-        template <typename U>
-        static U get_value(nlohmann::json const& j, std::string_view name)
-        {
-            j.at(name).template get<U>();
-        }
+        void raw_load(json const& j) override { j.get_to(*dynamic_cast<T*>(this)); }
     };
 
+    friend void to_json(json& j, std::unique_ptr<Base> const& object) { object->raw_save(j); }
+
+    friend void from_json(json const& j, std::unique_ptr<Base>& object)
+    {
+        if (j.contains("type")) {
+            object = create(j);
+        }
+
+        object->raw_load(j);
+    }
+
+    friend void to_json(json& j, Base const& base) { base.raw_save(j); }
+
+    friend void from_json(json const& j, Base& base) { return base.raw_load(j); }
+
 protected:
-    virtual void base_save(nlohmann::json& j);
-    virtual void base_load(nlohmann::json const& j);
+    virtual void raw_save([[maybe_unused]] json& j) const { ; }
+    virtual void raw_load([[maybe_unused]] json const& j) { ; }
 };
 }

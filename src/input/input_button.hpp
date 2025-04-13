@@ -4,7 +4,6 @@
 #include "input_axis.hpp"
 #include "system/window.hpp"
 #include "utils/json_factory.hpp"
-#include <nlohmann/json.hpp>
 
 namespace xen {
 class XEN_API InputButton : public JsonFactory<InputButton>, public virtual rocket::trackable {
@@ -33,10 +32,5 @@ public:
 
     [[nodiscard]] bool is_inverted() const { return inverted; }
     void set_inverted(bool inverted) { this->inverted = inverted; }
-
-protected:
-    void base_save(nlohmann::json& j) override { save_value(j, "inverted", inverted); }
-
-    void base_load(nlohmann::json const& j) override { load_value(j, "inverted", inverted); }
 };
 }

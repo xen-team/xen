@@ -30,17 +30,4 @@ InputAxis::ArgumentDescription JoystickInputAxis::get_argument_desc() const
         {.name = "axis", .type = "int", .description = "The axis on the joystick being checked"}
     };
 }
-
-void JoystickInputAxis::save(nlohmann::json& j)
-{
-    save_base(j);
-    save_value(j, "port", get_port());
-    save_value(j, "axis", axis);
-}
-void JoystickInputAxis::load(nlohmann::json const& j)
-{
-    load_base(j);
-    set_port(get_value<JoystickPort>(j, "port"));
-    load_value(j, "axis", axis);
-}
 }

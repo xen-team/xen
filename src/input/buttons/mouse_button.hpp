@@ -19,7 +19,16 @@ public:
     [[nodiscard]] MouseButton get_button() const { return button; }
     void set_button(MouseButton button) { this->button = button; }
 
-    void save(nlohmann::json& j) override;
-    void load(nlohmann::json const& j) override;
+    friend void to_json(json& j, MouseInputButton const& p)
+    {
+        to_json(j["inverted"], p.inverted);
+        to_json(j["button"], p.button);
+    }
+
+    friend void from_json(json const& j, MouseInputButton& p)
+    {
+        from_json(j["inverted"], p.inverted);
+        from_json(j["button"], p.button);
+    }
 };
 }

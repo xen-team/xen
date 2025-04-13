@@ -8,8 +8,8 @@
 
 namespace xen {
 class XEN_API Windows : public Module::Registrar<Windows> {
-    inline static bool const Registered = Register(Stage::Pre);
-
+    inline static bool const registered = Register("Windows", Stage::Pre);
+                                    
 private:
     WindowId focused_window_id = 0;
     std::vector<std::unique_ptr<Window>> windows;
@@ -28,6 +28,7 @@ public:
     Window* add_window();
     [[nodiscard]] Window const* get_window(WindowId id) const;
     [[nodiscard]] Window* get_window(WindowId id);
+    [[nodiscard]] Window* get_main_window();
 
     void set_focused_window(WindowId id);
     [[nodiscard]] Window const* get_focused_window() const;

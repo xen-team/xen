@@ -76,27 +76,4 @@ void ComboInputButton::connect_buttons()
         connect_button(button);
     }
 }
-
-void ComboInputButton::save(nlohmann::json& j)
-{
-    save_base(j);
-    save_value(j, "check_all", check_all);
-    for (auto [i, button] : enumerate(buttons)) {
-        button->save(j["buttons"][std::to_string(i)]);
-    }
-}
-void ComboInputButton::load(nlohmann::json const& j)
-{
-    load_base(j);
-    load_value(j, "check_all", check_all);
-    if (!j.contains("buttons")) {
-        return;
-    }
-
-    for (auto const& [i, button] : enumerate(j["buttons"])) {
-        buttons.emplace_back(create_by_type(button));
-        buttons[i]->load(button);
-    }
-    connect_buttons();
-}
 }
