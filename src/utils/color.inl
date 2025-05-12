@@ -113,8 +113,8 @@ constexpr Color& Color::operator/=(float rhs)
     return *this = *this / rhs;
 }
 
-inline std::ostream& operator<<(std::ostream& stream, Color const& Color)
+inline std::ostream& operator<<(std::ostream& stream, Color const& color)
 {
-    return stream << Color.r << ", " << Color.g << ", " << Color.b << ", " << Color.a;
+    return stream << color.r << ", " << color.g << ", " << color.b << ", " << color.a;
 }
 }

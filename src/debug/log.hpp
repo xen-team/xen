@@ -47,32 +47,32 @@ public:
     constexpr static std::string_view TimestampFormat = "%H:%M:%S";
 
     template <typename... Args>
-    static void out(Args... args)
+    static void out(Args const&... args)
     {
         write(args...);
     }
 
     template <typename... Args>
-    static void out(std::string_view const& style, std::string_view const& colour, Args... args)
+    static void out(std::string_view const& style, std::string_view const& colour, Args const&... args)
     {
         write(style, colour, args..., Styles::Default);
     }
 
     template <typename... Args>
-    static void vout(std::string_view format, Args... args)
+    static void vout(std::string_view format, Args const&... args)
     {
         write(std::vformat(format, std::make_format_args(args...)));
     }
 
     template <typename... Args>
     static void
-    vout(std::string_view const& style, std::string_view const& colour, std::string_view format, Args... args)
+    vout(std::string_view const& style, std::string_view const& colour, std::string_view format, Args const&... args)
     {
         write(style, colour, std::vformat(format, std::make_format_args(args...)), Styles::Default);
     }
 
     template <typename... Args>
-    static void debug([[maybe_unused]] Args... args)
+    static void debug([[maybe_unused]] Args const&... args)
     {
 #ifdef XEN_DEBUG
         out(Styles::Default, Colors::LightBlue, args...);
@@ -80,7 +80,7 @@ public:
     }
 
     template <typename... Args>
-    static void vdebug(std::string_view format, Args... args)
+    static void vdebug(std::string_view format, Args const&... args)
     {
 #ifdef XEN_DEBUG
         vout(Styles::Default, Colors::LightBlue, format, args...);
@@ -88,52 +88,52 @@ public:
     }
 
     template <typename... Args>
-    static void info(Args... args)
+    static void info(Args const&... args)
     {
         out(Styles::Default, Colors::Green, args...);
     }
 
     template <typename... Args>
-    static void vinfo(std::string_view format, Args... args)
+    static void vinfo(std::string_view format, Args const&... args)
     {
         vout(Styles::Default, Colors::Green, format, args...);
     }
 
     template <typename... Args>
-    static void warning(Args... args)
+    static void warning(Args const&... args)
     {
         out(Styles::Default, Colors::Yellow, args...);
     }
 
     template <typename... Args>
-    static void vwarning(std::string_view format, Args... args)
+    static void vwarning(std::string_view format, Args const&... args)
     {
         vout(Styles::Default, Colors::Yellow, format, args...);
     }
 
     template <typename... Args>
-    static void error(Args... args)
+    static void error(Args const&... args)
     {
         out(Styles::Default, Colors::Red, args...);
     }
 
     template <typename... Args>
-    static void verror(std::string_view format, Args... args)
+    static void verror(std::string_view format, Args const&... args)
     {
         vout(Styles::Default, Colors::Red, format, args...);
     }
 
     template <typename... Args>
-    static void rt_assert(bool expr, Args... args)
+    static void rt_assert(bool expr, Args const&... args)
     {
-        if (expr) {
+        if (!expr) {
             out(Styles::Default, Colors::Magenta, args...);
             assert(false);
         }
     }
 
     template <typename... Args>
-    static void vrt_assert(bool expr, std::string_view format, Args... args)
+    static void vrt_assert(bool expr, std::string_view format, Args const&... args)
     {
         if (expr) {
             vout(Styles::Default, Colors::Magenta, format, args...);
@@ -149,13 +149,13 @@ private:
     static std::ofstream fs;
 
     template <typename... Args>
-    static void write(Args... args)
+    static void write(Args const&... args)
     {
         std::unique_lock<std::mutex> lock(write_mutex);
 
-        ((std::cerr << std::forward<Args>(args)), ...);
+        ((std::cerr << std::forward<Args const&>(args)), ...);
         if (fs.is_open()) {
-            ((fs << std::forward<Args>(args)), ...);
+            ((fs << std::forward<Args const&>(args)), ...);
         }
         std::cerr << '\n';
     }

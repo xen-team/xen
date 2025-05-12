@@ -1,5 +1,5 @@
 #pragma once
-
+namespace xen {
 class NonCopyable {
 public:
     NonCopyable() = default;
@@ -22,3 +22,4 @@ class NonCopyableMovable : public NonCopyable, public NonMovable {
 protected:
     NonCopyableMovable() = default;
 };
+}

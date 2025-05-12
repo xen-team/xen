@@ -1,3 +1,3 @@
-Do sweety FreeType
-
-Think about realize performant hierarchy system
+Do get_uniform_location caching
+Remove throws
+render > video

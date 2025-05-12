@@ -14,7 +14,7 @@
 //     checks if json file is opened
 //     \returns true if json file can be written to, false either
 //     */
-//     bool IsValid() const;
+//     bool is_valid() const;
 //     /*!
 //     getter for entriesCount
 //     \returns number of json entries

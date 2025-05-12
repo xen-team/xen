@@ -1,0 +1,113 @@
+{
+    "axes": {
+        "forward": {
+            "negative": {
+                "inverted": false,
+                "key": 83,
+                "type": "keyboard"
+            },
+            "positive": {
+                "inverted": false,
+                "key": 87,
+                "type": "keyboard"
+            },
+            "scale": 1.0,
+            "type": "button"
+        },
+        "vertical": {
+            "negative": {
+                "inverted": false,
+                "key": 32,
+                "type": "keyboard"
+            },
+            "positive": {
+                "inverted": false,
+                "key": 341,
+                "type": "keyboard"
+            },
+            "scale": 1.0,
+            "type": "button"
+        },
+        "mouse_x": {
+            "axis": 0,
+            "scale": 0.15000000596046448,
+            "type": "mouse"
+        },
+        "mouse_y": {
+            "axis": 1,
+            "scale": 0.15000000596046448,
+            "type": "mouse"
+        },
+        "strafe": {
+            "negative": {
+                "inverted": false,
+                "key": 68,
+                "type": "keyboard"
+            },
+            "positive": {
+                "inverted": false,
+                "key": 65,
+                "type": "keyboard"
+            },
+            "scale": 1.0,
+            "type": "button"
+        }
+    },
+    "buttons": {
+        "capture_mouse": {
+            "inverted": false,
+            "key": 342,
+            "type": "keyboard"
+        },
+        "crouch": {
+            "inverted": false,
+            "key": 341,
+            "type": "keyboard"
+        },
+        "exit": {
+            "inverted": false,
+            "key": 81,
+            "type": "keyboard"
+        },
+        "fullscreen": {
+            "inverted": false,
+            "key": 70,
+            "type": "keyboard"
+        },
+        "jump": {
+            "inverted": false,
+            "key": 32,
+            "type": "keyboard"
+        },
+        "load": {
+            "inverted": false,
+            "key": 75,
+            "type": "keyboard"
+        },
+        "noclip": {
+            "inverted": false,
+            "key": 78,
+            "type": "keyboard"
+        },
+        "save": {
+            "inverted": false,
+            "key": 74,
+            "type": "keyboard"
+        },
+        "screenshot": {
+            "inverted": false,
+            "key": 71,
+            "type": "keyboard"
+        },
+        "spawn_sphere": {
+            "button": 0,
+            "inverted": false,
+            "type": "mouse"
+        },
+        "sprint": {
+            "inverted": false,
+            "key": 340,
+            "type": "keyboard"
+        }
+    }
+}

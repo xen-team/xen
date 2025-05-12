@@ -1,1 +1,0 @@
-add_subdirectory(depends/magic_enum)
