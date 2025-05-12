@@ -50,14 +50,14 @@ void from_json(json const& j, Vector4<T>& v)
 
 inline void to_json(json& j, Matrix2 const& v)
 {
-    for (size_t i = 0; i < Matrix2::COUNT; i++) {
+    for (size_t i = 0; i < Matrix2::Count; i++) {
         j = json{{"x" + std::to_string(i), v[i].x}, {"y" + std::to_string(i), v[i].y}};
     }
 }
 
 inline void from_json(json const& j, Matrix2& v)
 {
-    for (size_t i = 0; i < Matrix2::COUNT; i++) {
+    for (size_t i = 0; i < Matrix2::Count; i++) {
         j.at("x" + std::to_string(i)).get_to(v[i].x);
         j.at("y" + std::to_string(i)).get_to(v[i].y);
     }
@@ -65,7 +65,7 @@ inline void from_json(json const& j, Matrix2& v)
 
 inline void to_json(json& j, Matrix3 const& v)
 {
-    for (size_t i = 0; i < Matrix3::COUNT; i++) {
+    for (size_t i = 0; i < Matrix3::Count; i++) {
         j = json{
             {"x" + std::to_string(i), v[i].x}, {"y" + std::to_string(i), v[i].y}, {"z" + std::to_string(i), v[i].z}
         };
@@ -74,7 +74,7 @@ inline void to_json(json& j, Matrix3 const& v)
 
 inline void from_json(json const& j, Matrix3& v)
 {
-    for (size_t i = 0; i < Matrix3::COUNT; i++) {
+    for (size_t i = 0; i < Matrix3::Count; i++) {
         j.at("x" + std::to_string(i)).get_to(v[i].x);
         j.at("y" + std::to_string(i)).get_to(v[i].y);
         j.at("z" + std::to_string(i)).get_to(v[i].z);
@@ -83,7 +83,7 @@ inline void from_json(json const& j, Matrix3& v)
 
 inline void to_json(json& j, Matrix4 const& v)
 {
-    for (size_t i = 0; i < Matrix4::COUNT; i++) {
+    for (size_t i = 0; i < Matrix4::Count; i++) {
         j = json{
             {"x" + std::to_string(i), v[i].x},
             {"y" + std::to_string(i), v[i].y},
@@ -95,7 +95,7 @@ inline void to_json(json& j, Matrix4 const& v)
 
 inline void from_json(json const& j, Matrix4& v)
 {
-    for (size_t i = 0; i < Matrix4::COUNT; i++) {
+    for (size_t i = 0; i < Matrix4::Count; i++) {
         j.at("x" + std::to_string(i)).get_to(v[i].x);
         j.at("y" + std::to_string(i)).get_to(v[i].y);
         j.at("z" + std::to_string(i)).get_to(v[i].z);

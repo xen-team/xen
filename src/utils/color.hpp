@@ -1,8 +1,6 @@
 #pragma once
 
 #include <math/math.hpp>
-#include <math/vector3.hpp>
-#include <math/vector4.hpp>
 
 #include <cassert>
 #include <sstream>
@@ -16,23 +14,23 @@ public:
     float b = 0.f;
     float a = 1.f;
 
-    static Color const clear;
-    static Color const black;
-    static Color const grey;
-    static Color const silver;
-    static Color const white;
-    static Color const maroon;
-    static Color const red;
-    static Color const olive;
-    static Color const yellow;
-    static Color const green;
-    static Color const lime;
-    static Color const teal;
-    static Color const aqua;
-    static Color const navy;
-    static Color const blue;
-    static Color const purple;
-    static Color const fuchsia;
+    static Color const Clear;
+    static Color const Black;
+    static Color const Grey;
+    static Color const Silver;
+    static Color const White;
+    static Color const Maroon;
+    static Color const Red;
+    static Color const Olive;
+    static Color const Yellow;
+    static Color const Green;
+    static Color const Lime;
+    static Color const Teal;
+    static Color const Aqua;
+    static Color const Navy;
+    static Color const Blue;
+    static Color const Purple;
+    static Color const Fuchsia;
 
 public:
     /// In order of how bits are mapped [24, 16, 8, 0xFF].

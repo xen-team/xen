@@ -5,7 +5,6 @@
 #include <chrono>
 #include <iomanip>
 #include <sstream>
-#include <string>
 
 namespace xen {
 using namespace std::chrono_literals;

@@ -1,10 +1,5 @@
 #pragma once
 
-#include "core.hpp"
-
-#include <cmath>
-#include <random>
-
 template <typename T>
 concept HasDot = requires(T a, T b) {
     { a.dot(b) };
@@ -103,7 +98,7 @@ public:
     }
 
     template <typename T = float, typename K = float>
-    [[nodiscard]] static bool almost_equal(T const& a, T const& b, K const& eps)
+    [[nodiscard]] static bool almost_equal(T const& a, T const& b, K const& eps = 0.1f)
     {
         return std::fabs(a - b) < eps;
     }
@@ -111,19 +106,46 @@ public:
     template <typename T = float, typename K = float>
     constexpr static auto smooth_damp(T const& current, T const& target, K const& rate)
     {
-        return current + ((target - current) * rate);
+        return current + (target - current) * rate;
+    }
+
+    template <typename T = float>
+    constexpr static auto smooth_step(T const& value)
+    {
+        static_assert(std::is_floating_point_v<T>, "Error: The interpolation type must be floating point.");
+        Log::rt_assert(value >= 0 && value <= 1, "Error: The value must be between 0 & 1.");
+
+        return value * value * (3 - 2 * value);
     }
 
     template <typename T = float, typename K = float>
     [[nodiscard]] static constexpr auto lerp(T const& a, T const& b, K const& factor)
     {
-        return (a * (1 - factor)) + (b * factor);
+        return a * (1 - factor) + b * factor;
     }
 
     template <typename T = float>
-    [[nodiscard]] static T deadband(T const& min, T const& value)
+    [[nodiscard]] static constexpr T deadband(T const& min, T const& value)
     {
         return std::fabs(value) >= std::fabs(min) ? value : 0.0f;
+    }
+
+    template <typename T>
+    static constexpr T GoldenRatio = static_cast<T>(1.61803398874989484820L);
+
+    static constexpr std::vector<std::array<float, 3>> compute_fibonacci_sphere_points(std::size_t point_count)
+    {
+        std::vector<std::array<float, 3>> fibo_points(point_count);
+
+        for (std::size_t i = 0; i < point_count; ++i) {
+            float const theta = 2.f * std::numbers::pi_v<float> * static_cast<float>(i) / GoldenRatio<float>;
+            float const cos_phi = 1.f - 2.f * (static_cast<float>(i) + 0.5f) / static_cast<float>(point_count);
+            float const sin_phi = std::sqrt(1.f - cos_phi * cos_phi);
+
+            fibo_points[i] = {std::cos(theta) * sin_phi, cos_phi, std::sin(theta) * sin_phi};
+        }
+
+        return fibo_points;
     }
 
     template <typename T = float, typename K = float>
