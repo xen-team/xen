@@ -82,7 +82,7 @@ void LuaWrapper::register_shape_types()
         shape["translate"] = &Shape::translate;
         shape["compute_projection"] = &Shape::compute_projection;
         shape["compute_centroid"] = &Shape::compute_centroid;
-        shape["conpute_bounding_box"] = &Shape::conpute_bounding_box;
+        shape["compute_bounding_box"] = &Shape::compute_bounding_box;
     }
 
     {

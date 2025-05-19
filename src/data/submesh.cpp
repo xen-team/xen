@@ -22,9 +22,9 @@ constexpr Vector3f compute_tangent(Vertex const& first_vertex, Vertex const& sec
 }
 }
 
-AABB const& Submesh::conpute_bounding_box()
+AABB const& Submesh::compute_bounding_box()
 {
-    ZoneScopedN("Submesh::conpute_bounding_box");
+    ZoneScopedN("Submesh::compute_bounding_box");
 
     Vector3f min_pos(std::numeric_limits<float>::max());
     Vector3f max_pos(std::numeric_limits<float>::lowest());

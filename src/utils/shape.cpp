@@ -103,7 +103,7 @@ Vector3f Line::compute_projection(Vector3f const& point) const
     return begin_pos + line_vec * std::clamp(point_dist, 0.f, 1.f);
 }
 
-AABB Line::conpute_bounding_box() const
+AABB Line::compute_bounding_box() const
 {
     auto const [x_min, x_max] = std::minmax(begin_pos.x, end_pos.x);
     auto const [y_min, y_max] = std::minmax(begin_pos.y, end_pos.y);
@@ -152,7 +152,7 @@ bool Plane::intersects(const OBB&) const
     throw std::runtime_error("Error: Not implemented yet.");
 }
 
-AABB Plane::conpute_bounding_box() const
+AABB Plane::compute_bounding_box() const
 {
     throw std::runtime_error("Error: Not implemented yet.");
 }
@@ -196,7 +196,7 @@ bool Sphere::intersects(const OBB&) const
     throw std::runtime_error("Error: Not implemented yet.");
 }
 
-AABB Sphere::conpute_bounding_box() const
+AABB Sphere::compute_bounding_box() const
 {
     return AABB(center_pos - radius, center_pos + radius);
 }
@@ -235,7 +235,7 @@ Vector3f Triangle::compute_projection(Vector3f const&) const
     throw std::runtime_error("Error: Not implemented yet.");
 }
 
-AABB Triangle::conpute_bounding_box() const
+AABB Triangle::compute_bounding_box() const
 {
     auto const [x_min, x_max] = std::minmax({first_pos.x, second_pos.x, third_pos.x});
     auto const [y_min, y_max] = std::minmax({first_pos.y, second_pos.y, third_pos.y});
@@ -293,7 +293,7 @@ Vector3f Quad::compute_projection(Vector3f const&) const
     throw std::runtime_error("Error: Not implemented yet.");
 }
 
-AABB Quad::conpute_bounding_box() const
+AABB Quad::compute_bounding_box() const
 {
     auto const [x_min, x_max] = std::minmax({top_left_pos.x, top_right_pos.x, bottom_right_pos.x, bottom_left_pos.x});
     auto const [y_min, y_max] = std::minmax({top_left_pos.y, top_right_pos.y, bottom_right_pos.y, bottom_left_pos.y});
@@ -387,7 +387,7 @@ Vector3f OBB::compute_projection(Vector3f const&) const
     throw std::runtime_error("Error: Not implemented yet.");
 }
 
-AABB OBB::conpute_bounding_box() const
+AABB OBB::compute_bounding_box() const
 {
     throw std::runtime_error("Error: Not implemented yet.");
 }

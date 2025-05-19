@@ -89,7 +89,7 @@ public:
 
     /// Computes the shape's bounding box.
     /// \return Computed bounding box.
-    virtual AABB conpute_bounding_box() const = 0;
+    virtual AABB compute_bounding_box() const = 0;
 
 protected:
     Shape() = default;
@@ -166,7 +166,7 @@ public:
     /// \return Computed centroid.
     Vector3f compute_centroid() const override { return (begin_pos + end_pos) * 0.5f; }
 
-    AABB conpute_bounding_box() const override;
+    AABB compute_bounding_box() const override;
 
     /// Line squared length computation.
     /// To be preferred over length() for faster operations.
@@ -286,7 +286,7 @@ public:
     /// \return Computed centroid.
     Vector3f compute_centroid() const override { return normal * distance; }
 
-    AABB conpute_bounding_box() const override;
+    AABB compute_bounding_box() const override;
 
     /// Checks if the current plane is equal to another given one.
     /// Uses a near-equality check to take floating-point errors into account.
@@ -382,7 +382,7 @@ public:
     /// \return Computed centroid.
     Vector3f compute_centroid() const override { return center_pos; }
 
-    AABB conpute_bounding_box() const override;
+    AABB compute_bounding_box() const override;
 
     /// Checks if the current sphere is equal to another given one.
     /// Uses a near-equality check to take floating-point errors into account.
@@ -480,7 +480,7 @@ public:
     /// \return Computed centroid.
     Vector3f compute_centroid() const override { return (first_pos + second_pos + third_pos) / 3.f; }
 
-    AABB conpute_bounding_box() const override;
+    AABB compute_bounding_box() const override;
 
     /// Computes the triangle's normal from its points.
     /// \return Computed normal.
@@ -603,7 +603,7 @@ public:
         return (top_left_pos + top_right_pos + bottom_right_pos + bottom_left_pos) * 0.25f;
     }
 
-    AABB conpute_bounding_box() const override;
+    AABB compute_bounding_box() const override;
 
     /// Checks if the current quad is equal to another given one.
     /// Uses a near-equality check to take floating-point errors into account.
@@ -715,7 +715,7 @@ public:
     /// \return Computed centroid.
     Vector3f compute_centroid() const override { return (max_pos + min_pos) * 0.5f; }
 
-    AABB conpute_bounding_box() const override { return *this; }
+    AABB compute_bounding_box() const override { return *this; }
 
     /// Computes the half extents of the box, starting from its centroid.
     ///
@@ -868,7 +868,7 @@ public:
     /// \return Computed centroid.
     Vector3f compute_centroid() const override { return aabb.compute_centroid(); }
 
-    AABB conpute_bounding_box() const override;
+    AABB compute_bounding_box() const override;
 
     /// Computes the half extents of the box, starting from its centroid.
     /// These half extents are oriented according to the box's rotation.

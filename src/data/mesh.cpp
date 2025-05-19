@@ -229,15 +229,15 @@ size_t Mesh::recover_triangle_count() const
     return index_count / 3;
 }
 
-AABB const& Mesh::conpute_bounding_box()
+AABB const& Mesh::compute_bounding_box()
 {
-    ZoneScopedN("Mesh::conpute_bounding_box");
+    ZoneScopedN("Mesh::compute_bounding_box");
 
     Vector3f min_pos(std::numeric_limits<float>::max());
     Vector3f max_pos(std::numeric_limits<float>::lowest());
 
     for (Submesh& submesh : submeshes) {
-        AABB const& bounding_box = submesh.conpute_bounding_box();
+        AABB const& bounding_box = submesh.compute_bounding_box();
 
         min_pos.x = std::min(min_pos.x, bounding_box.get_min_position().x);
         min_pos.y = std::min(min_pos.y, bounding_box.get_min_position().y);

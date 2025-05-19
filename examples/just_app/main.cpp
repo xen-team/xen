@@ -273,7 +273,7 @@ int main()
             sponza.add_component<xen::MeshRenderer>(xen::ObjFormat::load("assets/meshes/crytek_sponza.obj").second);
         sponza.add_component<xen::Transform>(
             xen::Vector3f(0.f, -3.f, 0.f), xen::Quaternion(xen::Vector3f::Up, Degreesld(90)), xen::Vector3f(0.04f)
-        );
+        );  
 
         // xen::Entity& floor = world.add_entity_with_component<xen::Transform>(xen::Vector3f(0.f, -4.f, 0.f));
         // auto& floorMesh = floor.add_component<xen::Mesh>(xen::Plane(0.f), 100.f, 10.f);

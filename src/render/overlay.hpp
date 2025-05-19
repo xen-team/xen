@@ -50,6 +50,8 @@ public:
     [[nodiscard]] OverlayWindow&
     add_window(std::string title, Vector2f const& init_size = Vector2f(0.f), Vector2f const& init_pos = Vector2f(0.f));
 
+    [[nodiscard]] OverlayWindow& add_window(std::unique_ptr<OverlayWindow>&& window);
+
     /// Checks if the overlay is currently requesting the keyboard inputs.
     /// \return True if the keyboard focus is taken, false otherwise.
     bool has_keyboard_focus() const;
@@ -594,9 +596,9 @@ public:
     OverlayFpsCounter& add_fps_counter(std::string formatted_label);
 
     /// Renders the window's elements.
-    void render() const;
+    virtual void render() const;
 
-private:
+protected:
     std::string title{};
     Vector2f current_size{};
     Vector2f current_pos{};

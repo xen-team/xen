@@ -365,7 +365,7 @@ void Bloom::resize_buffers(Vector2ui const& size)
             1.f / static_cast<float>(size_for_downscale.x), 1.f / static_cast<float>(size_for_downscale.y)
         );
 
-        downscale_passes[i]->resize_write_buffers(size);
+        downscale_passes[i]->resize_write_buffers(size_for_downscale);
 
         downscale_passes[i]->get_program().set_attribute(inv_buffer_size, "uniInvBufferSize");
         downscale_passes[i]->get_program().send_attributes();
@@ -376,7 +376,7 @@ void Bloom::resize_buffers(Vector2ui const& size)
 
         auto const corresp_index = downscale_buffers_size - i - 2;
 
-        upscale_passes[corresp_index]->resize_write_buffers(size);
+        upscale_passes[corresp_index]->resize_write_buffers(size_for_downscale);
 
         upscale_passes[corresp_index]->get_program().set_attribute(inv_buffer_size, "uniInvBufferSize");
         upscale_passes[corresp_index]->get_program().send_attributes();
@@ -423,5 +423,4 @@ void Bloom::set_threshold_value(float const threshold) const
     threshold_pass->get_program().set_attribute(threshold, "uniThreshold");
     threshold_pass->get_program().send_attributes();
 }
-
 }
