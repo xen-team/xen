@@ -55,7 +55,7 @@ void BoundingVolumeHierarchyNode::build(std::vector<TriangleInfo>& triangles_inf
     // consumption
     // ZoneScopedN("BoundingVolumeHierarchyNode::build");
 
-    bounding_box = triangles_info[begin_index].triangle.conpute_bounding_box();
+    bounding_box = triangles_info[begin_index].triangle.compute_bounding_box();
 
     if (end_index - begin_index <= 1) {
         triangle_info = triangles_info[begin_index];
@@ -64,7 +64,7 @@ void BoundingVolumeHierarchyNode::build(std::vector<TriangleInfo>& triangles_inf
 
     // TODO: wait for a parallel/reduce to be implemented in order to optimize the following loop
     for (size_t i = begin_index + 1; i < end_index; ++i) {
-        AABB const triangle_box = triangles_info[i].triangle.conpute_bounding_box();
+        AABB const triangle_box = triangles_info[i].triangle.compute_bounding_box();
 
         float const x_min = std::min(triangle_box.get_min_position().x, bounding_box.get_min_position().x);
         float const y_min = std::min(triangle_box.get_min_position().y, bounding_box.get_min_position().y);

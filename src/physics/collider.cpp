@@ -85,20 +85,20 @@ bool Collider::intersects(Ray const& ray, RayHit* hit) const
         break;
 
     case ShapeType::PLANE:
-        return ray.intersects(static_cast<Plane const&>(*collider_shape), hit);
+        return ray.intersects(dynamic_cast<Plane const&>(*collider_shape), hit);
 
     case ShapeType::SPHERE:
-        return ray.intersects(static_cast<Sphere const&>(*collider_shape), hit);
+        return ray.intersects(dynamic_cast<Sphere const&>(*collider_shape), hit);
 
     case ShapeType::TRIANGLE:
-        return ray.intersects(static_cast<Triangle const&>(*collider_shape), hit);
+        return ray.intersects(dynamic_cast<Triangle const&>(*collider_shape), hit);
 
     case ShapeType::QUAD:
         // return ray.intersects(static_cast<const Quad&>(*collider_shape), hit);
         break;
 
     case ShapeType::AABB:
-        return ray.intersects(static_cast<AABB const&>(*collider_shape), hit);
+        return ray.intersects(dynamic_cast<AABB const&>(*collider_shape), hit);
 
     case ShapeType::OBB:
         // return ray.intersects(static_cast<const OBB&>(*collider_shape), hit);

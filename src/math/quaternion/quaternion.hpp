@@ -59,6 +59,10 @@ public:
 
     [[nodiscard]] constexpr float dot(Quaternion const& other) const;
 
+    [[nodiscard]] constexpr Quaternion lerp(Quaternion const& other, float progression) const;
+
+    [[nodiscard]] constexpr Quaternion nlerp(Quaternion const& other, float progression) const;
+
     [[nodiscard]] constexpr Quaternion slerp(Quaternion const& other, float progression) const;
 
     [[nodiscard]] constexpr Quaternion normalize() const;

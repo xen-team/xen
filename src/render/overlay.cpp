@@ -18,6 +18,11 @@ OverlayWindow& Overlay::add_window(std::string title, Vector2f const& init_size,
     return *windows.emplace_back(std::make_unique<OverlayWindow>(std::move(title), init_size, init_pos));
 }
 
+OverlayWindow& Overlay::add_window(std::unique_ptr<OverlayWindow>&& window)
+{
+    *windows.emplace_back(std::move(window));
+}
+
 bool Overlay::has_keyboard_focus() const
 {
     return ImGui::GetIO().WantCaptureKeyboard;

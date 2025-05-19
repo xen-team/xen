@@ -2,6 +2,8 @@ layout(location = 0) in vec3 vertPosition;
 layout(location = 1) in vec2 vertTexcoords;
 layout(location = 2) in vec3 vertNormal;
 layout(location = 3) in vec3 vertTangent;
+layout(location = 4) in ivec4 vertBoneIndices;
+layout(location = 5) in vec4 vertBoneWeights;
 
 layout(std140) uniform uboCameraInfo {
   mat4 uniViewMat;

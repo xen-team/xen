@@ -27,7 +27,7 @@ void LuaWrapper::register_mesh_types()
         mesh["recover_vertex_count"] = &Mesh::recover_vertex_count;
         mesh["recover_triangle_count"] = &Mesh::recover_triangle_count;
         mesh["add_submesh"] = &Mesh::add_submesh<>;
-        mesh["conpute_bounding_box"] = &Mesh::conpute_bounding_box;
+        mesh["compute_bounding_box"] = &Mesh::compute_bounding_box;
         mesh["compute_tangents"] = &Mesh::compute_tangents;
 
         state.new_enum<SphereMeshType>("SphereMeshType", {{"UV", SphereMeshType::UV}, {"ICO", SphereMeshType::ICO}});
@@ -40,7 +40,7 @@ void LuaWrapper::register_mesh_types()
         submesh["get_triangle_indices"] = PickConstOverload<>(&Submesh::get_triangle_indices);
         submesh["get_triangle_index_count"] = &Submesh::get_triangle_index_count;
         submesh["get_bounding_box"] = &Submesh::get_bounding_box;
-        submesh["conpute_bounding_box"] = &Submesh::conpute_bounding_box;
+        submesh["compute_bounding_box"] = &Submesh::compute_bounding_box;
 
         sol::usertype<Vertex> vertex = state.new_usertype<Vertex>("Vertex", sol::constructors<Vertex()>());
         vertex["position"] = &Vertex::position;

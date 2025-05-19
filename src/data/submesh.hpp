@@ -58,7 +58,7 @@ public:
 
     /// Computes & updates the submesh's bounding box.
     /// \return Submesh's bounding box.
-    AABB const& conpute_bounding_box();
+    AABB const& compute_bounding_box();
 
     /// Computes the tangents for each of the submesh's vertices.
     void compute_tangents();
