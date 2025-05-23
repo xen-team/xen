@@ -4,7 +4,7 @@
 #include <world.hpp>
 #include <audio/audio_system.hpp>
 #include <data/bvh_system.hpp>
-#include <physics/physics_system.hpp>
+// #include <physics/physics_system.hpp>
 #include <render/render_system.hpp>
 #include <script/lua_wrapper.hpp>
 #include <utils/trigger_system.hpp>
@@ -62,7 +62,7 @@ void LuaWrapper::register_core_types()
             sol::overload(&World::add_system<AudioSystem>, &World::add_system<AudioSystem, const char*>);
 #endif
         world["add_bvh_system"] = &World::add_system<BoundingVolumeHierarchySystem>;
-        world["add_physics_system"] = &World::add_system<PhysicsSystem>;
+        // world["add_physics_system"] = &World::add_system<PhysicsSystemSystem>;
         world["add_render_system"] = sol::overload(
             &World::add_system<RenderSystem>, &World::add_system<RenderSystem, Vector2ui const&>
 #if !defined(XEN_NO_WINDOW)
@@ -82,6 +82,7 @@ void LuaWrapper::register_core_types()
         world["update"] = &World::update;
         world["refresh"] = &World::refresh;
         world["destroy"] = &World::destroy;
+        world["get_player"] = &World::get_player;
     }
 }
 }

@@ -5,9 +5,12 @@
 #include <tracy/Tracy.hpp>
 
 namespace xen {
-Camera::Camera(Vector2ui const& frame_size, Radiansf fov, float near, float far, ProjectionType projection_type) :
+Camera::Camera(
+    Vector2ui const& frame_size, Vector3f offset_from_parent, Radiansf fov, float near, float far,
+    ProjectionType projection_type
+) :
     frame_ratio{static_cast<float>(frame_size.x) / static_cast<float>(frame_size.y)}, fov{fov}, near{near}, far{far},
-    projection_type{projection_type}
+    projection_type{projection_type}, offset_from_parent{std::move(offset_from_parent)}
 {
     ZoneScopedN("Camera::Camera");
 
@@ -56,7 +59,11 @@ Matrix4 const& Camera::compute_view(Transform const& camera_transform)
 {
     ZoneScopedN("Camera::compute_view");
 
-    view = camera_transform.get_rotation().inverse().to_rotation_matrix() * camera_transform.compute_translation(true);
+    auto camera_transform_with_offset = camera_transform;
+    camera_transform_with_offset.set_position(camera_transform.get_position() + offset_from_parent);
+
+    view = camera_transform_with_offset.get_rotation().inverse().to_rotation_matrix() *
+           camera_transform_with_offset.compute_translation(true);
 
     return view;
 }

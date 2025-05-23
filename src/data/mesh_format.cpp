@@ -20,7 +20,7 @@ std::pair<Mesh, MeshRenderer> load(FilePath const& filepath)
     std::string const file_extension = StrUtils::to_lower_copy(filepath.recover_extension().to_utf8());
 
     if (file_extension == "gltf" || file_extension == "glb") {
-        return GltfFormat::load(filepath);
+        // return GltfFormat::load(filepath);
     }
     else if (file_extension == "obj") {
         return ObjFormat::load(filepath);

@@ -23,9 +23,10 @@ void LuaWrapper::register_render_types()
         sol::usertype<Camera> camera = state.new_usertype<Camera>(
             "Camera",
             sol::constructors<
-                Camera(Vector2ui const&), Camera(Vector2ui const&, Radiansf), Camera(Vector2ui const&, Radiansf, float),
-                Camera(Vector2ui const&, Radiansf, float, float),
-                Camera(Vector2ui const&, Radiansf, float, float, ProjectionType)>(),
+                Camera(Vector2ui const&), Camera(Vector2ui const&, Vector3f),
+                Camera(Vector2ui const&, Vector3f, Radiansf), Camera(Vector2ui const&, Vector3f, Radiansf, float),
+                Camera(Vector2ui const&, Vector3f, Radiansf, float, float),
+                Camera(Vector2ui const&, Vector3f, Radiansf, float, float, ProjectionType)>(),
             sol::base_classes, sol::bases<Component>()
         );
         camera["fov"] = sol::property(&Camera::get_fov, &Camera::set_fov);

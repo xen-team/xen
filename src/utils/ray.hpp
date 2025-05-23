@@ -45,13 +45,12 @@ public:
     /// \return True if the ray intersects the point, false otherwise.
     bool intersects(Vector3f const& point, RayHit* hit = nullptr) const;
 
-    /*
     /// Ray-line intersection check.
     /// \param line Line to check if there is an intersection with.
     /// \param hit Ray intersection's information to recover.
     /// \return True if the ray intersects the line, false otherwise.
-    bool intersects(const Line& line, RayHit* hit = nullptr) const;
-    */
+    bool intersects(Line const& line, RayHit* hit = nullptr) const;
+
     /// Ray-plane intersection check.
     /// \param plane Plane to check if there is an intersection with.
     /// \param hit Ray intersection's information to recover.
@@ -73,13 +72,12 @@ public:
     /// \return True if the ray intersects the triangle, false otherwise.
     bool intersects(Triangle const& triangle, RayHit* hit = nullptr) const;
 
-    /*
     /// Ray-quad intersection check.
     /// \param quad Quad to check if there is an intersection with.
     /// \param hit Ray intersection's information to recover.
     /// \return True if the ray intersects the quad, false otherwise.
-    bool intersects(const Quad& quad, RayHit* hit = nullptr) const;
-    */
+    bool intersects(Quad const& quad, RayHit* hit = nullptr) const;
+
     /// Ray-AABB intersection check.
     /// \param aabb AABB to check if there is an intersection with.
     /// \param hit Ray intersection's information to recover.
@@ -88,13 +86,12 @@ public:
     /// \return True if the ray intersects the AABB, false otherwise.
     bool intersects(const AABB& aabb, RayHit* hit = nullptr) const;
 
-    /*
     /// Ray-OBB intersection check.
     /// \param obb OBB to check if there is an intersection with.
     /// \param hit Ray intersection's information to recover.
     /// \return True if the ray intersects the OBB, false otherwise.
     bool intersects(const OBB& obb, RayHit* hit = nullptr) const;
-    */
+
     /// Computes the projection of a point (closest point) onto the ray.
     /// The projected point is necessarily located between the ray's origin and towards infinity in the ray's direction.
     /// \param point Point to compute the projection from.

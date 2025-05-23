@@ -61,14 +61,14 @@ public:
     void set_threshold_value(float threshold) const;
 
 private:
-    RenderPass* threshold_pass{};
+    RenderPass* threshold_pass = nullptr;
 
-    std::vector<RenderPass*> downscale_passes{};
-    std::vector<std::weak_ptr<Texture2D>> downscale_buffers{};
+    std::vector<RenderPass*> downscale_passes;
+    std::vector<std::weak_ptr<Texture2D>> downscale_buffers;
 
-    std::vector<RenderPass*> upscale_passes{};
-    std::vector<std::weak_ptr<Texture2D>> upscale_buffers{};
+    std::vector<RenderPass*> upscale_passes;
+    std::vector<std::weak_ptr<Texture2D>> upscale_buffers;
 
-    RenderPass* final_pass{};
+    RenderPass* final_pass = nullptr;
 };
 }

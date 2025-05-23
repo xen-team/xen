@@ -19,6 +19,12 @@ public:
     World& operator=(World const&) = delete;
     World& operator=(World&&) noexcept = default;
 
+    [[nodiscard]] static World& get()
+    {
+        static World world;
+        return world;
+    }
+
     ~World() { destroy(); }
 
     std::vector<SystemPtr> const& get_systems() const { return systems; }
@@ -81,6 +87,9 @@ public:
     template <typename... CompsTs>
     Entity& add_entity_with_components(bool enabled = true);
 
+    void set_player(Entity& player) { this->player = &player; }
+    Entity& get_player() { return *player; }
+
     /// Fetches entities which contain specific component(s).
     /// \tparam CompsTs Types of the components to query.
     /// \return List of entities containing all given components.
@@ -109,6 +118,8 @@ private:
     std::vector<EntityPtr> entities{};
     size_t active_entity_count = 0;
     size_t max_entity_index = 0;
+
+    Entity* player;
 
 private:
     /// Sorts entities so that the disabled ones are packed to the end of the list.

@@ -48,7 +48,7 @@ void Material::load_type(MaterialType type)
             program.set_attribute(0.f, MaterialAttribute::Metallic);
         }
         if (!program.has_attribute(MaterialAttribute::Roughness)) {
-            program.set_attribute(1.f, MaterialAttribute::Roughness);
+            program.set_attribute(0.f, MaterialAttribute::Roughness);
         }
         if (!program.has_attribute(MaterialAttribute::Sheen)) {
             program.set_attribute(Vector4f(0.f), MaterialAttribute::Sheen);

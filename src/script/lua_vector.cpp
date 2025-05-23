@@ -148,7 +148,7 @@ constexpr void register_vector3(sol::state& state, std::string_view name)
             vector_preset["Right"] = sol::var(&VectorType::Right);
             vector_preset["Up"] = sol::var(&VectorType::Up);
             vector_preset["Down"] = sol::var(&VectorType::Down);
-            vector_preset["Front"] = sol::var(&VectorType::Front);
+            vector_preset["Front"] = sol::var(&VectorType::Forward);
             vector_preset["Back"] = sol::var(&VectorType::Back);
         }
 

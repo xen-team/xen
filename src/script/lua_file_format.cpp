@@ -43,8 +43,8 @@ void LuaWrapper::register_file_format_types()
 #endif
 
     {
-        sol::table gltfFormat = state["GltfFormat"].get_or_create<sol::table>();
-        gltfFormat["load"] = &GltfFormat::load;
+        // sol::table gltfFormat = state["GltfFormat"].get_or_create<sol::table>();
+        // gltfFormat["load"] = &GltfFormat::load;
     }
 
     {

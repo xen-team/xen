@@ -307,6 +307,11 @@ constexpr Matrix3 Matrix4::submatrix(uint32_t row, uint32_t col) const
     return result;
 }
 
+constexpr Vector3f Matrix4::xyz() const
+{
+    return Vector3f(rows[0][0], rows[0][1], rows[0][2]);
+}
+
 constexpr Matrix4 Matrix4::translation(Vector3f const& translation)
 {
     return Matrix4({1, 0, 0, translation.x, 0, 1, 0, translation.y, 0, 0, 1, translation.z, 0, 0, 0, 1});
@@ -323,7 +328,7 @@ constexpr Matrix4 Matrix4::tranform_matrix(Vector3f const& translation, Vector3f
     result = result.translate(translation);
     result = result.rotate(rotation.x, Vector3f::Right);
     result = result.rotate(rotation.y, Vector3f::Up);
-    result = result.rotate(rotation.z, Vector3f::Front);
+    result = result.rotate(rotation.z, Vector3f::Forward);
     result = result.scale(scale);
     return result;
 }
@@ -393,7 +398,7 @@ constexpr Matrix4 Matrix4::view_matrix(Vector3f const& position, Vector3f const&
 
     result = result.rotate(rotation.x, Vector3f::Right);
     result = result.rotate(rotation.y, Vector3f::Up);
-    result = result.rotate(rotation.z, Vector3f::Front);
+    result = result.rotate(rotation.z, Vector3f::Forward);
     result = result.translate(-position);
     return result;
 }

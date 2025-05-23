@@ -212,33 +212,6 @@ constexpr float Quaternion::dot(Quaternion const& other) const
     return w * other.w + x * other.x + y * other.y + z * other.z;
 }
 
-constexpr Quaternion Quaternion::lerp(Quaternion const& other, float progression) const
-{
-    assert("Error: The interpolation coefficient must be between 0 & 1." && (coeff >= 0 && coeff <= 1));
-
-    float const curr_coeff = 1 - progression;
-    return {
-        x * curr_coeff + other.x * progression, y * curr_coeff + other.y * progression,
-        z * curr_coeff + other.z * progression, w * curr_coeff + other.w * progression
-    };
-}
-
-constexpr Quaternion Quaternion::nlerp(Quaternion const& other, float progression) const
-{
-    assert("Error: The interpolation coefficient must be between 0 & 1." && (coeff >= 0 && coeff <= 1));
-
-    float const curr_coeff = 1 - progression;
-    // A rotation may be represented by two opposite quaternions; should the dot product between those be negative,
-    //  one quaternion must be negated. This is made by negating the coefficient
-    float const other_coeff = (dot(other) > 0 ? progression : -progression);
-
-    return Quaternion(
-               x * curr_coeff + other.x * other_coeff, y * curr_coeff + other.y * other_coeff,
-               z * curr_coeff + other.z * other_coeff, w * curr_coeff + other.w * other_coeff
-    )
-        .normalize();
-}
-
 constexpr Quaternion Quaternion::slerp(Quaternion const& other, float progression) const
 {
     auto const cosom = x * other.x + y * other.y + z * other.z + w * other.w;

@@ -40,7 +40,6 @@ bool World::update(FrameTimeInfo const& time_info)
         }
 
         bool const system_active = systems[system_index]->update(time_info);
-
         if (!system_active) {
             active_systems.set_bit(system_index, false);
         }

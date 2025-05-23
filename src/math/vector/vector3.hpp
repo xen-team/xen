@@ -23,7 +23,7 @@ public:
     static Vector3 const Right;
     static Vector3 const Up;
     static Vector3 const Down;
-    static Vector3 const Front;
+    static Vector3 const Forward;
     static Vector3 const Back;
 
 public:
