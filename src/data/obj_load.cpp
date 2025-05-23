@@ -430,6 +430,8 @@ std::pair<Mesh, MeshRenderer> load(FilePath const& filepath)
                 submesh.get_vertices().emplace_back(std::move(vert));
             }
         }
+
+        submesh.compute_bounding_box();
     }
 
     mesh.compute_tangents();

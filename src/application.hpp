@@ -15,6 +15,12 @@ class Application {
 public:
     explicit Application(size_t world_count = 1);
 
+    static Application& get()
+    {
+        static Application app(50);
+        return app;
+    }
+
     std::vector<WorldPtr> const& get_worlds() const { return worlds; }
 
     std::vector<WorldPtr>& get_worlds() { return worlds; }
@@ -33,6 +39,8 @@ public:
     /// \return Reference to the newly added world.
     template <typename... Args>
     World& add_world(Args&&... args);
+
+    World& get_world() { return *worlds[0]; }
 
     /// Runs the application.
     void run();

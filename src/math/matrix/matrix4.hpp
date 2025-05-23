@@ -73,6 +73,8 @@ public:
 
     [[nodiscard]] constexpr Matrix3 submatrix(uint32_t row, uint32_t col) const;
 
+    [[nodiscard]] constexpr Vector3f xyz() const;
+
     [[nodiscard]] static constexpr Matrix4 translation(Vector3f const& translation);
 
     [[nodiscard]] static constexpr Matrix4 scaling(Vector3f const& scale);

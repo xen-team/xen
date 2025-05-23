@@ -423,4 +423,5 @@ void Bloom::set_threshold_value(float const threshold) const
     threshold_pass->get_program().set_attribute(threshold, "uniThreshold");
     threshold_pass->get_program().send_attributes();
 }
+
 }

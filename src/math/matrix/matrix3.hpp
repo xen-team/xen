@@ -61,6 +61,8 @@ public:
 
     [[nodiscard]] constexpr Matrix2 submatrix(uint32_t row, uint32_t col) const;
 
+    [[nodiscard]] constexpr Vector3f xyz() const;
+
     [[nodiscard]] constexpr row_t const& operator[](uint32_t index) const;
     [[nodiscard]] constexpr row_t& operator[](uint32_t index);
 

@@ -128,7 +128,7 @@ if (NOT XEN_USE_EMSCRIPTEN) # Emscripten handles GLFW on its own, but still need
 endif ()
 
 if (XEN_USE_IMGUI)
-    target_link_libraries(xen PRIVATE ImGui)
+    target_link_libraries(xen PUBLIC ImGui)
     message(STATUS "[xen] Overlay ENABLED")
 else ()
     list(
@@ -184,7 +184,7 @@ endif ()
 # It also always compiles the implementation file, but making it conditional would be much more of a hassle. This may change in the future
 target_link_libraries(xen PUBLIC Tracy)
 
-target_link_libraries(xen PRIVATE fastgltf simdjson stb)
+target_link_libraries(xen PUBLIC fastgltf simdjson stb libbullet3)
 
 target_sources(xen PRIVATE ${XEN_FILES})
 

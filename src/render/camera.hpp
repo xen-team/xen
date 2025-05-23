@@ -15,8 +15,8 @@ class Camera final : public Component {
 public:
     Camera() = default;
     Camera(
-        Vector2ui const& frame_size, Radiansf fov = Degreesf(45.f), float near = 0.1f, float far = 1000.f,
-        ProjectionType projection_type = ProjectionType::PERSPECTIVE
+        Vector2ui const& frame_size, Vector3f offset_from_parent = Vector3f(0.f), Radiansf fov = Degreesf(45.f),
+        float near = 0.1f, float far = 1000.f, ProjectionType projection_type = ProjectionType::PERSPECTIVE
     );
 
     Radiansf get_fov() const { return fov; }
@@ -26,12 +26,14 @@ public:
     Matrix4 const& get_inverse_view() const { return inverse_view; }
     Matrix4 const& get_projection() const { return projection; }
     Matrix4 const& get_inverse_projection() const { return inverse_projection; }
+    Vector3f const& get_offset() const { return offset_from_parent; }
 
     void set_fov(Radiansf fov);
     void set_orthographic_bound(float bound);
     void set_camera_type(CameraType camera_type) { this->camera_type = camera_type; }
     void set_projection_type(ProjectionType projection_type);
     void set_target(Vector3f const& target) { this->target = target; }
+    void set_offset(Vector3f const& value) { this->offset_from_parent = value; }
 
     /// Computes the standard "free fly" view matrix.
     /// \param camera_transform Transform component of the camera.
@@ -122,5 +124,6 @@ private:
     Matrix4 inverse_view = Matrix4::Identity;
     Matrix4 projection = Matrix4::Identity;
     Matrix4 inverse_projection = Matrix4::Identity;
+    Vector3f offset_from_parent = Vector3f(0.f);
 };
 }

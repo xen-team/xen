@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Raz {
+namespace xen {
 class Mesh;
 class MeshRenderer;
 class FilePath;

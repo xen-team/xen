@@ -4,7 +4,6 @@
 #include <audio/sound.hpp>
 
 #include <math/transform/transform.hpp>
-#include <physics/rigid_body.hpp>
 
 #include <tracy/Tracy.hpp>
 
@@ -153,9 +152,9 @@ bool AudioSystem::update(FrameTimeInfo const&)
             }
 
             // TODO: velocity should be set only if it has been updated since last time
-            if (entity->has_component<RigidBody>()) {
-                sound.set_velocity(entity->get_component<RigidBody>().get_velocity());
-            }
+            // if (entity->has_component<RigidBody>()) {
+            //     sound.set_velocity(entity->get_component<RigidBody>().get_velocity());
+            // }
         }
 
         if (entity->has_component<Listener>()) {
@@ -179,9 +178,9 @@ bool AudioSystem::update(FrameTimeInfo const&)
             // listener_transform.set_updated(false);
             //}
 
-            if (entity->has_component<RigidBody>()) {
-                listener.set_velocity(entity->get_component<RigidBody>().get_velocity());
-            }
+            // if (entity->has_component<RigidBody>()) {
+            //     listener.set_velocity(entity->get_component<RigidBody>().get_velocity());
+            // }
         }
     }
 

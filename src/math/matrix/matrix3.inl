@@ -209,6 +209,11 @@ constexpr Matrix2 Matrix3::submatrix(uint32_t row, uint32_t col) const
     return result;
 }
 
+constexpr Vector3f Matrix3::xyz() const
+{
+    return Vector3f(rows[0][0], rows[0][1], rows[0][2]);
+}
+
 constexpr Matrix3::row_t const& Matrix3::operator[](uint32_t index) const
 {
     assert(index < Count);

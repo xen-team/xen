@@ -219,7 +219,7 @@ private:
     CloseCallback close_callback{};
 
 #if !defined(XEN_NO_OVERLAY)
-    Overlay overlay;
+    Overlay overlay{};
     bool overlay_enabled = true;
 #endif
 

@@ -47,7 +47,6 @@ bool Application::run_once()
         if (!active_worlds[world_index]) {
             continue;
         }
-
         if (!worlds[world_index]->update(time_info)) {
             active_worlds.set_bit(world_index, false);
         }

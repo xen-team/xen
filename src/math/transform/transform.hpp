@@ -2,17 +2,23 @@
 
 #include <component.hpp>
 #include <math/angle.hpp>
+#include <utility>
 
 namespace xen {
 /// Transform class which handles 3D transformations (translation/rotation/scale).
 class Transform final : public Component {
 public:
-    constexpr explicit Transform(
-        Vector3f const& position = Vector3f(0.f), Quaternion const& rotation = Quaternion::Identity,
-        Vector3f const& scale = Vector3f(1.f)
-    ) : position_{position}, rotation_{rotation}, scale_{scale}
+    constexpr Transform(
+        Vector3f position = Vector3f(0.f), Quaternion rotation = Quaternion::Identity, Vector3f scale = Vector3f(1.f)
+    ) : position_{std::move(position)}, rotation_{rotation}, scale_{std::move(scale)}
     {
     }
+
+    constexpr Transform(Transform const& other) = default;
+    constexpr Transform(Transform&& other) noexcept = default;
+
+    constexpr Transform& operator=(Transform const& other) = default;
+    constexpr Transform& operator=(Transform&& other) = default;
 
     [[nodiscard]] constexpr Vector3f const& get_position() const { return position_; }
     [[nodiscard]] constexpr Quaternion const& get_rotation() const { return rotation_; }
@@ -72,7 +78,7 @@ public:
     {
         Quaternion const x_quat(Vector3f::Right, x_angle);
         Quaternion const y_quat(Vector3f::Right, y_angle);
-        Quaternion const z_quat(Vector3f::Front, z_angle);
+        Quaternion const z_quat(Vector3f::Forward, z_angle);
         rotation_ *= z_quat * x_quat * y_quat;
         // rotation_ = rotation_.normalize();
 
@@ -113,6 +119,24 @@ public:
         );
 
         return compute_translation() * rotation_.to_rotation_matrix() * scale_mat;
+    }
+
+    /// Combines two transformations: parent_transform * local_transform.
+    /// Applies the local transform relative to the parent's coordinate system.
+    /// \param parent The parent's global transform.
+    /// \param local The local transform relative to the parent.
+    /// \return The resulting combined transform (child's global transform).
+    [[nodiscard]] constexpr Transform operator*(Transform const& local) const
+    {
+        Vector3f combined_scale = get_scale() * local.get_scale();
+        Quaternion combined_rotation = get_rotation() * local.get_rotation();
+        Vector3f scaled_local_position = local.get_position() * get_scale();
+
+        Vector3f rotated_scaled_local_position = get_rotation() * scaled_local_position;
+
+        Vector3f combined_position = get_position() + rotated_scaled_local_position;
+
+        return Transform(combined_position, combined_rotation, combined_scale);
     }
 
 private:

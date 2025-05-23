@@ -43,9 +43,9 @@
 // #include "Math/Quaternion.hpp"
 // #include "Math/Transform.hpp"
 // #include "Math/Vector.hpp"
-// #include "Physics/Collider.hpp"
-// #include "Physics/PhysicsSystem.hpp"
-// #include "Physics/RigidBody.hpp"
+// #include "PhysicsSystem/Collider.hpp"
+// #include "PhysicsSystem/PhysicsSystemSystem.hpp"
+// #include "PhysicsSystem/RigidBody.hpp"
 // #include "render/process/bloom.hpp>
 // #include "render/process/box_blur.hpp>
 // #include "render/Camera.hpp"
