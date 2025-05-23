@@ -36,54 +36,53 @@ Transform load_transform(fastgltf::Node const& node)
     );
 }
 
-void compute_node_transform(
-    fastgltf::Node const& current_node, std::optional<Transform> const& parent_transform,
-    std::vector<fastgltf::Node> const& nodes, std::vector<std::optional<Transform>>& transforms
+void compute_node_transform_recursive(
+    size_t node_index, fastgltf::Asset const& asset, std::optional<Transform> const& parent_transform,
+    std::vector<std::optional<Transform>>& mesh_transforms
 )
 {
     ZoneScopedN("[GltfLoad]::compute_node_transform");
 
-    if (!current_node.meshIndex.has_value()) {
-        return;
-    }
+    fastgltf::Node const& current_node = asset.nodes[node_index];
 
-    size_t const current_mesh_index = *current_node.meshIndex;
-
-    if (current_mesh_index >= transforms.size()) {
-        Log::error("[GltfLoad] Unexpected node mesh index.");
-        return;
-    }
-
-    std::optional<Transform>& current_transform = transforms[current_mesh_index];
-
-    if (!current_transform.has_value())
-        current_transform = load_transform(current_node);
+    Transform current_local = load_transform(current_node);
+    Transform current_global = current_local;
 
     if (parent_transform.has_value()) {
-        current_transform->set_position(
+        current_global.set_position(
             parent_transform->get_position() +
-            parent_transform->get_rotation() * (current_transform->get_position() * parent_transform->get_scale())
+            parent_transform->get_rotation() * (current_local.get_position() * parent_transform->get_scale())
         );
-        current_transform->set_rotation(
-            (parent_transform->get_rotation() * current_transform->get_rotation()).normalize()
-        );
-        current_transform->scale(parent_transform->get_scale());
+        current_global.set_rotation((parent_transform->get_rotation() * current_local.get_rotation()).normalize());
+        current_global.scale(parent_transform->get_scale());
+    }
+
+    if (current_node.meshIndex.has_value()) {
+        size_t const mesh_index = *current_node.meshIndex;
+        if (mesh_index < mesh_transforms.size()) {
+            mesh_transforms[mesh_index] = current_global;
+        }
     }
 
     for (size_t const child_index : current_node.children) {
-        compute_node_transform(nodes[child_index], current_transform, nodes, transforms);
+        compute_node_transform_recursive(child_index, asset, current_global, mesh_transforms);
     }
 }
 
-std::vector<std::optional<Transform>> load_transforms(std::vector<fastgltf::Node> const& nodes, size_t mesh_count)
+std::vector<std::optional<Transform>> load_transforms(fastgltf::Asset const& asset)
 {
-    ZoneScopedN("[GltfLoad]::load_transforms");
-
     std::vector<std::optional<Transform>> transforms;
-    transforms.resize(mesh_count);
+    transforms.resize(asset.meshes.size());
 
-    for (fastgltf::Node const& node : nodes) {
-        compute_node_transform(node, std::nullopt, nodes, transforms);
+    if (!asset.scenes.empty()) {
+        size_t scene_index = asset.defaultScene.value_or(0);
+        fastgltf::Scene const& scene = asset.scenes[scene_index];
+        for (size_t node_index : scene.nodeIndices) {
+            compute_node_transform_recursive(node_index, asset, std::nullopt, transforms);
+        }
+    }
+    else {
+        Log::warning("[GltfLoad] No scenes found, transform loading might be incomplete.");
     }
 
     return transforms;
@@ -568,7 +567,7 @@ std::pair<Mesh, MeshRenderer> load(FilePath const& filepath, FilePath const& pro
         throw std::invalid_argument("Error: Failed to load glTF: " + fastgltf::getErrorMessage(asset.error()));
     }
 
-    std::vector<std::optional<Transform>> const transforms = load_transforms(asset->nodes, asset->meshes.size());
+    std::vector<std::optional<Transform>> const transforms = load_transforms(asset.get());
     auto [mesh, mesh_renderer] = load_meshes(asset.get(), transforms);
 
     // auto& ent = world.add_entity_with_component<Transform>();
