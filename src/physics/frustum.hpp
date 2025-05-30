@@ -1,5 +1,6 @@
 #pragma once
 
+#include "utils/shape.hpp"
 namespace xen {
 class XEN_API Frustum {
 private:
@@ -47,6 +48,28 @@ public:
             }
         }
 
+        return true;
+    }
+
+    [[nodiscard]] constexpr bool aabb_in(AABB const& box) const
+    {
+        Vector3f const& min = box.get_min_position();
+        Vector3f const& max = box.get_max_position();
+
+        for (uint32_t i = 0; i < 6; ++i) {
+            float const nx = frustum[i][0];
+            float const ny = frustum[i][1];
+            float const nz = frustum[i][2];
+            float const d = frustum[i][3];
+
+            float p_vertex_x = (nx >= 0) ? max.x : min.x;
+            float p_vertex_y = (ny >= 0) ? max.y : min.y;
+            float p_vertex_z = (nz >= 0) ? max.z : min.z;
+
+            if ((nx * p_vertex_x + ny * p_vertex_y + nz * p_vertex_z + d) <= 0.0f) {
+                return false;
+            }
+        }
         return true;
     }
 

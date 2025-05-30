@@ -79,13 +79,14 @@ Window::Window(
         {{4, 6}, {4, 5}, {4, 4}, {4, 3}, {4, 2}, {4, 1}, {4, 0}, {3, 3}}
     };
 
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    GLFWvidmode const* mode = glfwGetVideoMode(monitor);
+
     for (auto [major, minor] : gl_versions) {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
 
-        window_handle = glfwCreateWindow(
-            static_cast<int>(size.x), static_cast<int>(size.y), title.c_str(), nullptr, glfwGetCurrentContext()
-        );
+        window_handle = glfwCreateWindow(mode->width, mode->height, title.c_str(), monitor, glfwGetCurrentContext());
 
         if (window_handle) {
             break;
@@ -108,9 +109,9 @@ Window::Window(
 
     glfwSetWindowUserPointer(window_handle, this);
 
-    int width, height;
-    glfwGetWindowSize(window_handle, &width, &height);
-    this->size = Vector2ui(width, height);
+    // int width, height;
+    // glfwGetWindowSize(window_handle, &width, &height);
+    this->size = Vector2ui(mode->width, mode->height);
 
     glfwGetWindowPos(window_handle, &position.x, &position.y);
 

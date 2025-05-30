@@ -267,6 +267,17 @@ void Mesh::compute_tangents()
     });
 }
 
+Mesh Mesh::clone() const
+{
+    Mesh mesh;
+    mesh.submeshes.reserve(submeshes.size());
+    for (auto const& submesh : submeshes) {
+        mesh.submeshes.emplace_back(submesh.clone());   
+    }
+    mesh.bounding_box = bounding_box;
+    return mesh;
+}
+
 void Mesh::create_uv_sphere(Sphere const& sphere, Vector2ui const& lines_count)
 {
     // Algorithm based on the standard/UV sphere presented here: http://www.songho.ca/opengl/gl_sphere.html#sphere

@@ -5,7 +5,7 @@
 namespace xen {
 Entity& World::add_entity(bool enabled)
 {
-    entities.emplace_back(Entity::create(max_entity_index++, enabled));
+    entities.emplace_back(Entity::create(*this, max_entity_index++, enabled));
     active_entity_count += enabled;
 
     return *entities.back();

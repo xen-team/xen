@@ -77,7 +77,13 @@ constexpr void register_vector2(sol::state& state, std::string_view name)
         vector.set_function(sol::meta_function::unary_minus, &VectorType::template subtract<VectorDataType>);
         vector.set_function(sol::meta_function::addition, &VectorType::template add<VectorDataType>);
         vector.set_function(sol::meta_function::subtraction, &VectorType::template subtract<VectorDataType>);
-        vector.set_function(sol::meta_function::multiplication, &VectorType::template multiply<VectorDataType>);
+        vector.set_function(
+            sol::meta_function::multiplication,
+            sol::overload(
+                [](VectorType const& vec, VectorDataType const& data) { return vec * data; },
+                [](VectorType const& vec, VectorType const& other_vec) { return vec * other_vec; }
+            )
+        );
         vector.set_function(sol::meta_function::division, &VectorType::template divide<VectorDataType>);
         vector.set_function(
             sol::meta_function::index, sol::overload(
@@ -155,7 +161,13 @@ constexpr void register_vector3(sol::state& state, std::string_view name)
         vector.set_function(sol::meta_function::unary_minus, &VectorType::template subtract<VectorDataType>);
         vector.set_function(sol::meta_function::addition, &VectorType::template add<VectorDataType>);
         vector.set_function(sol::meta_function::subtraction, &VectorType::template subtract<VectorDataType>);
-        vector.set_function(sol::meta_function::multiplication, &VectorType::template multiply<VectorDataType>);
+        vector.set_function(
+            sol::meta_function::multiplication,
+            sol::overload(
+                [](VectorType const& vec, VectorDataType const& data) { return vec * data; },
+                [](VectorType const& vec, VectorType const& other_vec) { return vec * other_vec; }
+            )
+        );
         vector.set_function(sol::meta_function::division, &VectorType::template divide<VectorDataType>);
         vector.set_function(
             sol::meta_function::index, sol::overload(
@@ -224,7 +236,13 @@ constexpr void register_vector4(sol::state& state, std::string_view name)
         vector.set_function(sol::meta_function::unary_minus, &VectorType::template subtract<VectorDataType>);
         vector.set_function(sol::meta_function::addition, &VectorType::template add<VectorDataType>);
         vector.set_function(sol::meta_function::subtraction, &VectorType::template subtract<VectorDataType>);
-        vector.set_function(sol::meta_function::multiplication, &VectorType::template multiply<VectorDataType>);
+        vector.set_function(
+            sol::meta_function::multiplication,
+            sol::overload(
+                [](VectorType const& vec, VectorDataType const& data) { return vec * data; },
+                [](VectorType const& vec, VectorType const& other_vec) { return vec * other_vec; }
+            )
+        );
         vector.set_function(sol::meta_function::division, &VectorType::template divide<VectorDataType>);
         vector.set_function(
             sol::meta_function::index, sol::overload(

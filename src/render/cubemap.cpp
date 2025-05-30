@@ -80,7 +80,7 @@ inline MeshRenderer const& get_display_cube()
         program.set_attribute(0, "uniSkybox");
         program.send_attributes();
 
-        mesh_renderer.load(mesh, RenderMode::TRIANGLE);
+        mesh_renderer.get_data()->load(mesh, RenderMode::TRIANGLE);
         mesh_renderer.get_submesh_renderers().front().set_material_index(0);
 
 #if !defined(USE_OPENGL_ES)

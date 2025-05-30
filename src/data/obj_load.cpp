@@ -182,7 +182,7 @@ inline void load_mtl(
 }
 }
 
-std::pair<Mesh, MeshRenderer> load(FilePath const& filepath)
+std::pair<Mesh, MeshRendererData> load(FilePath const& filepath)
 {
     ZoneScopedN("ObjFormat::load");
     ZoneTextF("Path: %s", filepath.to_utf8().c_str());
@@ -196,7 +196,7 @@ std::pair<Mesh, MeshRenderer> load(FilePath const& filepath)
     }
 
     Mesh mesh;
-    MeshRenderer mesh_renderer;
+    MeshRendererData mesh_renderer;
 
     mesh.add_submesh();
     mesh_renderer.add_submesh_renderer();

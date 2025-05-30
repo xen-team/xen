@@ -206,6 +206,8 @@ public:
     /// \return 2D vector representing the mouse's position relative to the window.
     Vector2f recover_mouse_position() const;
 
+    GLFWwindow& get_window_handle() { return *window_handle.get(); }
+
 private:
     static inline int ref_counter = 0;
 

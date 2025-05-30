@@ -77,10 +77,10 @@ void LuaWrapper::register_file_format_types()
     {
         sol::table objFormat = state["ObjFormat"].get_or_create<sol::table>();
         objFormat["load"] = &ObjFormat::load;
-        objFormat["save"] = sol::overload(
-            [](FilePath const& p, Mesh const& m) { ObjFormat::save(p, m); },
-            PickOverload<FilePath const&, Mesh const&, MeshRenderer const*>(&ObjFormat::save)
-        );
+        // objFormat["save"] = sol::overload(
+        //     [](FilePath const& p, Mesh const& m) { ObjFormat::save(p, m); },
+        //     PickOverload<FilePath const&, Mesh const&, MeshRenderer const*>(&ObjFormat::save)
+        // );
     }
 
     {

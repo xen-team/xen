@@ -19,8 +19,8 @@ void LuaWrapper::register_overlay_base_types()
         sol::usertype<Overlay> overlay = state.new_usertype<Overlay>("Overlay", sol::constructors<Overlay()>());
         overlay["empty"] = &Overlay::empty;
         overlay["add_window"] = sol::overload(
-            [](Overlay& o, std::string t) { return &o.add_window(std::move(t)); },
-            [](Overlay& o, std::string t, Vector2f const& s) { return &o.add_window(std::move(t), s); },
+            [](Overlay& o, std::string t) { return o.add_window(std::move(t)); },
+            [](Overlay& o, std::string t, Vector2f const& s) { return o.add_window(std::move(t), s); },
             PickOverload<std::string, Vector2f const&, Vector2f const&>(&Overlay::add_window)
         );
         overlay["has_keyboard_focus"] = &Overlay::has_keyboard_focus;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "physics/frustum.hpp"
 #include <component.hpp>
 #include <math/angle.hpp>
 

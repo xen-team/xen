@@ -240,6 +240,7 @@ private:
 };
 class AABB final : public Shape {
 public:
+    AABB() = default;
     AABB(Vector3f const& min_pos, Vector3f const& max_pos) : min_pos{min_pos}, max_pos{max_pos} {}
     ShapeType get_type() const override { return ShapeType::AABB; }
     Vector3f const& get_min_position() const { return min_pos; }
@@ -258,6 +259,16 @@ public:
     Vector3f compute_centroid() const override { return (max_pos + min_pos) * 0.5f; }
     AABB compute_bounding_box() const override { return *this; }
     Vector3f compute_half_extents() const { return (max_pos - min_pos) * 0.5f; }
+    void extend(Vector3f const& point)
+    {
+        min_pos.x = std::min(min_pos.x, point.x);
+        min_pos.y = std::min(min_pos.y, point.y);
+        min_pos.z = std::min(min_pos.z, point.z);
+        max_pos.x = std::max(max_pos.x, point.x);
+        max_pos.y = std::max(max_pos.y, point.y);
+        max_pos.z = std::max(max_pos.z, point.z);
+    }
+
     constexpr bool operator==(const AABB& aabb) const { return (min_pos == aabb.min_pos && max_pos == aabb.max_pos); }
     constexpr bool operator!=(const AABB& aabb) const { return !(*this == aabb); }
 

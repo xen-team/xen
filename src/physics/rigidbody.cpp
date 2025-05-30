@@ -44,6 +44,8 @@ void Rigidbody::start(Transform& transform)
 
     create_shape();
 
+    set_bt_object_internal(rigid_body.get());
+
     assert((!shape || shape->getShapeType() != INVALID_SHAPE_PROXYTYPE) && "Invalid rigidbody shape!");
     gravity = physics.get_gravity();
     btVector3 local_inertia;
@@ -63,12 +65,12 @@ void Rigidbody::start(Transform& transform)
     // rigid_body->setContactProcessingThreshold(m_defaultContactProcessingThreshold);
     rigid_body->setWorldTransform(world_transform);
     // rigid_body->setContactStiffnessAndDamping(1000.0f, 0.1f);
-    rigid_body->setFriction(friction);
-    rigid_body->setRollingFriction(friction_rolling);
-    rigid_body->setSpinningFriction(friction_spinning);
+    rigid_body->setFriction(0.f);
+    rigid_body->setRollingFriction(0.f);
+    rigid_body->setSpinningFriction(0.f);
     rigid_body->setGravity(Collider::convert(gravity));
-    rigid_body->setLinearFactor(Collider::convert(linear_factor));
-    rigid_body->setAngularFactor(Collider::convert(angular_factor));
+    rigid_body->setLinearFactor(Collider::convert(Vector3f(0.f, 1.f, 0.f)));
+    rigid_body->setAngularFactor(Collider::convert(Vector3f(0.f, 1.f, 0.f)));
     rigid_body->setUserPointer(dynamic_cast<CollisionObject*>(this));
     body = rigid_body.get();
     physics.get_dynamics_world()->addRigidBody(rigid_body.get());
@@ -94,15 +96,14 @@ void Rigidbody::update(FrameTimeInfo const& time_info, Transform& transform)
         ++it;
     }
 
-    auto const old_rotation = transform.get_rotation();
-
     btTransform motion_transform;
     rigid_body->getMotionState()->getWorldTransform(motion_transform);
-    transform = Collider::convert(motion_transform, transform.get_scale());
-    transform.set_rotation(old_rotation);
+
+    Vector3f new_position = Collider::convert(motion_transform.getOrigin());
+    transform.set_position(new_position);
 
     shape->setLocalScaling(Collider::convert(transform.get_scale()));
-    // rigidBody->getMotionState()->setWorldTransform(Collider::convert(transform));
+
     linear_velocity = Collider::convert(rigid_body->getLinearVelocity());
     angular_velocity = Collider::convert(rigid_body->getAngularVelocity());
 }

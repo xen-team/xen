@@ -1,4 +1,5 @@
 #include "render_graph.hpp"
+#include "data/mesh.hpp"
 
 // #include <math/transform/transform.hpp>
 #include <render/camera.hpp>
@@ -52,19 +53,21 @@ void RenderGraph::execute(RenderSystem& render_system)
     }
 
     execute_geometry_pass(render_system);
+
     last_executed_pass = &geometry_pass;
 
     executed_passes.reserve(nodes.size() + 1);
     executed_passes.emplace(&geometry_pass);
 
     for (std::unique_ptr<RenderPass> const& render_pass : nodes) {
-        execute_pass(*render_pass);
+        execute_pass(render_system, *render_pass);
     }
 
     executed_passes.clear();
+    deferred_mesh_renderers.clear();
 }
 
-void RenderGraph::execute_geometry_pass(RenderSystem& render_system) const
+void RenderGraph::execute_geometry_pass(RenderSystem& render_system)
 {
     ZoneScopedN("RenderGraph::execute_geometry_pass");
     TracyGpuZone("Geometry pass")
@@ -102,9 +105,17 @@ void RenderGraph::execute_geometry_pass(RenderSystem& render_system) const
             continue;
         }
 
-        render_system.model_ubo.send_data(entity->get_component<Transform>().compute_transform(), 0);
-        mesh_renderer.draw();
+        if (!mesh_renderer.is_skip_depth()) {
+            render_system.model_ubo.send_data(entity->get_component<Transform>().compute_transform(), 0);
+            mesh_renderer.draw();
+        }
+        else {
+            deferred_mesh_renderers.emplace_back(
+                &mesh_renderer, entity->get_component<Transform>().compute_transform()
+            );
+        }
     }
+    execute_deferred_pass(render_system);
 
     geometry_framebuffer.unbind();
 
@@ -119,14 +130,28 @@ void RenderGraph::execute_geometry_pass(RenderSystem& render_system) const
 #endif
 }
 
-void RenderGraph::execute_pass(RenderPass const& render_pass)
+void RenderGraph::execute_deferred_pass(RenderSystem& render_system)
+{
+    Renderer::enable(Capability::DEPTH_TEST);
+    Renderer::set_depth_function(DepthStencilFunction::LESS_EQUAL);
+    glDepthRange(0.0, 0.01);
+    render_system.model_ubo.bind();
+
+    for (auto const& deferred_mesh : deferred_mesh_renderers) {
+        render_system.model_ubo.send_data(deferred_mesh.computed_transform, 0);
+        deferred_mesh.mesh_render->draw();
+    }
+    glDepthRange(0.0, 1.0);
+}
+
+void RenderGraph::execute_pass(RenderSystem& render_system, RenderPass const& render_pass)
 {
     if (executed_passes.find(&render_pass) != executed_passes.cend()) {
         return;
     }
 
     for (RenderPass const* parent_pass : render_pass.parents) {
-        execute_pass(*parent_pass);
+        execute_pass(render_system, *parent_pass);
     }
 
     render_pass.execute();

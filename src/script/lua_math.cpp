@@ -15,7 +15,6 @@ void LuaWrapper::register_math_types()
 {
     sol::state& state = get_state();
 
-    // Angles
     {
         {
             sol::usertype<Degreesf> degreesf =
@@ -120,6 +119,15 @@ void LuaWrapper::register_math_types()
         quaternion["to_rotation_matrix"] = &Quaternion::to_rotation_matrix;
         quaternion["from_rotation_matrix"] = &Quaternion::from_rotation_matrix;
         quaternion["to_euler"] = &Quaternion::to_euler;
+
+        quaternion.set_function(
+            sol::meta_function::multiplication,
+            sol::overload(
+                [](Quaternion const& quat, Quaternion const& other_quat) { return quat * other_quat; },
+                [](Quaternion const& quat, float const& data) { return quat * data; },
+                [](Quaternion const& quat, Vector3f const& data) { return quat * data; }
+            )
+        );
 
         // quaternion.set_function(sol::meta_function::unary_minus, &Quaternion::subtract);
         // quaternion.set_function(sol::meta_function::addition, &Quaternion::add);

@@ -20,6 +20,7 @@ void LuaWrapper::register_shape_types()
         aabb["get_min_position"] = &AABB::get_min_position;
         aabb["get_max_position"] = &AABB::get_max_position;
         aabb["compute_half_extents"] = &AABB::compute_half_extents;
+        aabb["contains"] = &AABB::contains;
     }
 
     {

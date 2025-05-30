@@ -31,10 +31,6 @@ inline std::ostream& operator<<(std::ostream& stream, Vertex const& vert)
 class Submesh {
 public:
     Submesh() = default;
-    Submesh(Submesh const&) = delete;
-    Submesh(Submesh&&) noexcept = default;
-    Submesh& operator=(Submesh const&) = delete;
-    Submesh& operator=(Submesh&&) noexcept = default;
 
     std::vector<Vertex> const& get_vertices() const { return vertices; }
 
@@ -62,6 +58,8 @@ public:
 
     /// Computes the tangents for each of the submesh's vertices.
     void compute_tangents();
+
+    [[nodiscard]] Submesh clone() const;
 
 private:
     std::vector<Vertex> vertices{};

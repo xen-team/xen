@@ -58,8 +58,12 @@ public:
     /// \return Mesh's bounding box.
     AABB const& compute_bounding_box();
 
+    void set_bounding_box(AABB const& aabb) { bounding_box = aabb; };
+
     /// Computes the tangents for each of the mesh's vertices.
     void compute_tangents();
+
+    [[nodiscard]] Mesh clone() const;
 
 private:
     std::vector<Submesh> submeshes{};

@@ -23,6 +23,9 @@ public:
 
     Bitset const& get_accepted_components() const { return accepted_components; }
 
+    void pause() { paused = true; }
+    void unpause() { paused = false; }
+
     /// Gets the ID of the given system type.
     /// It uses CRTP to assign a different ID to each system type it is called with.
     /// This function will be instantiated every time it is called with a different type, incrementing the assigned
@@ -49,6 +52,7 @@ public:
 protected:
     std::vector<Entity*> entities{};
     Bitset accepted_components{};
+    bool paused = false;
 
 protected:
     System() = default;

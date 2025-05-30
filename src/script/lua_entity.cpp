@@ -1,3 +1,6 @@
+#include "physics/kinematic_character.hpp"
+#include "utils/health.hpp"
+#include "world.hpp"
 #include <entity.hpp>
 #if defined(XEN_USE_AUDIO)
 #include <audio/listener.hpp>
@@ -33,24 +36,26 @@ void LuaWrapper::register_entity_types()
     sol::state& state = get_state();
 
     {
-        sol::usertype<Entity> entity =
-            state.new_usertype<Entity>("Entity", sol::constructors<Entity(size_t), Entity(size_t, bool)>());
+        sol::usertype<Entity> entity = state.new_usertype<Entity>(
+            "Entity", sol::constructors<Entity(World & world, size_t), Entity(World & world, size_t, bool)>()
+        );
         entity["get_id"] = &Entity::get_id;
         entity["is_enabled"] = &Entity::is_enabled;
         entity["get_enabled_components"] = &Entity::get_enabled_components;
         entity["enable"] = sol::overload([](Entity& e) { e.enable(); }, PickOverload<bool>(&Entity::enable));
         entity["disable"] = &Entity::disable;
-        //         entity["add_component"] = bindComponents<
-        //             Camera, Collider, Light,
-        // #if defined(XEN_USE_AUDIO)
-        //             Listener,
-        // #endif
-        //             Mesh, MeshRenderer, RigidBody,
-        // #if defined(XEN_USE_AUDIO)
-        //             Sound,
-        // #endif
-        //             Transform>();
+        entity["add_component"] = bindComponents<
+            Camera, Light,
+#if defined(XEN_USE_AUDIO)
+            Listener,
+#endif
+            Mesh, MeshRenderer,
+#if defined(XEN_USE_AUDIO)
+            Sound,
+#endif
+            Transform>();
         entity["has_samera"] = &Entity::has_component<Camera>;
+        entity["has_health"] = &Entity::has_component<Health>;
         // entity["ha_collider"] = &Entity::has_component<Collider>;
         entity["has_light"] = &Entity::has_component<Light>;
 #if defined(XEN_USE_AUDIO)
@@ -63,7 +68,9 @@ void LuaWrapper::register_entity_types()
         entity["has_sound"] = &Entity::has_component<Sound>;
 #endif
         entity["has_transform"] = &Entity::has_component<Transform>;
+        entity["has_kinematic"] = &Entity::has_component<KinematicCharacter>;
         entity["get_camera"] = [](Entity& e) { return &e.get_component<Camera>(); };
+        entity["get_health"] = [](Entity& e) { return &e.get_component<Health>(); };
         // entity["get_collider"] = [](Entity& e) { return &e.get_component<Collider>(); };
         entity["get_light"] = [](Entity& e) { return &e.get_component<Light>(); };
 #if defined(XEN_USE_AUDIO)
@@ -76,6 +83,10 @@ void LuaWrapper::register_entity_types()
         entity["get_sound"] = [](Entity& e) { return &e.get_component<Sound>(); };
 #endif
         entity["get_transform"] = [](Entity& e) { return &e.get_component<Transform>(); };
+        entity["get_kinematic"] = [](Entity& e) { return &e.get_component<KinematicCharacter>(); };
+        entity["get_linked_world"] = [](Entity& e) { return &e.get_linked_world(); };
+
+        entity["destroy"] = &Entity::destroy;
     }
 }
 }

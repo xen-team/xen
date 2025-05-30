@@ -12,6 +12,10 @@ ScriptSystem::ScriptSystem()
 
 bool ScriptSystem::update(FrameTimeInfo const& time_info)
 {
+    if (paused) {
+        return true;
+    }
+
     ZoneScopedN("ScriptSystem::update");
 
     bool res = true;
