@@ -151,7 +151,7 @@ void main() {
     lightRadiance += (diffuse * albedoFactor + specular) * radiance * lightAngle;
   }
 
-  vec3 ambient    = vec3(0.008) * albedo * ambOcc;
+  vec3 ambient    = vec3(0.02) * albedo * ambOcc;
   vec3 emissive   = texture(uniMaterial.emissiveMap, vertMeshInfo.vertTexcoords).rgb * uniMaterial.emissive;
   vec3 finalColor = ambient + lightRadiance + emissive;
 

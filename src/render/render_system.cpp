@@ -51,9 +51,9 @@ void RenderSystem::resize_viewport(Vector2ui const& size)
 bool RenderSystem::update(FrameTimeInfo const& time_info)
 {
     ZoneScopedN("RenderSystem::update");
-    TracyGpuZone("RenderSystem::update")
+    TracyGpuZone("RenderSystem::update");
 
-        camera_ubo.bind_base(0);
+    camera_ubo.bind_base(0);
     lights_ubo.bind_base(1);
     time_ubo.bind_base(2);
     model_ubo.bind_base(3);

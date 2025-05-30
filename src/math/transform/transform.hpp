@@ -121,6 +121,8 @@ public:
         return compute_translation() * rotation_.to_rotation_matrix() * scale_mat;
     }
 
+    [[nodiscard]] constexpr Vector3f get_direction() const { return rotation_ * Vector3f::Forward; }
+
     /// Combines two transformations: parent_transform * local_transform.
     /// Applies the local transform relative to the parent's coordinate system.
     /// \param parent The parent's global transform.

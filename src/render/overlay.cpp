@@ -10,17 +10,20 @@
 #include "misc/cpp/imgui_stdlib.h"
 #include "implot.h"
 
+#include <utils/fonts.hpp>
+
 #include <tracy/Tracy.hpp>
 
 namespace xen {
-OverlayWindow& Overlay::add_window(std::string title, Vector2f const& init_size, Vector2f const& init_pos)
+OverlayWindow* Overlay::add_window(std::string title, Vector2f const& init_size, Vector2f const& init_pos)
 {
-    return *windows.emplace_back(std::make_unique<OverlayWindow>(std::move(title), init_size, init_pos));
+    return windows.emplace_back(std::make_unique<OverlayWindow>(std::move(title), init_size, init_pos)).get();
 }
 
-OverlayWindow& Overlay::add_window(std::unique_ptr<OverlayWindow>&& window)
+OverlayWindow* Overlay::add_window(std::unique_ptr<OverlayWindow>&& window)
 {
-    *windows.emplace_back(std::move(window));
+    windows.push_back(std::move(window));
+    return windows.back().get();
 }
 
 bool Overlay::has_keyboard_focus() const
@@ -78,7 +81,7 @@ void Overlay::init(GLFWwindow* window_handle)
     ImGui::CreateContext();
     ImPlot::CreateContext();
 
-    ImGui::StyleColorsDark();
+    ImGui::StyleColorsClassic();
 
     ImGui_ImplGlfw_InitForOpenGL(window_handle, false);
 
@@ -87,6 +90,23 @@ void Overlay::init(GLFWwindow* window_handle)
 #else
     ImGui_ImplOpenGL3_Init("#version 300 es");
 #endif
+
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->Clear();
+
+    static ImVector<ImWchar> ranges;
+    if (ranges.empty()) {
+        ImFontGlyphRangesBuilder builder;
+        builder.AddRanges(io.Fonts->GetGlyphRangesCyrillic());
+        builder.BuildRanges(&ranges);
+    }
+
+    get_fonts().emplace_back(ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(
+        InterMedium_compressed_data, sizeof(InterMedium_compressed_data), 22.f, nullptr, ranges.Data
+    ));
+    get_fonts().emplace_back(ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(
+        InterMedium_compressed_data, sizeof(InterMedium_compressed_data), 84.f, nullptr, ranges.Data
+    ));
 
     Log::debug("[Overlay] Initialized");
 }
@@ -328,7 +348,7 @@ OverlayFpsCounter& OverlayWindow::add_fps_counter(std::string formatted_label)
     );
 }
 
-void OverlayWindow::render() const
+void OverlayWindow::render()
 {
     ZoneScopedN("OverlayWindow::render");
 

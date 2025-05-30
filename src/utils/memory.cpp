@@ -18,7 +18,7 @@ void* operator new(size_t size)
     throw std::bad_alloc();
 }
 
-void* operator new(size_t size, std::nothrow_t const&)
+void* operator new(size_t size, std::nothrow_t const&) noexcept
 {
     try {
         return operator new(size);
@@ -40,7 +40,7 @@ void* operator new[](size_t size)
     throw std::bad_alloc();
 }
 
-void* operator new[](size_t size, std::nothrow_t const&)
+void* operator new[](size_t size, std::nothrow_t const&) noexcept
 {
     try {
         return operator new[](size);
@@ -52,34 +52,34 @@ void* operator new[](size_t size, std::nothrow_t const&)
 
 // See https://en.cppreference.com/w/cpp/memory/new/operator_delete
 
-void operator delete(void* ptr)
+void operator delete(void* ptr) noexcept
 {
     // TracyFree(ptr);
     std::free(ptr);
 }
 
-void operator delete(void* ptr, size_t)
+void operator delete(void* ptr, size_t) noexcept
 {
     operator delete(ptr);
 }
 
-void operator delete(void* ptr, std::nothrow_t const&)
+void operator delete(void* ptr, std::nothrow_t const&) noexcept
 {
     operator delete(ptr);
 }
 
-void operator delete[](void* ptr)
+void operator delete[](void* ptr) noexcept
 {
     // TracyFree(ptr);
     std::free(ptr);
 }
 
-void operator delete[](void* ptr, size_t)
+void operator delete[](void* ptr, size_t) noexcept
 {
     operator delete[](ptr);
 }
 
-void operator delete[](void* ptr, std::nothrow_t const&)
+void operator delete[](void* ptr, std::nothrow_t const&) noexcept
 {
     operator delete[](ptr);
 }

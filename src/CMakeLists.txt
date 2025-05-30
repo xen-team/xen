@@ -184,7 +184,7 @@ endif ()
 # It also always compiles the implementation file, but making it conditional would be much more of a hassle. This may change in the future
 target_link_libraries(xen PUBLIC Tracy)
 
-target_link_libraries(xen PUBLIC fastgltf simdjson stb libbullet3)
+target_link_libraries(xen PUBLIC fastgltf simdjson stb libbullet3 rocket)
 
 target_sources(xen PRIVATE ${XEN_FILES})
 

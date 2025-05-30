@@ -4,13 +4,16 @@
 #include <data/bitset.hpp>
 
 namespace xen {
+class World;
 class Entity;
 using EntityPtr = std::unique_ptr<Entity>;
 
 /// Entity class representing an aggregate of Component objects.
 class Entity {
 public:
-    explicit Entity(size_t index, bool enabled = true) : id{index}, enabled{enabled} {}
+    explicit Entity(World& world, size_t index, bool enabled = true) : id{index}, enabled{enabled}, linked_world(world)
+    {
+    }
 
     Entity(Entity const&) = delete;
     Entity(Entity&&) = delete;
@@ -38,6 +41,8 @@ public:
 
     /// Disables the entity.
     void disable() { enable(false); }
+
+    void destroy();
 
     /// Adds a component to be held by the entity.
     /// \tparam CompT Type of the component to be added.
@@ -89,11 +94,14 @@ public:
     template <typename CompT>
     void remove_component();
 
+    World& get_linked_world() { return linked_world; }
+
 private:
     size_t id{};
     bool enabled{};
     std::vector<ComponentPtr> components{};
     Bitset enabled_components{};
+    World& linked_world;
 };
 }
 

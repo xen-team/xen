@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 namespace xen {
 class FilePath;
 class Mesh;
@@ -10,7 +12,7 @@ namespace MeshFormat {
 /// \param filepath File from which to load the mesh.
 /// \return Pair containing respectively the mesh's data (vertices & indices) and rendering information (materials,
 /// textures, ...).
-std::pair<Mesh, MeshRenderer> load(FilePath const& filepath);
+std::pair<std::shared_ptr<Mesh>, MeshRenderer> load(FilePath const& filepath);
 
 /// Saves a mesh to a file.
 /// \param filepath File to which to save the mesh.

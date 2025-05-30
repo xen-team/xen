@@ -38,7 +38,7 @@ private:
     Vector3f direction{};
     float energy = 1.f;
     Color color{};
-    Radiansf angle = Radiansf(0.f);
+    Radiansf angle = Radiansf(1.f);
 };
 
 }

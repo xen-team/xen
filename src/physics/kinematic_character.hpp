@@ -19,6 +19,7 @@ private:
     float jump_speed;
     float max_height;
     bool interpolate;
+    float capsule_height = 1.f;
 
     std::unique_ptr<btPairCachingGhostObject> ghost_object;
     std::unique_ptr<btKinematicCharacterController> controller;

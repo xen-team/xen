@@ -47,9 +47,9 @@ public:
     void draw() const;
 
 private:
-    VertexArray vao{};
-    VertexBuffer vbo{};
-    IndexBuffer ibo{};
+    VertexArray vao;
+    VertexBuffer vbo;
+    IndexBuffer ibo;
 
     RenderMode render_mode = RenderMode::TRIANGLE;
     std::function<void(VertexBuffer const&, IndexBuffer const&)> render_func{};

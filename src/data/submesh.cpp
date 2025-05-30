@@ -75,4 +75,8 @@ void Submesh::compute_tangents()
     }
 }
 
+Submesh Submesh::clone() const
+{
+    return *this;
+}
 }

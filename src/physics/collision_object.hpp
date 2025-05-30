@@ -1,9 +1,11 @@
 #pragma once
 
+#include "entity.hpp"
 #include "force.hpp"
 
 #include "colliders/collider.hpp"
 #include "utils/classes.hpp"
+#include <BulletCollision/CollisionDispatch/btCollisionObject.h>
 
 class btTransform;
 class btCollisionShape;
@@ -32,6 +34,20 @@ public:
     // void SetChildTransform(Collider* child, Transform const& transform);
     // void AddChild(Collider* child);
     // void RemoveChild(Collider* child);
+
+    void set_entity_owner(Entity* entity) { owner_entity = entity; }
+
+    [[nodiscard]] Entity* get_entity() const { return owner_entity; }
+
+    void set_bt_object_internal(btCollisionObject* obj)
+    {
+        body = obj;
+        if (body) {
+            body->setUserPointer(this);
+        }
+    }
+
+    [[nodiscard]] btCollisionObject* get_bt_collision_object() const { return body; }
 
     void set_ignore_collision_check(CollisionObject* other, bool ignore);
 
@@ -86,6 +102,8 @@ protected:
     Vector3f linear_factor, angular_factor;
 
     Vector3f linear_velocity, angular_velocity;
+
+    Entity* owner_entity = nullptr;
 
     std::unique_ptr<btCollisionShape> shape;
     btCollisionObject* body = nullptr;

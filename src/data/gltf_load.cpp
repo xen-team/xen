@@ -1,6 +1,5 @@
 #include <BulletCollision/CollisionShapes/btConvexHullShape.h>
 #include <data/gltf_format.hpp>
-#include <data/gltf_collider_load.hpp>
 #include <data/image.hpp>
 #include <data/image_format.hpp>
 #include <data/mesh.hpp>
@@ -199,7 +198,7 @@ void load_indices(fastgltf::Asset const& asset, fastgltf::Accessor const& indice
     Log::debug("[GltfLoad] Loaded indices");
 }
 
-std::pair<Mesh, MeshRenderer>
+std::pair<Mesh, MeshRendererData>
 load_meshes(fastgltf::Asset const& asset, std::vector<std::optional<Transform>> const& transforms)
 {
     ZoneScopedN("[GltfLoad]::load_meshes");
@@ -209,7 +208,7 @@ load_meshes(fastgltf::Asset const& asset, std::vector<std::optional<Transform>> 
     Log::vdebug("[GltfLoad] Loading {} mesh(es)...", meshes.size());
 
     Mesh loaded_mesh;
-    MeshRenderer loaded_mesh_renderer;
+    MeshRendererData loaded_mesh_renderer;
 
     for (size_t mesh_index = 0; mesh_index < meshes.size(); ++mesh_index) {
         for (fastgltf::Primitive const& primitive : meshes[mesh_index].primitives) {
@@ -469,7 +468,7 @@ void load_sheen(
 
 void load_materials(
     std::vector<fastgltf::Material> const& materials, std::vector<fastgltf::Texture> const& textures,
-    std::vector<std::optional<Image>> const& images, MeshRenderer& mesh_renderer
+    std::vector<std::optional<Image>> const& images, MeshRendererData& mesh_renderer
 )
 {
     ZoneScopedN("[GltfLoad]::load_materials");
@@ -535,7 +534,7 @@ void load_materials(
 }
 
 namespace GltfFormat {
-std::pair<Mesh, MeshRenderer> load(FilePath const& filepath, FilePath const& proxy_filepath)
+std::pair<Mesh, MeshRendererData> load(FilePath const& filepath)
 {
     ZoneScopedN("GltfFormat::load");
     ZoneTextF("Path: %s", filepath.to_utf8().c_str());
@@ -586,16 +585,16 @@ std::pair<Mesh, MeshRenderer> load(FilePath const& filepath, FilePath const& pro
     return {std::move(mesh), std::move(mesh_renderer)};
 }
 
-Rigidbody& create_map_rigidbody_from_mesh(Entity& entity, Mesh map_mesh, float mass, float friction)
+Rigidbody& create_map_rigidbody_from_mesh(Entity& entity, std::shared_ptr<Mesh> map_mesh)
 {
     ZoneScopedN("[GltfColliderLoad]::create_map_rigidbody_from_mesh");
 
-    if (map_mesh.get_submeshes().empty()) {
+    if (map_mesh->get_submeshes().empty()) {
         Log::warning("[GltfColliderLoad] Map mesh has no submeshes. Cannot create rigidbody.");
         // return nullptr;
     }
 
-    auto tri_mesh_collider = std::make_unique<TriangleMeshCollider>(std::move(map_mesh), Transform());
+    auto tri_mesh_collider = std::make_unique<TriangleMeshCollider>(*map_mesh, Transform());
 
     if (!tri_mesh_collider->get_triangle_mesh_interface() ||
         tri_mesh_collider->get_triangle_mesh_interface()->getNumTriangles() == 0) {
@@ -604,7 +603,8 @@ Rigidbody& create_map_rigidbody_from_mesh(Entity& entity, Mesh map_mesh, float m
         // return nullptr;
     }
 
-    auto& map_rigidbody = entity.add_component<Rigidbody>(std::move(tri_mesh_collider), mass, friction);
+    auto& map_rigidbody =
+        entity.add_component<Rigidbody>(std::move(tri_mesh_collider), 0.f, 0.f, Vector3f(0.f), Vector3f(0.f));
 
     // Log::info("[GltfColliderLoad] Successfully prepared map Rigidbody. Call start() to activate with appropriate
     // transform.");

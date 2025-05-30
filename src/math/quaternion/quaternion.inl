@@ -212,6 +212,13 @@ constexpr float Quaternion::dot(Quaternion const& other) const
     return w * other.w + x * other.x + y * other.y + z * other.z;
 }
 
+constexpr Quaternion Quaternion::lerp(Quaternion const& other, float progression) const
+{
+    auto ta = *this * (1 - progression);
+    auto tb = other * progression;
+    return ta + tb;
+}
+
 constexpr Quaternion Quaternion::slerp(Quaternion const& other, float progression) const
 {
     auto const cosom = x * other.x + y * other.y + z * other.z + w * other.w;

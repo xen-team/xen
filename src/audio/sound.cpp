@@ -95,7 +95,6 @@ void Sound::set_gain(float gain) const
 float Sound::recover_gain() const
 {
     float gain{};
-
     alGetSourcef(source_index, AL_GAIN, &gain);
     check_error("Failed to recover the source's gain");
 
@@ -156,10 +155,6 @@ void Sound::set_repeat(bool repeat) const
 
 void Sound::play() const
 {
-    if (is_playing()) {
-        return;
-    }
-
     alSourcePlay(source_index);
     check_error("Failed to play/resume the sound");
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <imgui.h>
 struct GLFWwindow;
 
 namespace xen {
@@ -47,10 +48,10 @@ public:
     /// from its content.
     /// \param init_pos Initial window position.
     /// \return The newly added window.
-    [[nodiscard]] OverlayWindow&
+    [[nodiscard]] OverlayWindow*
     add_window(std::string title, Vector2f const& init_size = Vector2f(0.f), Vector2f const& init_pos = Vector2f(0.f));
 
-    [[nodiscard]] OverlayWindow& add_window(std::unique_ptr<OverlayWindow>&& window);
+    [[nodiscard]] OverlayWindow* add_window(std::unique_ptr<OverlayWindow>&& window);
 
     /// Checks if the overlay is currently requesting the keyboard inputs.
     /// \return True if the keyboard focus is taken, false otherwise.
@@ -62,6 +63,12 @@ public:
 
     /// Renders the overlay.
     void render() const;
+
+    static auto& get_fonts()
+    {
+        static std::vector<ImFont*> fonts;
+        return fonts;
+    }
 
 private:
     std::vector<std::unique_ptr<OverlayWindow>> windows{};
@@ -596,7 +603,7 @@ public:
     OverlayFpsCounter& add_fps_counter(std::string formatted_label);
 
     /// Renders the window's elements.
-    virtual void render() const;
+    virtual void render();
 
 protected:
     std::string title{};

@@ -1,19 +1,24 @@
 #include "kinematic_character.hpp"
 #include "physics.hpp"
+#include "physics/colliders/capsule_collider.hpp"
 #include "physics/frustum.hpp"
 #include "application.hpp"
 // #include <scene/entity.hpp>
 // #include <scene/scenes.hpp>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
+#include <BulletCollision/CollisionShapes/btCapsuleShape.h>
 #include <BulletCollision/CollisionShapes/btCompoundShape.h>
 #include <BulletSoftBody/btSoftRigidDynamicsWorld.h>
 #include <BulletDynamics/Character/btKinematicCharacterController.h>
 
 namespace xen {
 KinematicCharacter::KinematicCharacter(std::unique_ptr<Collider>&& collider, float mass, float friction) :
-    CollisionObject({}, mass, friction), up(Vector3f::Up), steheight(0.0f), fall_speed(55.0f), jump_speed(10.0f),
+    CollisionObject({}, mass, friction), up(Vector3f::Up), steheight(0.2f), fall_speed(55.0f), jump_speed(10.0f),
     max_height(1.5f), interpolate(true)
 {
+    if (auto* capsule = dynamic_cast<CapsuleCollider*>(collider.get())) {
+        capsule_height = capsule->get_height();
+    }
     add_collider(std::move(collider));
 }
 
@@ -43,18 +48,19 @@ void KinematicCharacter::start(Transform& transform)
 
     create_shape(true);
 
+    set_bt_object_internal(ghost_object.get());
+
     assert((shape || shape->getShapeType() != INVALID_SHAPE_PROXYTYPE) && "Invalid ghost object shape!");
 
     gravity = physics.get_gravity();
 
     btVector3 localInertia;
 
-    // Rigidbody is dynamic if and only if mass is non zero, otherwise static.
     if (mass != 0.0f) {
         shape->calculateLocalInertia(mass, localInertia);
     }
 
-    auto const world_transform = Collider::convert(transform);
+    auto world_transform = Collider::convert(transform);
 
     ghost_object = std::make_unique<btPairCachingGhostObject>();
     ghost_object->setWorldTransform(world_transform);
@@ -73,6 +79,7 @@ void KinematicCharacter::start(Transform& transform)
     controller = std::make_unique<btKinematicCharacterController>(
         ghost_object.get(), dynamic_cast<btConvexShape*>(shape.get()), 0.03f
     );
+
     controller->setGravity(Collider::convert(gravity));
     controller->setUp(Collider::convert(up));
     controller->setStepHeight(steheight);
@@ -81,20 +88,26 @@ void KinematicCharacter::start(Transform& transform)
     controller->setMaxJumpHeight(max_height);
     controller->setUpInterpolate(interpolate);
     physics.get_dynamics_world()->addAction(controller.get());
+    recalculate_mass();
 }
 
 void KinematicCharacter::update(FrameTimeInfo const&, Transform& transform)
 {
     entity_transform = transform;
 
-    auto const old_rotation = transform.get_rotation();
-
     if (shape.get() != body->getCollisionShape()) {
         body->setCollisionShape(shape.get());
     }
+
     auto const world_transform = ghost_object->getWorldTransform();
-    transform = Collider::convert(world_transform, transform.get_scale());
-    transform.set_rotation(old_rotation);
+
+    Vector3f new_position = Collider::convert(world_transform.getOrigin());
+
+    new_position.y += (capsule_height / 4.8f);
+
+    shape->setLocalScaling(Collider::convert(transform.get_scale()));
+
+    transform.set_position(new_position);
 
     linear_velocity = Collider::convert(controller->getLinearVelocity());
     angular_velocity = Collider::convert(controller->getAngularVelocity());

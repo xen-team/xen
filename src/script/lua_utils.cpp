@@ -1,3 +1,4 @@
+#include "utils/health.hpp"
 #include <script/lua_wrapper.hpp>
 #include <utils/filepath.hpp>
 #include <utils/file_utils.hpp>
@@ -93,6 +94,14 @@ void LuaWrapper::register_utils_types()
             );
             ray["compute_projection"] = &Ray::compute_projection;
         }
+    }
+
+    {
+        sol::usertype<Health> health = state.new_usertype<Health>("Health", sol::constructors<Health(float)>());
+        health["get"] = &Health::get;
+        health["get_max"] = &Health::get_max;
+        health["apply_damage"] = &Health::apply_damage;
+        health["apply_heal"] = &Health::apply_heal;
     }
 
     {

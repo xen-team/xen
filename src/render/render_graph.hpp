@@ -1,8 +1,16 @@
 #pragma once
 
+#include "render/mesh_renderer.hpp"
 #include <data/graph.hpp>
 #include <render/render_pass.hpp>
 #include <render/process/render_process.hpp>
+#include <render/shader/shader.hpp>
+
+namespace {
+constexpr std::string_view deferred_shader_source = {
+#include "deferred.frag.embed"
+};
+}
 
 namespace xen {
 class Entity;
@@ -38,6 +46,13 @@ public:
     void update_shaders() const;
 
 private:
+    struct DeferredRender {
+        MeshRenderer const* mesh_render;
+        Matrix4 computed_transform;
+    };
+
+    std::vector<DeferredRender> deferred_mesh_renderers;
+
     RenderPass geometry_pass{};
     std::vector<std::unique_ptr<RenderProcess>> render_processes{};
     std::unordered_set<RenderPass const*> executed_passes{};
@@ -50,12 +65,16 @@ private:
 
     /// Executes the geometry pass.
     /// \param render_system Render system executing the render graph.
-    void execute_geometry_pass(RenderSystem& render_system) const;
+    void execute_geometry_pass(RenderSystem& render_system);
+
+    /// Executes the geometry pass.
+    /// \param render_system Render system executing the render graph.
+    void execute_deferred_pass(RenderSystem& render_system);
 
     /// Executes a render pass, which in turn recursively executes its parents if they have not already been in the
     /// current frame.
     /// \param render_pass Render pass to be executed.
-    void execute_pass(RenderPass const& render_pass);
+    void execute_pass(RenderSystem& render_system, RenderPass const& render_pass);
 };
 }
 

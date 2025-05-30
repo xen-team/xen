@@ -1,4 +1,5 @@
 #include "mesh_renderer.hpp"
+#include "render/renderer.hpp"
 
 #include <data/mesh.hpp>
 
@@ -7,14 +8,7 @@
 #include <tracy/TracyOpenGL.hpp>
 
 namespace xen {
-void MeshRenderer::set_render_mode(RenderMode render_mode, Mesh const& mesh)
-{
-    for (size_t i = 0; i < submesh_renderers.size(); ++i) {
-        submesh_renderers[i].set_render_mode(render_mode, mesh.get_submeshes()[i]);
-    }
-}
-
-Material& MeshRenderer::set_material(Material&& material)
+Material& MeshRendererData::set_material(Material&& material)
 {
     ZoneScopedN("MeshRenderer::set_material");
 
@@ -34,7 +28,7 @@ Material& MeshRenderer::set_material(Material&& material)
     return new_material;
 }
 
-void MeshRenderer::remove_material(size_t material_index)
+void MeshRendererData::remove_material(size_t material_index)
 {
     Log::rt_assert(material_index < materials.size(), "Error: Cannot remove a material that does not exist.");
 
@@ -55,25 +49,7 @@ void MeshRenderer::remove_material(size_t material_index)
         }
     }
 }
-
-MeshRenderer MeshRenderer::clone() const
-{
-    MeshRenderer mesh_renderer;
-
-    mesh_renderer.submesh_renderers.reserve(submesh_renderers.size());
-    for (SubmeshRenderer const& submesh_renderer : submesh_renderers) {
-        mesh_renderer.submesh_renderers.emplace_back(submesh_renderer.clone());
-    }
-
-    mesh_renderer.materials.reserve(materials.size());
-    for (Material const& material : materials) {
-        mesh_renderer.materials.emplace_back(material.clone());
-    }
-
-    return mesh_renderer;
-}
-
-void MeshRenderer::load(Mesh const& mesh, RenderMode render_mode)
+void MeshRendererData::load(Mesh const& mesh, RenderMode render_mode)
 {
     ZoneScopedN("MeshRenderer::load");
 
@@ -98,7 +74,7 @@ void MeshRenderer::load(Mesh const& mesh, RenderMode render_mode)
     Log::debug("[MeshRenderer] Loaded mesh data");
 }
 
-void MeshRenderer::load_materials() const
+void MeshRendererData::load_materials() const
 {
     ZoneScopedN("MeshRenderer::load_materials");
 
@@ -111,7 +87,7 @@ void MeshRenderer::load_materials() const
     }
 }
 
-void MeshRenderer::draw() const
+void MeshRendererData::draw() const
 {
     ZoneScopedN("MeshRenderer::draw");
     TracyGpuZone("MeshRenderer::draw");

@@ -266,7 +266,7 @@ int main()
 
         xen::Entity& mesh = world.add_entity();
 
-        auto [meshData, meshRenderData] = xen::MeshFormat::load("assets/meshes/shield.obj");
+        // auto [meshData, meshRenderData] = xen::MeshFormat::load("assets/meshes/shield.obj");
 
         xen::Entity& sponza = world.add_entity();
         auto& sponzaRenderComp =

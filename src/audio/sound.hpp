@@ -1,5 +1,6 @@
 #pragma once
 
+#include "rocket.hpp"
 #include <component.hpp>
 #include <audio/audio_data.hpp>
 #include <data/owner_value.hpp>

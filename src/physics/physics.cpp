@@ -79,6 +79,11 @@ void PhysicsSystem::start()
 
 bool PhysicsSystem::update(FrameTimeInfo const& time_info)
 {
+    if (paused) {
+        return true;
+    }
+
+    dynamics_world->stepSimulation(time_info.delta_time);
     for (Entity* entity : entities) {
         if (entity->has_component<Rigidbody>()) {
             auto& rigidbody = entity->get_component<Rigidbody>();
@@ -89,8 +94,6 @@ bool PhysicsSystem::update(FrameTimeInfo const& time_info)
             kinematic_character.update(time_info, entity->get_component<Transform>());
         }
     }
-
-    dynamics_world->stepSimulation(time_info.delta_time);
     check_for_collision_events();
 
     return true;
@@ -100,6 +103,7 @@ Raycast PhysicsSystem::raytest(Vector3f const& start, Vector3f const& end) const
 {
     auto startBt = Collider::convert(start);
     auto endBt = Collider::convert(end);
+
     btCollisionWorld::ClosestRayResultCallback result(startBt, endBt);
     dynamics_world->getCollisionWorld()->rayTest(startBt, endBt, result);
 

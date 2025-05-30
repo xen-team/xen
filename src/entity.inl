@@ -1,8 +1,11 @@
 #pragma once
+#include "physics/collision_object.hpp"
 
 #include "entity.hpp"
 
 namespace xen {
+class CollisionObject;
+
 template <typename CompT, typename... Args>
 CompT& Entity::add_component(Args&&... args)
 {
@@ -18,7 +21,13 @@ CompT& Entity::add_component(Args&&... args)
     components[comp_id] = std::make_unique<CompT>(std::forward<Args>(args)...);
     enabled_components.set_bit(comp_id);
 
-    return static_cast<CompT&>(*components[comp_id]);
+    auto& new_comp_ref = static_cast<CompT&>(*components[comp_id]);
+
+    if constexpr (std::is_base_of_v<CollisionObject, CompT>) {
+        new_comp_ref.set_entity_owner(this);
+    }
+
+    return new_comp_ref;
 }
 
 template <typename CompT>
