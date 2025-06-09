@@ -20,7 +20,7 @@ inline BufferDataUsage recover_data_usage(UniformBufferUsage usage)
 }
 }
 
-UniformBuffer::UniformBuffer(uint size, UniformBufferUsage usage) : UniformBuffer()
+UniformBuffer::UniformBuffer(uint32_t size, UniformBufferUsage usage) : UniformBuffer()
 {
     Log::vdebug("[UniformBuffer] Creating (with size: {})...", size);
 
@@ -33,30 +33,31 @@ UniformBuffer::UniformBuffer(uint size, UniformBufferUsage usage) : UniformBuffe
     Log::debug("[UniformBuffer] Created (ID: " + std::to_string(index) + ")");
 }
 
-void UniformBuffer::bind_uniform_block(ShaderProgram const& program, uint ubo_index, uint shader_binding_index) const
+void UniformBuffer::bind_uniform_block(ShaderProgram const& program, uint32_t ubo_index, uint32_t shader_binding_index)
+    const
 {
     Renderer::bind_uniform_block(program.get_index(), ubo_index, shader_binding_index);
 }
 
 void UniformBuffer::bind_uniform_block(
-    ShaderProgram const& program, std::string const& ubo_name, uint shader_binding_index
+    ShaderProgram const& program, std::string const& ubo_name, uint32_t shader_binding_index
 ) const
 {
-    uint const block_index = Renderer::recover_uniform_block_index(program.get_index(), ubo_name.c_str());
+    uint32_t const block_index = Renderer::recover_uniform_block_index(program.get_index(), ubo_name.c_str());
 
-    if (block_index == std::numeric_limits<uint>::max()) {
+    if (block_index == std::numeric_limits<uint32_t>::max()) {
         return; // The uniform buffer is either not declared or unused in the given shader program; not binding anything
     }
 
     bind_uniform_block(program, block_index, shader_binding_index);
 }
 
-void UniformBuffer::bind_base(uint buffer_binding_index) const
+void UniformBuffer::bind_base(uint32_t buffer_binding_index) const
 {
     Renderer::bind_buffer_base(BufferType::UNIFORM_BUFFER, buffer_binding_index, index);
 }
 
-void UniformBuffer::bind_range(uint buffer_binding_index, std::ptrdiff_t offset, std::ptrdiff_t size) const
+void UniformBuffer::bind_range(uint32_t buffer_binding_index, std::ptrdiff_t offset, std::ptrdiff_t size) const
 {
     Renderer::bind_buffer_range(BufferType::UNIFORM_BUFFER, buffer_binding_index, index, offset, size);
 }
@@ -87,7 +88,7 @@ UniformBuffer::UniformBuffer()
     Renderer::generate_buffer(index);
 }
 
-void UniformBuffer::send_data(void const* data, std::ptrdiff_t size, uint offset) const
+void UniformBuffer::send_data(void const* data, std::ptrdiff_t size, uint32_t offset) const
 {
     Renderer::send_buffer_sub_data(BufferType::UNIFORM_BUFFER, offset, size, data);
 }

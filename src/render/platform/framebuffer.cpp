@@ -97,7 +97,7 @@ void Framebuffer::set_depth_buffer(Texture2DPtr texture)
     map_buffers();
 }
 
-void Framebuffer::add_color_buffer(Texture2DPtr texture, uint index)
+void Framebuffer::add_color_buffer(Texture2DPtr texture, uint32_t index)
 {
     if (texture->get_colorspace() == TextureColorspace::DEPTH ||
         texture->get_colorspace() == TextureColorspace::INVALID) {
@@ -173,7 +173,7 @@ void Framebuffer::map_buffers() const
         for (auto const& [color_buffer, buffer_index] : color_buffers) {
             Log::debug("[Framebuffer] Mapping color buffer " + std::to_string(buffer_index) + "...");
 
-            size_t const color_attachment = static_cast<uint>(DrawBuffer::COLOR_ATTACHMENT0) + buffer_index;
+            size_t const color_attachment = static_cast<uint32_t>(DrawBuffer::COLOR_ATTACHMENT0) + buffer_index;
 
             Renderer::set_framebuffer_texture_2d(
                 static_cast<FramebufferAttachment>(color_attachment), color_buffer->get_index(), 0,
@@ -186,7 +186,7 @@ void Framebuffer::map_buffers() const
             draw_buffers[buffer_index] = static_cast<DrawBuffer>(color_attachment);
         }
 
-        Renderer::set_draw_buffers(static_cast<uint>(draw_buffers.size()), draw_buffers.data());
+        Renderer::set_draw_buffers(static_cast<uint32_t>(draw_buffers.size()), draw_buffers.data());
     }
 
     unbind();

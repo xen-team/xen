@@ -13,7 +13,7 @@ bool RenderPass::is_valid() const
     // Since a pass can get read & write buffers from other sources than the previous pass, one may have more or less
     //  buffers than its parent write to. Direct buffer compatibility is thus not checked
 
-    std::vector<std::pair<Texture2DPtr, uint>> const& write_color_buffers = write_framebuffer.color_buffers;
+    std::vector<std::pair<Texture2DPtr, uint32_t>> const& write_color_buffers = write_framebuffer.color_buffers;
 
     for (auto const& [texture, _] : program.get_textures()) {
         // If the same depth buffer exists both in read & write, the pass is invalid

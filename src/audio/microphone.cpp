@@ -90,7 +90,7 @@ constexpr int recover_frame_size(AudioFormat format)
     return channel_count * bit_count / 8;
 }
 }
-Microphone::Microphone(AudioFormat format, uint frequency, float duration, std::string const& device_name)
+Microphone::Microphone(AudioFormat format, uint32_t frequency, float duration, std::string const& device_name)
 {
     ZoneScopedN("Microphone::Microphone");
     open_device(format, frequency, duration, device_name);
@@ -117,7 +117,7 @@ std::vector<std::string> Microphone::recover_devices()
     return devices;
 }
 
-void Microphone::open_device(AudioFormat format, uint frequency, float duration, std::string const& device_name)
+void Microphone::open_device(AudioFormat format, uint32_t frequency, float duration, std::string const& device_name)
 {
     ZoneScopedN("Microphone::open_device");
 

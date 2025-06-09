@@ -53,9 +53,9 @@ private:
             }
 
             for (size_t i = 0; (i + 2) < indices.size(); i += 3) {
-                uint const idx0 = indices[i];
-                uint const idx1 = indices[i + 1];
-                uint const idx2 = indices[i + 2];
+                uint32_t const idx0 = indices[i];
+                uint32_t const idx1 = indices[i + 1];
+                uint32_t const idx2 = indices[i + 2];
 
                 if (idx0 >= vertices.size() || idx1 >= vertices.size() || idx2 >= vertices.size()) {
                     // Log::error("[TriangleMeshCollider] Vertex index out of bounds. Idx: ({},{},{}), Vertices: {}.

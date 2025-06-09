@@ -167,7 +167,7 @@ XrSession::XrSession(XrContext const& context) : instance{context.instance}
     }
 }
 
-void XrSession::begin(uint view_config_type)
+void XrSession::begin(uint32_t view_config_type)
 {
     Log::debug("[XrSession] Beginning session...");
 
@@ -187,8 +187,8 @@ void XrSession::end()
 }
 
 bool XrSession::render_frame(
-    std::vector<XrViewConfigurationView> const& view_config_views, uint view_config_type, uint environment_blend_mode,
-    ViewRenderFunc const& view_render_func
+    std::vector<XrViewConfigurationView> const& view_config_views, uint32_t view_config_type,
+    uint32_t environment_blend_mode, ViewRenderFunc const& view_render_func
 ) const
 {
     ZoneScopedN("XrSession::render_frame");
@@ -451,8 +451,8 @@ void XrSession::create_swapchain_images(XrSwapchain swapchain, SwapchainType swa
 }
 
 bool XrSession::render_layer(
-    RenderLayerInfo& layer_info, std::vector<XrViewConfigurationView> const& view_config_views, uint view_config_type,
-    ViewRenderFunc const& view_render_func
+    RenderLayerInfo& layer_info, std::vector<XrViewConfigurationView> const& view_config_views,
+    uint32_t view_config_type, ViewRenderFunc const& view_render_func
 ) const
 {
     ZoneScopedN("XrSession::render_layer");

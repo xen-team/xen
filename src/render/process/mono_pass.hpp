@@ -26,7 +26,7 @@ public:
 protected:
     void set_input_buffer(Texture2DPtr input_buffer, std::string const& uniform_name);
 
-    void set_output_buffer(Texture2DPtr output_buffer, uint index);
+    void set_output_buffer(Texture2DPtr output_buffer, uint32_t index);
 
 protected:
     RenderPass& pass;

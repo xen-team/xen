@@ -11,7 +11,7 @@ using Texture1DPtr = std::shared_ptr<class Texture1D>;
 #endif
 using Texture2DPtr = std::shared_ptr<class Texture2D>;
 using Texture3DPtr = std::shared_ptr<class Texture3D>;
-enum class TextureType : uint;
+enum class TextureType : uint32_t;
 
 enum class TextureColorspace { INVALID = -1, GRAY = 0, RG, RGB, RGBA, SRGB, SRGBA, DEPTH };
 
@@ -32,7 +32,7 @@ public:
 
     virtual ~Texture();
 
-    [[nodiscard]] uint get_index() const { return index; }
+    [[nodiscard]] uint32_t get_index() const { return index; }
 
     [[nodiscard]] TextureColorspace get_colorspace() const { return colorspace; }
 
@@ -63,7 +63,7 @@ public:
     void set_colorspace(TextureColorspace colorspace, TextureDataType data_type);
 
 protected:
-    OwnerValue<uint> index{};
+    OwnerValue<uint32_t> index{};
     TextureType type{};
 
     TextureColorspace colorspace = TextureColorspace::INVALID;
@@ -92,14 +92,14 @@ public:
     {
         set_colorspace(colorspace, data_type);
     }
-    Texture1D(uint width, TextureColorspace colorspace) : Texture1D(colorspace) { resize(width); }
-    Texture1D(uint width, TextureColorspace colorspace, TextureDataType data_type);
+    Texture1D(uint32_t width, TextureColorspace colorspace) : Texture1D(colorspace) { resize(width); }
+    Texture1D(uint32_t width, TextureColorspace colorspace, TextureDataType data_type);
     /// Constructs a plain colored texture.
     /// \param color Color to fill the texture with.
     /// \param width Width of the texture to create.
-    explicit Texture1D(Color const& color, uint width = 1);
+    explicit Texture1D(Color const& color, uint32_t width = 1);
 
-    uint get_width() const { return width; }
+    uint32_t get_width() const { return width; }
 
     template <typename... Args>
     static Texture1DPtr create(Args&&... args)
@@ -109,14 +109,14 @@ public:
 
     /// Resizes the texture.
     /// \param width New texture width.
-    void resize(uint width);
+    void resize(uint32_t width);
 
     /// Fills the texture with a single color.
     /// \param color Color to fill the texture with.
     void fill(Color const& color);
 
 private:
-    uint width = 0;
+    uint32_t width = 0;
 
 private:
     void load() const override;
@@ -151,9 +151,9 @@ public:
 
     Vector2ui get_size() const { return size; }
 
-    uint get_width() const { return size.x; }
+    uint32_t get_width() const { return size.x; }
 
-    uint get_height() const { return size.y; }
+    uint32_t get_height() const { return size.y; }
 
     template <typename... Args>
     static Texture2DPtr create(Args&&... args)
@@ -220,9 +220,9 @@ public:
     explicit Texture3D(Color const& color, Vector3ui size = Vector3ui(1));
 
     Vector3ui get_size() const { return size; }
-    uint get_width() const { return size.x; }
-    uint get_height() const { return size.y; }
-    uint get_depth() const { return size.z; }
+    uint32_t get_width() const { return size.x; }
+    uint32_t get_height() const { return size.y; }
+    uint32_t get_depth() const { return size.z; }
 
     template <typename... Args>
     static Texture3DPtr create(Args&&... args)

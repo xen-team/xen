@@ -182,7 +182,9 @@ void load_vertices(
     Log::debug("[GltfLoad] Loaded vertices");
 }
 
-void load_indices(fastgltf::Asset const& asset, fastgltf::Accessor const& indices_accessor, std::vector<uint>& indices)
+void load_indices(
+    fastgltf::Asset const& asset, fastgltf::Accessor const& indices_accessor, std::vector<uint32_t>& indices
+)
 {
     ZoneScopedN("[GltfLoad]::load_indices");
 
@@ -193,7 +195,7 @@ void load_indices(fastgltf::Asset const& asset, fastgltf::Accessor const& indice
     }
 
     indices.resize(indices_accessor.count);
-    fastgltf::copyFromAccessor<uint>(asset, indices_accessor, indices.data());
+    fastgltf::copyFromAccessor<uint32_t>(asset, indices_accessor, indices.data());
 
     Log::debug("[GltfLoad] Loaded indices");
 }
@@ -383,8 +385,8 @@ Image merge_images(Image const& image1, Image const& image2)
 
     Image res(image1.get_size(), colorspace, image1.get_data_type());
 
-    for (uint height_index = 0; height_index < image1.get_height(); ++height_index) {
-        for (uint width_index = 0; width_index < image1.get_width(); ++width_index) {
+    for (uint32_t height_index = 0; height_index < image1.get_height(); ++height_index) {
+        for (uint32_t width_index = 0; width_index < image1.get_width(); ++width_index) {
             for (uint8_t channel_index = 0; channel_index < image1.get_channel_count(); ++channel_index)
                 res.set_byte_value(
                     width_index, height_index, channel_index,

@@ -8,7 +8,7 @@
 namespace xen {
 ThreadPool::ThreadPool() : ThreadPool(get_system_thread_count()) {}
 
-ThreadPool::ThreadPool(uint thread_count)
+ThreadPool::ThreadPool(uint32_t thread_count)
 {
     ZoneScopedN("ThreadPool::ThreadPool");
 
@@ -16,7 +16,7 @@ ThreadPool::ThreadPool(uint thread_count)
 
     threads.reserve(thread_count);
 
-    for (uint thread_index = 0; thread_index < thread_count; ++thread_index) {
+    for (uint32_t thread_index = 0; thread_index < thread_count; ++thread_index) {
         threads.emplace_back([this
 #if defined(TRACY_ENABLE)
                               ,

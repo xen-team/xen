@@ -14,19 +14,19 @@ public:
 
     ~VertexArray();
 
-    [[nodiscard]] uint get_index() const { return index; }
+    [[nodiscard]] uint32_t get_index() const { return index; }
 
     void bind() const;
 
     void unbind() const;
 
 private:
-    OwnerValue<uint> index{0};
+    OwnerValue<uint32_t> index{0};
 };
 
 class VertexBuffer {
 public:
-    uint vertex_count{0};
+    uint32_t vertex_count{0};
 
 public:
     VertexBuffer();
@@ -38,19 +38,19 @@ public:
 
     ~VertexBuffer();
 
-    [[nodiscard]] uint get_index() const { return index; }
+    [[nodiscard]] uint32_t get_index() const { return index; }
 
     void bind() const;
     void unbind() const;
 
 private:
-    OwnerValue<uint> index{0};
+    OwnerValue<uint32_t> index{0};
 };
 
 class IndexBuffer {
 public:
-    uint line_index_count{0};
-    uint triangle_index_count{0};
+    uint32_t line_index_count{0};
+    uint32_t triangle_index_count{0};
 
 public:
     IndexBuffer();
@@ -62,12 +62,12 @@ public:
 
     ~IndexBuffer();
 
-    [[nodiscard]] uint get_index() const { return index; }
+    [[nodiscard]] uint32_t get_index() const { return index; }
 
     void bind() const;
     void unbind() const;
 
 private:
-    OwnerValue<uint> index{0};
+    OwnerValue<uint32_t> index{0};
 };
 }

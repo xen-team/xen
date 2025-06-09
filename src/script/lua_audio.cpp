@@ -75,12 +75,13 @@ void LuaWrapper::register_audio_types()
         sol::usertype<Microphone> microphone = state.new_usertype<Microphone>(
             "Microphone",
             sol::constructors<
-                Microphone(AudioFormat, uint, float), Microphone(AudioFormat, uint, float, std::string const&)>()
+                Microphone(AudioFormat, uint32_t, float), Microphone(AudioFormat, uint32_t, float, std::string const&)>(
+            )
         );
         microphone["recover_devices"] = &Microphone::recover_devices;
         microphone["open_device"] = sol::overload(
-            [](Microphone& m, AudioFormat fmt, uint freq, float d) { m.open_device(fmt, freq, d); },
-            PickOverload<AudioFormat, uint, float, std::string const&>(&Microphone::open_device)
+            [](Microphone& m, AudioFormat fmt, uint32_t freq, float d) { m.open_device(fmt, freq, d); },
+            PickOverload<AudioFormat, uint32_t, float, std::string const&>(&Microphone::open_device)
         );
         microphone["recover_current_device"] = &Microphone::recover_current_device;
         microphone["start"] = &Microphone::start;

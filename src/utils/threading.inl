@@ -14,7 +14,7 @@ std::future<ResultT> launch_async(FuncT&& action, Args&&... args)
 }
 
 template <typename BegIndexT, typename EndIndexT, typename FuncT, typename>
-void parallelize(BegIndexT begin_index, EndIndexT end_index, FuncT const& action, uint task_count)
+void parallelize(BegIndexT begin_index, EndIndexT end_index, FuncT const& action, uint32_t task_count)
 {
     static_assert(
         std::is_invocable_v<FuncT, IndexRange>, "Error: The given action must take an IndexRange as parameter"
@@ -69,7 +69,7 @@ void parallelize(BegIndexT begin_index, EndIndexT end_index, FuncT const& action
 }
 
 template <typename IterT, typename FuncT, typename>
-void parallelize(IterT begin, IterT end, FuncT const& action, uint task_count)
+void parallelize(IterT begin, IterT end, FuncT const& action, uint32_t task_count)
 {
     static_assert(
         std::is_invocable_v<FuncT, IterRange<IterT>>, "Error: The given action must take an IterRange as parameter"

@@ -2,7 +2,7 @@
 
 namespace xen::PerlinNoise {
 namespace {
-constexpr std::array<uint, 512> permutations = {
+constexpr std::array<uint32_t, 512> permutations = {
     151, 160, 137, 91,  90,  15,  131, 13,  201, 95,  96,  53,  194, 233, 7,   225, 140, 36,  103, 30,  69,  142, 8,
     99,  37,  240, 21,  10,  23,  190, 6,   148, 247, 120, 234, 75,  0,   26,  197, 62,  94,  252, 219, 203, 117, 35,
     11,  32,  57,  177, 33,  88,  237, 149, 56,  87,  174, 20,  125, 136, 171, 168, 68,  175, 74,  165, 71,  134, 139,
@@ -52,7 +52,7 @@ constexpr std::array<Vector3f, 16> gradients_3d = {
     Vector3f(0.f, -0.7071067691f, 0.7071067691f), Vector3f(0.f, -0.7071067691f, -0.7071067691f)
 };
 
-constexpr float get_gradient_1d(uint x)
+constexpr float get_gradient_1d(uint32_t x)
 {
     return (permutations[x] % 2 == 0 ? 1.f : -1.f);
 }
@@ -63,9 +63,9 @@ constexpr float compute_value(float x)
     //
     //  x0---------x0+1
 
-    auto const int_x = static_cast<uint>(x);
+    auto const int_x = static_cast<uint32_t>(x);
 
-    uint const x0 = int_x & 255u;
+    uint32_t const x0 = int_x & 255u;
 
     float const left_grad = get_gradient_1d(x0);
     float const right_grad = get_gradient_1d(x0 + 1);
@@ -99,11 +99,11 @@ constexpr float compute_value(Vector2f const& pos)
     //     |      |
     // x0/y0______x0+1
 
-    auto const int_x = static_cast<uint>(pos.x);
-    auto const int_y = static_cast<uint>(pos.y);
+    auto const int_x = static_cast<uint32_t>(pos.x);
+    auto const int_y = static_cast<uint32_t>(pos.y);
 
-    uint const x0 = int_x & 255u;
-    uint const y0 = int_y & 255u;
+    uint32_t const x0 = int_x & 255u;
+    uint32_t const y0 = int_y & 255u;
 
     // Recovering pseudo-random gradients at each corner of the quad
     Vector2f const& bot_left_grad = get_gradient_2d(Vector2ui(x0, y0));
@@ -145,13 +145,13 @@ constexpr float compute_value(Vector3f const& pos)
 {
     // Recovering integer coordinates on the cube
 
-    auto const int_x = static_cast<uint>(pos.x);
-    auto const int_y = static_cast<uint>(pos.y);
-    auto const int_z = static_cast<uint>(pos.z);
+    auto const int_x = static_cast<uint32_t>(pos.x);
+    auto const int_y = static_cast<uint32_t>(pos.y);
+    auto const int_z = static_cast<uint32_t>(pos.z);
 
-    uint const x0 = int_x & 255u;
-    uint const y0 = int_y & 255u;
-    uint const z0 = int_z & 255u;
+    uint32_t const x0 = int_x & 255u;
+    uint32_t const y0 = int_y & 255u;
+    uint32_t const z0 = int_z & 255u;
 
     // Recovering pseudo-random gradients at each corner of the quad
     Vector3f const& bot_left_back_grad = get_gradient_3d(Vector3ui(x0, y0, z0));

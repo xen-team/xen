@@ -4,7 +4,7 @@
 #include <render/graphic_objects.hpp>
 
 namespace xen {
-enum class RenderMode : uint {
+enum class RenderMode : uint32_t {
     POINT,    ///< Renders the submesh as points.
     LINE,     ///< Renders the submesh as lines.
     TRIANGLE, ///< Renders the submesh as triangles.

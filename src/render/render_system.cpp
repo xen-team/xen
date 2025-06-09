@@ -102,7 +102,7 @@ void RenderSystem::update_lights() const
 {
     ZoneScopedN("RenderSystem::update_lights");
 
-    uint light_count = 0;
+    uint32_t light_count = 0;
 
     lights_ubo.bind();
 
@@ -312,28 +312,28 @@ void RenderSystem::send_camera_info() const
     send_view_projection(camera.get_projection() * camera.get_view());
 }
 
-void RenderSystem::update_light(Entity const& entity, uint light_index) const
+void RenderSystem::update_light(Entity const& entity, uint32_t light_index) const
 {
     auto const& light = entity.get_component<Light>();
     size_t const data_stride = sizeof(Vector4f) * 4 * light_index;
 
     if (light.get_type() == LightType::DIRECTIONAL) {
-        lights_ubo.send_data(Vector4f(0.f), static_cast<uint>(data_stride));
+        lights_ubo.send_data(Vector4f(0.f), static_cast<uint32_t>(data_stride));
     }
     else {
         Log::rt_assert(
             entity.has_component<Transform>(), "Error: A non-directional light needs to have a Transform component."
         );
         lights_ubo.send_data(
-            Vector4f(entity.get_component<Transform>().get_position(), 1.f), static_cast<uint>(data_stride)
+            Vector4f(entity.get_component<Transform>().get_position(), 1.f), static_cast<uint32_t>(data_stride)
         );
     }
 
-    lights_ubo.send_data(light.get_direction(), static_cast<uint>(data_stride + sizeof(Vector4f)));
-    lights_ubo.send_data(light.get_color(), static_cast<uint>(data_stride + sizeof(Vector4f) * 2));
-    lights_ubo.send_data(light.get_energy(), static_cast<uint>(data_stride + sizeof(Vector4f) * 3));
+    lights_ubo.send_data(light.get_direction(), static_cast<uint32_t>(data_stride + sizeof(Vector4f)));
+    lights_ubo.send_data(light.get_color(), static_cast<uint32_t>(data_stride + sizeof(Vector4f) * 2));
+    lights_ubo.send_data(light.get_energy(), static_cast<uint32_t>(data_stride + sizeof(Vector4f) * 3));
     lights_ubo.send_data(
-        light.get_angle().value, static_cast<uint>(data_stride + sizeof(Vector4f) * 3 + sizeof(float))
+        light.get_angle().value, static_cast<uint32_t>(data_stride + sizeof(Vector4f) * 3 + sizeof(float))
     );
 }
 

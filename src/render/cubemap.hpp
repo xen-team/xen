@@ -25,7 +25,7 @@ public:
 
     ~Cubemap();
 
-    [[nodiscard]] uint get_index() const { return index; }
+    [[nodiscard]] uint32_t get_index() const { return index; }
 
     [[nodiscard]] RenderShaderProgram const& get_program() const;
 
@@ -51,6 +51,6 @@ public:
     void draw() const;
 
 private:
-    OwnerValue<uint> index;
+    OwnerValue<uint32_t> index;
 };
 }

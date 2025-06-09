@@ -12,7 +12,7 @@ public:
     /// exceed this value.
     /// \param device_name Name of the audio capture device to open; if empty, will use the default one.
     /// \see Microphone::recover_devices()
-    Microphone(AudioFormat format, uint frequency, float duration, std::string const& device_name = {});
+    Microphone(AudioFormat format, uint32_t frequency, float duration, std::string const& device_name = {});
     Microphone(Microphone const&) = delete;
     Microphone(Microphone&&) = delete;
 
@@ -32,7 +32,7 @@ public:
     /// exceed this value.
     /// \param device_name Name of the audio capture device to open; if empty, will use the default one.
     /// \see Microphone::recover_devices()
-    void open_device(AudioFormat format, uint frequency, float duration, std::string const& device_name = {});
+    void open_device(AudioFormat format, uint32_t frequency, float duration, std::string const& device_name = {});
 
     /// Recovers the name of the current audio capture device.
     /// \return The current device's name, or an empty string if the required extension is unsupported.
@@ -73,7 +73,7 @@ private:
     void* device{};
 
     AudioFormat format{};
-    uint frequency{};
+    uint32_t frequency{};
 
 private:
     /// Destroys the microphone.

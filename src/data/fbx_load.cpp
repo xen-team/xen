@@ -242,24 +242,7 @@ std::pair<Mesh, MeshRenderer> load(FilePath const& filepath)
             }
         }
 
-        // Recovering tangents
-        // Not working yet, fetching/calculating way too many tangents (around 4x the amount of vertices)
-        /*
-        fbx_mesh->GenerateTangentsData(mesh_texcoords->GetName()); // Generate tangents using UVs
-        const fbxsdk::FbxGeometryElementTangent* meshTangents = fbx_mesh->GetElementTangent();
-
-        if (meshTangents) {
-          for (int tanIndex = 0; tanIndex < meshTangents->GetDirectArray().GetCount(); ++tanIndex) {
-            const fbxsdk::FbxVector4 tan = global_transform.MultR(meshTangents->GetDirectArray()[tanIndex]);
-
-            vertices[tanIndex].tangent.x = static_cast<float>(tan[0]);
-            vertices[tanIndex].tangent.y = static_cast<float>(tan[1]);
-            vertices[tanIndex].tangent.z = static_cast<float>(tan[2]);
-          }
-        }
-        */
-
-        std::vector<uint>& indices = submesh.get_triangle_indices();
+        std::vector<uint32_t>& indices = submesh.get_triangle_indices();
 
         // Process recovered data
         indices.reserve(static_cast<size_t>(fbx_mesh->GetPolygonCount()) * 3);

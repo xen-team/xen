@@ -282,7 +282,7 @@ void ShaderProgram::bind_textures() const
 
     use();
 
-    uint texture_index = 0;
+    uint32_t texture_index = 0;
 
     for (auto const& [texture, _] : textures) {
         Renderer::activate_texture(texture_index++);
@@ -338,7 +338,7 @@ void ShaderProgram::bind_image_textures() const
 
     use();
 
-    uint binding_index = 0;
+    uint32_t binding_index = 0;
 
     for (auto const& [texture, info] : image_textures) {
         Renderer::bind_image_texture(binding_index++, texture->get_index(), 0, false, 0, info.access, info.format);
@@ -380,7 +380,7 @@ void ShaderProgram::send_uniform(int index, int value) const
     Renderer::send_uniform(index, value);
 }
 
-void ShaderProgram::send_uniform(int index, uint value) const
+void ShaderProgram::send_uniform(int index, uint32_t value) const
 {
     check_program_used(*this);
     Renderer::send_uniform(index, value);
@@ -398,7 +398,7 @@ void ShaderProgram::send_uniform(int index, int const* values, size_t count) con
     Renderer::send_uniform_vector1fi(index, values, static_cast<int>(count));
 }
 
-void ShaderProgram::send_uniform(int index, uint const* values, size_t count) const
+void ShaderProgram::send_uniform(int index, uint32_t const* values, size_t count) const
 {
     check_program_used(*this);
     Renderer::send_uniform_vector1fui(index, values, static_cast<int>(count));

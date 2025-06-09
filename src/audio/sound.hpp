@@ -27,7 +27,7 @@ public:
 
     ~Sound() override { destroy(); }
 
-    constexpr uint get_buffer_index() const { return buffer_index; }
+    constexpr uint32_t get_buffer_index() const { return buffer_index; }
 
     constexpr AudioData const& get_data() const { return data; }
 
@@ -129,8 +129,8 @@ public:
     void destroy();
 
 private:
-    OwnerValue<uint, std::numeric_limits<uint>::max()> buffer_index{};
-    OwnerValue<uint, std::numeric_limits<uint>::max()> source_index{};
+    OwnerValue<uint32_t, std::numeric_limits<uint32_t>::max()> buffer_index{};
+    OwnerValue<uint32_t, std::numeric_limits<uint32_t>::max()> source_index{};
 
     AudioData data{};
 

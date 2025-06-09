@@ -9,7 +9,7 @@ namespace xen {
 namespace {
 #if !defined(XEN_IS_PLATFORM_MAC) && !defined(USE_OPENGL_ES)
 inline void GLAPIENTRY log_callback(
-    GLenum source, GLenum type, uint id, GLenum severity, int /* length */, const char* message,
+    GLenum source, GLenum type, uint32_t id, GLenum severity, int /* length */, const char* message,
     const void* /* userParam */
 )
 {
@@ -92,7 +92,7 @@ inline void GLAPIENTRY log_callback(
 }
 #endif
 
-inline constexpr const char* recover_gl_error_str(uint error_code)
+inline constexpr const char* recover_gl_error_str(uint32_t error_code)
 {
     switch (error_code) {
     case GL_INVALID_ENUM:
@@ -151,7 +151,7 @@ void Renderer::init()
         extensions.reserve(static_cast<size_t>(ext_count));
 
         for (int ext_index = 0; ext_index < ext_count; ++ext_index) {
-            extensions.emplace(get_extension(static_cast<uint>(ext_index)));
+            extensions.emplace(get_extension(static_cast<uint32_t>(ext_index)));
         }
     }
 
@@ -191,7 +191,7 @@ void Renderer::enable(Capability capability)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glEnable(static_cast<uint>(capability));
+    glEnable(static_cast<uint32_t>(capability));
 
     print_conditional_errors();
 }
@@ -200,7 +200,7 @@ void Renderer::disable(Capability capability)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glDisable(static_cast<uint>(capability));
+    glDisable(static_cast<uint32_t>(capability));
 
     print_conditional_errors();
 }
@@ -209,7 +209,7 @@ bool Renderer::is_enabled(Capability capability)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    bool const is_enabled = (glIsEnabled(static_cast<uint>(capability)) == GL_TRUE);
+    bool const is_enabled = (glIsEnabled(static_cast<uint32_t>(capability)) == GL_TRUE);
 
     print_conditional_errors();
 
@@ -220,14 +220,14 @@ std::string Renderer::get_context_info(ContextInfo info)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    std::string res = reinterpret_cast<char const*>(glGetString(static_cast<uint>(info)));
+    std::string res = reinterpret_cast<char const*>(glGetString(static_cast<uint32_t>(info)));
 
     print_conditional_errors();
 
     return res;
 }
 
-std::string Renderer::get_extension(uint ext_index)
+std::string Renderer::get_extension(uint32_t ext_index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 #if defined(XEN_CONFIG_DEBUG)
@@ -249,7 +249,7 @@ void Renderer::get_parameter(StateParameter parameter, unsigned char* values)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glGetBooleanv(static_cast<uint>(parameter), values);
+    glGetBooleanv(static_cast<uuint32_tint>(parameter), values);
 
     print_conditional_errors();
 }
@@ -258,7 +258,7 @@ void Renderer::get_parameter(StateParameter parameter, int* values)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glGetIntegerv(static_cast<uint>(parameter), values);
+    glGetIntegerv(static_cast<uint32_t>(parameter), values);
 
     print_conditional_errors();
 }
@@ -267,7 +267,7 @@ void Renderer::get_parameter(StateParameter parameter, int64_t* values)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glGetInteger64v(static_cast<uint>(parameter), values);
+    glGetInteger64v(static_cast<uint32_t>(parameter), values);
 
     print_conditional_errors();
 }
@@ -276,7 +276,7 @@ void Renderer::get_parameter(StateParameter parameter, float* values)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glGetFloatv(static_cast<uint>(parameter), values);
+    glGetFloatv(static_cast<uint32_t>(parameter), values);
 
     print_conditional_errors();
 }
@@ -285,52 +285,52 @@ void Renderer::get_parameter(StateParameter parameter, double* values)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glGetDoublev(static_cast<uint>(parameter), values);
+    glGetDoublev(static_cast<uint32_t>(parameter), values);
 
     print_conditional_errors();
 }
 
-void Renderer::get_parameter(StateParameter parameter, uint index, unsigned char* values)
+void Renderer::get_parameter(StateParameter parameter, uint32_t index, unsigned char* values)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glGetBooleani_v(static_cast<uint>(parameter), index, values);
+    glGetBooleani_v(static_cast<uint32_t>(parameter), index, values);
 
     print_conditional_errors();
 }
 
-void Renderer::get_parameter(StateParameter parameter, uint index, int* values)
+void Renderer::get_parameter(StateParameter parameter, uint32_t index, int* values)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glGetIntegeri_v(static_cast<uint>(parameter), index, values);
+    glGetIntegeri_v(static_cast<uint32_t>(parameter), index, values);
 
     print_conditional_errors();
 }
 
-void Renderer::get_parameter(StateParameter parameter, uint index, int64_t* values)
+void Renderer::get_parameter(StateParameter parameter, uint32_t index, int64_t* values)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glGetInteger64i_v(static_cast<uint>(parameter), index, values);
+    glGetInteger64i_v(static_cast<uint32_t>(parameter), index, values);
 
     print_conditional_errors();
 }
 
-uint Renderer::get_active_texture()
+uint32_t Renderer::get_active_texture()
 {
     int texture{};
     get_parameter(StateParameter::ACTIVE_TEXTURE, &texture);
 
-    return static_cast<uint>(texture - GL_TEXTURE0);
+    return static_cast<uint32_t>(texture - GL_TEXTURE0);
 }
 
-uint Renderer::get_current_program()
+uint32_t Renderer::get_current_program()
 {
     int program{};
     get_parameter(StateParameter::CURRENT_PROGRAM, &program);
 
-    return static_cast<uint>(program);
+    return static_cast<uint32_t>(program);
 }
 
 void Renderer::clear_color(Color const& color)
@@ -348,7 +348,7 @@ void Renderer::clear(MaskType mask)
 
     TracyGpuZone("Renderer::clear")
 
-        glClear(static_cast<uint>(mask));
+        glClear(static_cast<uint32_t>(mask));
 
     print_conditional_errors();
 }
@@ -359,16 +359,16 @@ void Renderer::set_depth_function(DepthStencilFunction func)
 
     TracyGpuZone("Renderer::set_depth_function")
 
-        glDepthFunc(static_cast<uint>(func));
+        glDepthFunc(static_cast<uint32_t>(func));
 
     print_conditional_errors();
 }
 
-void Renderer::set_stencil_function(DepthStencilFunction func, int ref, uint mask, FaceOrientation orientation)
+void Renderer::set_stencil_function(DepthStencilFunction func, int ref, uint32_t mask, FaceOrientation orientation)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glStencilFuncSeparate(static_cast<uint>(orientation), static_cast<uint>(func), ref, mask);
+    glStencilFuncSeparate(static_cast<uint32_t>(orientation), static_cast<uint32_t>(func), ref, mask);
 
     print_conditional_errors();
 }
@@ -381,18 +381,18 @@ void Renderer::set_stencil_operations(
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
     glStencilOpSeparate(
-        static_cast<uint>(stencil_fail_op), static_cast<uint>(depth_fail_op), static_cast<uint>(success_op),
-        static_cast<uint>(orientation)
+        static_cast<uint32_t>(stencil_fail_op), static_cast<uint32_t>(depth_fail_op), static_cast<uint32_t>(success_op),
+        static_cast<uint32_t>(orientation)
     );
 
     print_conditional_errors();
 }
 
-void Renderer::set_stencil_mask(uint mask, FaceOrientation orientation)
+void Renderer::set_stencil_mask(uint32_t mask, FaceOrientation orientation)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glStencilMaskSeparate(static_cast<uint>(orientation), mask);
+    glStencilMaskSeparate(static_cast<uint32_t>(orientation), mask);
 
     print_conditional_errors();
 }
@@ -401,7 +401,7 @@ void Renderer::set_blend_function(BlendFactor source, BlendFactor destination)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glBlendFunc(static_cast<uint>(source), static_cast<uint>(destination));
+    glBlendFunc(static_cast<uint32_t>(source), static_cast<uint32_t>(destination));
 
     print_conditional_errors();
 }
@@ -410,7 +410,7 @@ void Renderer::set_face_cull(FaceOrientation orientation)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glCullFace(static_cast<uint>(orientation));
+    glCullFace(static_cast<uint32_t>(orientation));
 
     print_conditional_errors();
 }
@@ -420,7 +420,7 @@ void Renderer::set_polygon_mode(FaceOrientation orientation, PolygonMode mode)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glPolygonMode(static_cast<uint>(orientation), static_cast<uint>(mode));
+    glPolygonMode(static_cast<uint32_t>(orientation), static_cast<uint32_t>(mode));
 
     print_conditional_errors();
 }
@@ -433,7 +433,7 @@ void Renderer::set_clip_control(ClipOrigin origin, ClipDepth depth)
         "Error: Setting clip control requires OpenGL 4.5+ or the 'GL_ARB_clip_control' extension."
     );
 
-    glClipControl(static_cast<uint>(origin), static_cast<uint>(depth));
+    glClipControl(static_cast<uint32_t>(origin), static_cast<uint32_t>(depth));
 
     print_conditional_errors();
 }
@@ -461,17 +461,17 @@ void Renderer::set_patch_parameter(PatchParameter param, float const* values)
         "Error: Setting a patch parameter requires OpenGL 4.0+ or the 'GL_ARB_tessellation_shader' extension."
     );
 
-    glPatchParameterfv(static_cast<uint>(param), values);
+    glPatchParameterfv(static_cast<uint32_t>(param), values);
 
     print_conditional_errors();
 }
 #endif
 
-void Renderer::set_pixel_storage(PixelStorage storage, uint value)
+void Renderer::set_pixel_storage(PixelStorage storage, uint32_t value)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glPixelStorei(static_cast<uint>(storage), static_cast<int>(value));
+    glPixelStorei(static_cast<uint32_t>(storage), static_cast<int>(value));
 
 #if !defined(NDEBUG) && !defined(XEN_SKIP_RENDERER_ERRORS)
     const ErrorCodes error_codes = Renderer::recover_errors();
@@ -490,14 +490,14 @@ void Renderer::recover_frame(Vector2ui const& size, TextureFormat format, PixelD
     TracyGpuZone("Renderer::recover_frame")
 
         glReadPixels(
-            0, 0, static_cast<int>(size.x), static_cast<int>(size.y), static_cast<uint>(format),
-            static_cast<uint>(data_type), data
+            0, 0, static_cast<int>(size.x), static_cast<int>(size.y), static_cast<uint32_t>(format),
+            static_cast<uint32_t>(data_type), data
         );
 
     print_conditional_errors();
 }
 
-void Renderer::generate_vertex_arrays(uint count, uint* indices)
+void Renderer::generate_vertex_arrays(uint32_t count, uint32_t* indices)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -506,7 +506,7 @@ void Renderer::generate_vertex_arrays(uint count, uint* indices)
     print_conditional_errors();
 }
 
-void Renderer::bind_vertex_array(uint index)
+void Renderer::bind_vertex_array(uint32_t index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -515,7 +515,7 @@ void Renderer::bind_vertex_array(uint index)
     print_conditional_errors();
 }
 
-void Renderer::enable_vertex_attrib_array(uint index)
+void Renderer::enable_vertex_attrib_array(uint32_t index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -525,20 +525,20 @@ void Renderer::enable_vertex_attrib_array(uint index)
 }
 
 void Renderer::set_vertex_attrib(
-    uint index, AttribDataType data_type, uint8_t size, uint stride, uint offset, bool normalize
+    uint32_t index, AttribDataType data_type, uint8_t size, uint32_t stride, uint32_t offset, bool normalize
 )
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
     glVertexAttribPointer(
-        index, size, static_cast<uint>(data_type), normalize, static_cast<int>(stride),
+        index, size, static_cast<uint32_t>(data_type), normalize, static_cast<int>(stride),
         reinterpret_cast<void const*>(offset)
     );
 
     print_conditional_errors();
 }
 
-void Renderer::set_vertex_attribDivisor(uint index, uint divisor)
+void Renderer::set_vertex_attribDivisor(uint32_t index, uint32_t divisor)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -547,7 +547,7 @@ void Renderer::set_vertex_attribDivisor(uint index, uint divisor)
     print_conditional_errors();
 }
 
-void Renderer::delete_vertex_arrays(uint count, uint* indices)
+void Renderer::delete_vertex_arrays(uint32_t count, uint32_t* indices)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -556,7 +556,7 @@ void Renderer::delete_vertex_arrays(uint count, uint* indices)
     print_conditional_errors();
 }
 
-void Renderer::generate_buffers(uint count, uint* indices)
+void Renderer::generate_buffers(uint32_t count, uint32_t* indices)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -565,31 +565,31 @@ void Renderer::generate_buffers(uint count, uint* indices)
     print_conditional_errors();
 }
 
-void Renderer::bind_buffer(BufferType type, uint index)
+void Renderer::bind_buffer(BufferType type, uint32_t index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glBindBuffer(static_cast<uint>(type), index);
+    glBindBuffer(static_cast<uint32_t>(type), index);
 
     print_conditional_errors();
 }
 
-void Renderer::bind_buffer_base(BufferType type, uint binding_index, uint buffer_index)
+void Renderer::bind_buffer_base(BufferType type, uint32_t binding_index, uint32_t buffer_index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glBindBufferBase(static_cast<uint>(type), binding_index, buffer_index);
+    glBindBufferBase(static_cast<uint32_t>(type), binding_index, buffer_index);
 
     print_conditional_errors();
 }
 
 void Renderer::bind_buffer_range(
-    BufferType type, uint binding_index, uint buffer_index, std::ptrdiff_t offset, std::ptrdiff_t size
+    BufferType type, uint32_t binding_index, uint32_t buffer_index, std::ptrdiff_t offset, std::ptrdiff_t size
 )
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glBindBufferRange(static_cast<uint>(type), binding_index, buffer_index, offset, size);
+    glBindBufferRange(static_cast<uint32_t>(type), binding_index, buffer_index, offset, size);
 
     print_conditional_errors();
 }
@@ -598,7 +598,7 @@ void Renderer::send_buffer_data(BufferType type, std::ptrdiff_t size, void const
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glBufferData(static_cast<uint>(type), size, data, static_cast<uint>(usage));
+    glBufferData(static_cast<uint32_t>(type), size, data, static_cast<uint32_t>(usage));
 
     print_conditional_errors();
 }
@@ -607,12 +607,12 @@ void Renderer::send_buffer_sub_data(BufferType type, std::ptrdiff_t offset, std:
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glBufferSubData(static_cast<uint>(type), offset, data_size, data);
+    glBufferSubData(static_cast<uint32_t>(type), offset, data_size, data);
 
     print_conditional_errors();
 }
 
-void Renderer::delete_buffers(uint count, uint* indices)
+void Renderer::delete_buffers(uint32_t count, uint32_t* indices)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -621,7 +621,7 @@ void Renderer::delete_buffers(uint count, uint* indices)
     print_conditional_errors();
 }
 
-bool Renderer::is_texture(uint index)
+bool Renderer::is_texture(uint32_t index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -632,7 +632,7 @@ bool Renderer::is_texture(uint index)
     return is_texture;
 }
 
-void Renderer::generate_textures(uint count, uint* indices)
+void Renderer::generate_textures(uint32_t count, uint32_t* indices)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -641,19 +641,19 @@ void Renderer::generate_textures(uint count, uint* indices)
     print_conditional_errors();
 }
 
-void Renderer::bind_texture(TextureType type, uint index)
+void Renderer::bind_texture(TextureType type, uint32_t index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glBindTexture(static_cast<uint>(type), index);
+    glBindTexture(static_cast<uint32_t>(type), index);
 
     print_conditional_errors();
 }
 
 #if !defined(USE_WEBGL)
 void Renderer::bind_image_texture(
-    uint image_unit_index, uint texture_index, int texture_level, bool is_layered, int layer, ImageAccess image_access,
-    ImageInternalFormat image_format
+    uint32_t image_unit_index, uint32_t texture_index, int texture_level, bool is_layered, int layer,
+    ImageAccess image_access, ImageInternalFormat image_format
 )
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
@@ -664,15 +664,15 @@ void Renderer::bind_image_texture(
 #endif
 
     glBindImageTexture(
-        image_unit_index, texture_index, texture_level, is_layered, layer, static_cast<uint>(image_access),
-        static_cast<uint>(image_format)
+        image_unit_index, texture_index, texture_level, is_layered, layer, static_cast<uint32_t>(image_access),
+        static_cast<uint32_t>(image_format)
     );
 
     print_conditional_errors();
 }
 #endif
 
-void Renderer::activate_texture(uint index)
+void Renderer::activate_texture(uint32_t index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -685,7 +685,7 @@ void Renderer::set_texture_parameter(TextureType type, TextureParam param, int v
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glTexParameteri(static_cast<uint>(type), static_cast<uint>(param), value);
+    glTexParameteri(static_cast<uint32_t>(type), static_cast<uint32_t>(param), value);
 
     print_conditional_errors();
 }
@@ -694,7 +694,7 @@ void Renderer::set_texture_parameter(TextureType type, TextureParam param, float
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glTexParameterf(static_cast<uint>(type), static_cast<uint>(param), value);
+    glTexParameterf(static_cast<uint32_t>(type), static_cast<uint32_t>(param), value);
 
     print_conditional_errors();
 }
@@ -703,7 +703,7 @@ void Renderer::set_texture_parameter(TextureType type, TextureParam param, int c
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glTexParameteriv(static_cast<uint>(type), static_cast<uint>(param), values);
+    glTexParameteriv(static_cast<uint32_t>(type), static_cast<uint32_t>(param), values);
 
     print_conditional_errors();
 }
@@ -712,55 +712,55 @@ void Renderer::set_texture_parameter(TextureType type, TextureParam param, float
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glTexParameterfv(static_cast<uint>(type), static_cast<uint>(param), values);
+    glTexParameterfv(static_cast<uint32_t>(type), static_cast<uint32_t>(param), values);
 
     print_conditional_errors();
 }
 
 #if !defined(USE_OPENGL_ES)
-void Renderer::set_texture_parameter(uint texture_index, TextureParam param, int value)
+void Renderer::set_texture_parameter(uint32_t texture_index, TextureParam param, int value)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
     Log::rt_assert(check_version(4, 5), "Error: OpenGL 4.5+ is needed to set a parameter with a texture index.");
 
-    glTextureParameteri(texture_index, static_cast<uint>(param), value);
+    glTextureParameteri(texture_index, static_cast<uint32_t>(param), value);
 
     print_conditional_errors();
 }
 
-void Renderer::set_texture_parameter(uint texture_index, TextureParam param, float value)
+void Renderer::set_texture_parameter(uint32_t texture_index, TextureParam param, float value)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
     Log::rt_assert(check_version(4, 5), "Error: OpenGL 4.5+ is needed to set a parameter with a texture index.");
 
-    glTextureParameterf(texture_index, static_cast<uint>(param), value);
+    glTextureParameterf(texture_index, static_cast<uint32_t>(param), value);
 
     print_conditional_errors();
 }
 
-void Renderer::set_texture_parameter(uint texture_index, TextureParam param, int const* values)
+void Renderer::set_texture_parameter(uint32_t texture_index, TextureParam param, int const* values)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
     Log::rt_assert(check_version(4, 5), "Error: OpenGL 4.5+ is needed to set a parameter with a texture index.");
 
-    glTextureParameteriv(texture_index, static_cast<uint>(param), values);
+    glTextureParameteriv(texture_index, static_cast<uint32_t>(param), values);
 
     print_conditional_errors();
 }
 
-void Renderer::set_texture_parameter(uint texture_index, TextureParam param, float const* values)
+void Renderer::set_texture_parameter(uint32_t texture_index, TextureParam param, float const* values)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
     Log::rt_assert(check_version(4, 5), "Error: OpenGL 4.5+ is needed to set a parameter with a texture index.");
 
-    glTextureParameterfv(texture_index, static_cast<uint>(param), values);
+    glTextureParameterfv(texture_index, static_cast<uint32_t>(param), values);
 
     print_conditional_errors();
 }
 
 void Renderer::send_image_data_1d(
-    TextureType type, uint mipmap_level, TextureInternalFormat internal_format, uint width, TextureFormat format,
-    PixelDataType data_type, void const* data
+    TextureType type, uint32_t mipmap_level, TextureInternalFormat internal_format, uint32_t width,
+    TextureFormat format, PixelDataType data_type, void const* data
 )
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
@@ -768,16 +768,16 @@ void Renderer::send_image_data_1d(
     TracyGpuZone("Renderer::send_image_data_1d")
 
         glTexImage1D(
-            static_cast<uint>(type), static_cast<int>(mipmap_level), static_cast<int>(internal_format),
-            static_cast<int>(width), 0, static_cast<uint>(format), static_cast<uint>(data_type), data
+            static_cast<uint32_t>(type), static_cast<int>(mipmap_level), static_cast<int>(internal_format),
+            static_cast<int>(width), 0, static_cast<uint32_t>(format), static_cast<uint32_t>(data_type), data
         );
 
     print_conditional_errors();
 }
 
 void Renderer::send_image_sub_data_1d(
-    TextureType type, uint mipmap_level, uint offsetX, uint width, TextureFormat format, PixelDataType data_type,
-    void const* data
+    TextureType type, uint32_t mipmap_level, uint32_t offsetX, uint32_t width, TextureFormat format,
+    PixelDataType data_type, void const* data
 )
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
@@ -785,8 +785,8 @@ void Renderer::send_image_sub_data_1d(
     TracyGpuZone("Renderer::send_image_sub_data_1d")
 
         glTexSubImage1D(
-            static_cast<uint>(type), static_cast<int>(mipmap_level), static_cast<int>(offsetX), static_cast<int>(width),
-            static_cast<uint>(format), static_cast<uint>(data_type), data
+            static_cast<uint32_t>(type), static_cast<int>(mipmap_level), static_cast<int>(offsetX),
+            static_cast<int>(width), static_cast<uint32_t>(format), static_cast<uint32_t>(data_type), data
         );
 
     print_conditional_errors();
@@ -794,7 +794,7 @@ void Renderer::send_image_sub_data_1d(
 #endif
 
 void Renderer::send_image_data_2d(
-    TextureType type, uint mipmap_level, TextureInternalFormat internal_format, Vector2ui const& size,
+    TextureType type, uint32_t mipmap_level, TextureInternalFormat internal_format, Vector2ui const& size,
     TextureFormat format, PixelDataType data_type, const void* data
 )
 {
@@ -803,16 +803,16 @@ void Renderer::send_image_data_2d(
     TracyGpuZone("Renderer::send_image_data_2d")
 
         glTexImage2D(
-            static_cast<uint>(type), static_cast<int>(mipmap_level), static_cast<int>(internal_format),
-            static_cast<int>(size.x), static_cast<int>(size.y), 0, static_cast<uint>(format),
-            static_cast<uint>(data_type), data
+            static_cast<uint32_t>(type), static_cast<int>(mipmap_level), static_cast<int>(internal_format),
+            static_cast<int>(size.x), static_cast<int>(size.y), 0, static_cast<uint32_t>(format),
+            static_cast<uint32_t>(data_type), data
         );
 
     print_conditional_errors();
 }
 
 void Renderer::send_image_sub_data_2d(
-    TextureType type, uint mipmap_level, Vector2ui const& offset, Vector2ui const& size, TextureFormat format,
+    TextureType type, uint32_t mipmap_level, Vector2ui const& offset, Vector2ui const& size, TextureFormat format,
     PixelDataType data_type, void const* data
 )
 {
@@ -821,16 +821,16 @@ void Renderer::send_image_sub_data_2d(
     TracyGpuZone("Renderer::send_image_sub_data_2d")
 
         glTexSubImage2D(
-            static_cast<uint>(type), static_cast<int>(mipmap_level), static_cast<int>(offset.x),
-            static_cast<int>(offset.y), static_cast<int>(size.x), static_cast<int>(size.y), static_cast<uint>(format),
-            static_cast<uint>(data_type), data
+            static_cast<uint32_t>(type), static_cast<int>(mipmap_level), static_cast<int>(offset.x),
+            static_cast<int>(offset.y), static_cast<int>(size.x), static_cast<int>(size.y),
+            static_cast<uint32_t>(format), static_cast<uint32_t>(data_type), data
         );
 
     print_conditional_errors();
 }
 
 void Renderer::send_image_data_3d(
-    TextureType type, uint mipmap_level, TextureInternalFormat internal_format, Vector3ui const& size,
+    TextureType type, uint32_t mipmap_level, TextureInternalFormat internal_format, Vector3ui const& size,
     TextureFormat format, PixelDataType data_type, void const* data
 )
 {
@@ -839,16 +839,16 @@ void Renderer::send_image_data_3d(
     TracyGpuZone("Renderer::send_image_data_3d")
 
         glTexImage3D(
-            static_cast<uint>(type), static_cast<int>(mipmap_level), static_cast<int>(internal_format),
-            static_cast<int>(size.x), static_cast<int>(size.y), static_cast<int>(size.z), 0, static_cast<uint>(format),
-            static_cast<uint>(data_type), data
+            static_cast<uint32_t>(type), static_cast<int>(mipmap_level), static_cast<int>(internal_format),
+            static_cast<int>(size.x), static_cast<int>(size.y), static_cast<int>(size.z), 0,
+            static_cast<uint32_t>(format), static_cast<uint32_t>(data_type), data
         );
 
     print_conditional_errors();
 }
 
 void Renderer::send_image_sub_data_3d(
-    TextureType type, uint mipmap_level, Vector3ui const& offset, Vector3ui const& size, TextureFormat format,
+    TextureType type, uint32_t mipmap_level, Vector3ui const& offset, Vector3ui const& size, TextureFormat format,
     PixelDataType data_type, void const* data
 )
 {
@@ -857,38 +857,42 @@ void Renderer::send_image_sub_data_3d(
     TracyGpuZone("Renderer::send_image_sub_data_3d")
 
         glTexSubImage3D(
-            static_cast<uint>(type), static_cast<int>(mipmap_level), static_cast<int>(offset.x),
+            static_cast<uint32_t>(type), static_cast<int>(mipmap_level), static_cast<int>(offset.x),
             static_cast<int>(offset.y), static_cast<int>(offset.z), static_cast<int>(size.x), static_cast<int>(size.y),
-            static_cast<int>(size.z), static_cast<uint>(format), static_cast<uint>(data_type), data
+            static_cast<int>(size.z), static_cast<uint32_t>(format), static_cast<uint32_t>(data_type), data
         );
 
     print_conditional_errors();
 }
 
 #if !defined(USE_OPENGL_ES)
-void Renderer::recover_texture_attribute(TextureType type, uint mipmap_level, TextureAttribute attribute, int* values)
+void Renderer::recover_texture_attribute(
+    TextureType type, uint32_t mipmap_level, TextureAttribute attribute, int* values
+)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
     glGetTexLevelParameteriv(
-        static_cast<uint>(type), static_cast<int>(mipmap_level), static_cast<uint>(attribute), values
+        static_cast<uint32_t>(type), static_cast<int>(mipmap_level), static_cast<uint32_t>(attribute), values
     );
 
     print_conditional_errors();
 }
 
-void Renderer::recover_texture_attribute(TextureType type, uint mipmap_level, TextureAttribute attribute, float* values)
+void Renderer::recover_texture_attribute(
+    TextureType type, uint32_t mipmap_level, TextureAttribute attribute, float* values
+)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
     glGetTexLevelParameterfv(
-        static_cast<uint>(type), static_cast<int>(mipmap_level), static_cast<uint>(attribute), values
+        static_cast<uint32_t>(type), static_cast<int>(mipmap_level), static_cast<uint32_t>(attribute), values
     );
 
     print_conditional_errors();
 }
 
-int Renderer::recover_texture_width(TextureType type, uint mipmap_level)
+int Renderer::recover_texture_width(TextureType type, uint32_t mipmap_level)
 {
     int width{};
     recover_texture_attribute(type, mipmap_level, TextureAttribute::WIDTH, &width);
@@ -896,7 +900,7 @@ int Renderer::recover_texture_width(TextureType type, uint mipmap_level)
     return width;
 }
 
-int Renderer::recover_texture_height(TextureType type, uint mipmap_level)
+int Renderer::recover_texture_height(TextureType type, uint32_t mipmap_level)
 {
     int height{};
     recover_texture_attribute(type, mipmap_level, TextureAttribute::HEIGHT, &height);
@@ -904,7 +908,7 @@ int Renderer::recover_texture_height(TextureType type, uint mipmap_level)
     return height;
 }
 
-int Renderer::recover_texture_depth(TextureType type, uint mipmap_level)
+int Renderer::recover_texture_depth(TextureType type, uint32_t mipmap_level)
 {
     int depth{};
     recover_texture_attribute(type, mipmap_level, TextureAttribute::DEPTH, &depth);
@@ -912,7 +916,7 @@ int Renderer::recover_texture_depth(TextureType type, uint mipmap_level)
     return depth;
 }
 
-TextureInternalFormat Renderer::recover_texture_internal_format(TextureType type, uint mipmap_level)
+TextureInternalFormat Renderer::recover_texture_internal_format(TextureType type, uint32_t mipmap_level)
 {
     int format{};
     recover_texture_attribute(type, mipmap_level, TextureAttribute::INTERNAL_FORMAT, &format);
@@ -921,7 +925,7 @@ TextureInternalFormat Renderer::recover_texture_internal_format(TextureType type
 }
 
 void Renderer::recover_texture_data(
-    TextureType type, uint mipmap_level, TextureFormat format, PixelDataType data_type, void* data
+    TextureType type, uint32_t mipmap_level, TextureFormat format, PixelDataType data_type, void* data
 )
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
@@ -929,8 +933,8 @@ void Renderer::recover_texture_data(
     TracyGpuZone("Renderer::recover_texture_data")
 
         glGetTexImage(
-            static_cast<uint>(type), static_cast<int>(mipmap_level), static_cast<uint>(format),
-            static_cast<uint>(data_type), data
+            static_cast<uint32_t>(type), static_cast<int>(mipmap_level), static_cast<uint32_t>(format),
+            static_cast<uint32_t>(data_type), data
         );
 
     print_conditional_errors();
@@ -943,13 +947,13 @@ void Renderer::generate_mipmap(TextureType type)
 
     TracyGpuZone("Renderer::generate_mipmap")
 
-        glGenerateMipmap(static_cast<uint>(type));
+        glGenerateMipmap(static_cast<uint32_t>(type));
 
     print_conditional_errors();
 }
 
 #if !defined(USE_OPENGL_ES)
-void Renderer::generate_mipmap(uint texture_index)
+void Renderer::generate_mipmap(uint32_t texture_index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
     Log::rt_assert(check_version(4, 5), "Error: OpenGL 4.5+ is needed to generate mipmap with a texture index");
@@ -962,7 +966,7 @@ void Renderer::generate_mipmap(uint texture_index)
 }
 #endif
 
-void Renderer::delete_textures(uint count, uint* indices)
+void Renderer::delete_textures(uint32_t count, uint32_t* indices)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -982,27 +986,27 @@ void Renderer::resize_viewport(Vector2ui const& position, Vector2ui const& size)
     print_conditional_errors();
 }
 
-uint Renderer::create_program()
+uint32_t Renderer::create_program()
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    uint const program_index = glCreateProgram();
+    uint32_t const program_index = glCreateProgram();
 
     print_conditional_errors();
 
     return program_index;
 }
 
-void Renderer::get_program_parameter(uint index, ProgramParameter parameter, int* parameters)
+void Renderer::get_program_parameter(uint32_t index, ProgramParameter parameter, int* parameters)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glGetProgramiv(index, static_cast<uint>(parameter), parameters);
+    glGetProgramiv(index, static_cast<uint32_t>(parameter), parameters);
 
     print_conditional_errors();
 }
 
-bool Renderer::is_program_linked(uint index)
+bool Renderer::is_program_linked(uint32_t index)
 {
     int linkStatus{};
     get_program_parameter(index, ProgramParameter::LINK_STATUS, &linkStatus);
@@ -1010,15 +1014,15 @@ bool Renderer::is_program_linked(uint index)
     return (linkStatus == GL_TRUE);
 }
 
-uint Renderer::recover_active_uniform_count(uint program_index)
+uint32_t Renderer::recover_active_uniform_count(uint32_t program_index)
 {
     int uniformCount{};
     get_program_parameter(program_index, ProgramParameter::ACTIVE_UNIFORMS, &uniformCount);
 
-    return static_cast<uint>(uniformCount);
+    return static_cast<uint32_t>(uniformCount);
 }
 
-std::vector<uint> Renderer::recover_attached_shaders(uint program_index)
+std::vector<uint32_t> Renderer::recover_attached_shaders(uint32_t program_index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1029,7 +1033,7 @@ std::vector<uint> Renderer::recover_attached_shaders(uint program_index)
         return {};
     }
 
-    std::vector<uint> shader_indices(static_cast<size_t>(attached_shader_count));
+    std::vector<uint32_t> shader_indices(static_cast<size_t>(attached_shader_count));
 
     int recovered_shader_count{};
     glGetAttachedShaders(program_index, attached_shader_count, &recovered_shader_count, shader_indices.data());
@@ -1043,7 +1047,7 @@ std::vector<uint> Renderer::recover_attached_shaders(uint program_index)
     return shader_indices;
 }
 
-void Renderer::link_program(uint index)
+void Renderer::link_program(uint32_t index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1061,7 +1065,7 @@ void Renderer::link_program(uint index)
     print_conditional_errors();
 }
 
-void Renderer::use_program(uint index)
+void Renderer::use_program(uint32_t index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1090,7 +1094,7 @@ void Renderer::use_program(uint index)
 #endif
 }
 
-void Renderer::delete_program(uint index)
+void Renderer::delete_program(uint32_t index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1099,7 +1103,7 @@ void Renderer::delete_program(uint index)
     print_conditional_errors();
 }
 
-uint Renderer::create_shader(ShaderType type)
+uint32_t Renderer::create_shader(ShaderType type)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 #if !defined(USE_OPENGL_ES)
@@ -1124,26 +1128,26 @@ uint Renderer::create_shader(ShaderType type)
     );
 #endif
 
-    const uint shader_index = glCreateShader(static_cast<uint>(type));
+    const uint32_t shader_index = glCreateShader(static_cast<uint32_t>(type));
 
     print_conditional_errors();
 
     return shader_index;
 }
 
-int Renderer::recover_shader_info(uint index, ShaderInfo info)
+int Renderer::recover_shader_info(uint32_t index, ShaderInfo info)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
     int res{};
-    glGetShaderiv(index, static_cast<uint>(info), &res);
+    glGetShaderiv(index, static_cast<uint32_t>(info), &res);
 
     print_conditional_errors();
 
     return res;
 }
 
-void Renderer::send_shader_source(uint index, char const* source, int length)
+void Renderer::send_shader_source(uint32_t index, char const* source, int length)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1154,7 +1158,7 @@ void Renderer::send_shader_source(uint index, char const* source, int length)
     print_conditional_errors();
 }
 
-std::string Renderer::recover_shader_source(uint index)
+std::string Renderer::recover_shader_source(uint32_t index)
 {
     TracyGpuZone("Renderer::recover_shader_source")
 
@@ -1175,7 +1179,7 @@ std::string Renderer::recover_shader_source(uint index)
     return source;
 }
 
-void Renderer::compile_shader(uint index)
+void Renderer::compile_shader(uint32_t index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1193,7 +1197,7 @@ void Renderer::compile_shader(uint index)
     print_conditional_errors();
 }
 
-void Renderer::attach_shader(uint program_index, uint shader_index)
+void Renderer::attach_shader(uint32_t program_index, uint32_t shader_index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1202,7 +1206,7 @@ void Renderer::attach_shader(uint program_index, uint shader_index)
     print_conditional_errors();
 }
 
-void Renderer::detach_shader(uint program_index, uint shader_index)
+void Renderer::detach_shader(uint32_t program_index, uint32_t shader_index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1211,13 +1215,13 @@ void Renderer::detach_shader(uint program_index, uint shader_index)
     print_conditional_errors();
 }
 
-bool Renderer::is_shader_attached(uint program_index, uint shader_index)
+bool Renderer::is_shader_attached(uint32_t program_index, uint32_t shader_index)
 {
-    std::vector<uint> const shader_indices = recover_attached_shaders(program_index);
+    std::vector<uint32_t> const shader_indices = recover_attached_shaders(program_index);
     return (std::find(shader_indices.cbegin(), shader_indices.cend(), shader_index) != shader_indices.cend());
 }
 
-void Renderer::delete_shader(uint index)
+void Renderer::delete_shader(uint32_t index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1226,7 +1230,7 @@ void Renderer::delete_shader(uint index)
     print_conditional_errors();
 }
 
-int Renderer::recover_uniform_location(uint program_index, char const* uniform_name)
+int Renderer::recover_uniform_location(uint32_t program_index, char const* uniform_name)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1244,14 +1248,14 @@ int Renderer::recover_uniform_location(uint program_index, char const* uniform_n
 }
 
 void Renderer::recover_uniform_info(
-    uint program_index, uint uniform_index, UniformType& type, std::string& name, int* size
+    uint32_t program_index, uint32_t uniform_index, UniformType& type, std::string& name, int* size
 )
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
     int name_length{};
     int uniform_size{};
-    uint uniform_type{};
+    uint32_t uniform_type{};
     std::array<char, 256> uniform_name{};
 
     glGetActiveUniform(
@@ -1282,7 +1286,7 @@ void Renderer::recover_uniform_info(
     if (error_codes[ErrorCode::INVALID_VALUE]) {
         std::string error_msg = "Renderer::recover_uniform_info - ";
 
-        uint const uni_count = recover_active_uniform_count(program_index);
+        uint32_t const uni_count = recover_active_uniform_count(program_index);
 
         if (uniform_index >= uni_count) {
             error_msg += "The given uniform index (" + std::to_string(uniform_index) +
@@ -1299,7 +1303,7 @@ void Renderer::recover_uniform_info(
 #endif
 }
 
-UniformType Renderer::recover_uniform_type(uint program_index, uint uniform_index)
+UniformType Renderer::recover_uniform_type(uint32_t program_index, uint32_t uniform_index)
 {
     UniformType type{};
     std::string name;
@@ -1308,7 +1312,7 @@ UniformType Renderer::recover_uniform_type(uint program_index, uint uniform_inde
     return type;
 }
 
-std::string Renderer::recover_uniform_name(uint program_index, uint uniform_index)
+std::string Renderer::recover_uniform_name(uint32_t program_index, uint32_t uniform_index)
 {
     UniformType type{};
     std::string name;
@@ -1317,7 +1321,7 @@ std::string Renderer::recover_uniform_name(uint program_index, uint uniform_inde
     return name;
 }
 
-void Renderer::recover_uniform_data(uint program_index, int uniform_index, int* data)
+void Renderer::recover_uniform_data(uint32_t program_index, int uniform_index, int* data)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1326,7 +1330,7 @@ void Renderer::recover_uniform_data(uint program_index, int uniform_index, int* 
     print_conditional_errors();
 }
 
-void Renderer::recover_uniform_data(uint program_index, int uniform_index, uint* data)
+void Renderer::recover_uniform_data(uint32_t program_index, int uniform_index, uint32_t* data)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1335,7 +1339,7 @@ void Renderer::recover_uniform_data(uint program_index, int uniform_index, uint*
     print_conditional_errors();
 }
 
-void Renderer::recover_uniform_data(uint program_index, int uniform_index, float* data)
+void Renderer::recover_uniform_data(uint32_t program_index, int uniform_index, float* data)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1345,7 +1349,7 @@ void Renderer::recover_uniform_data(uint program_index, int uniform_index, float
 }
 
 #if !defined(USE_OPENGL_ES)
-void Renderer::recover_uniform_data(uint program_index, int uniform_index, double* data)
+void Renderer::recover_uniform_data(uint32_t program_index, int uniform_index, double* data)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
     Log::rt_assert(check_version(4, 0), "Error: Recovering uniform data of type double requires OpenGL 4.0+.");
@@ -1356,7 +1360,7 @@ void Renderer::recover_uniform_data(uint program_index, int uniform_index, doubl
 }
 #endif
 
-void Renderer::bind_uniform_block(uint program_index, uint uniform_block_index, uint binding_index)
+void Renderer::bind_uniform_block(uint32_t program_index, uint32_t uniform_block_index, uint32_t binding_index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1365,11 +1369,11 @@ void Renderer::bind_uniform_block(uint program_index, uint uniform_block_index, 
     print_conditional_errors();
 }
 
-uint Renderer::recover_uniform_block_index(uint program_index, char const* uniformBlockName)
+uint32_t Renderer::recover_uniform_block_index(uint32_t program_index, char const* uniformBlockName)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    uint const index = glGetUniformBlockIndex(program_index, uniformBlockName);
+    uint32_t const index = glGetUniformBlockIndex(program_index, uniformBlockName);
 
     print_conditional_errors();
 
@@ -1385,7 +1389,7 @@ void Renderer::send_uniform(int uniform_index, int value)
     print_conditional_errors();
 }
 
-void Renderer::send_uniform(int uniform_index, uint value)
+void Renderer::send_uniform(int uniform_index, uint32_t value)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1439,7 +1443,7 @@ void Renderer::send_uniform_Vector4i(int uniform_index, int const* values, int c
     print_conditional_errors();
 }
 
-void Renderer::send_uniform_vector1fui(int uniform_index, uint const* values, int count)
+void Renderer::send_uniform_vector1fui(int uniform_index, uint32_t const* values, int count)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1448,7 +1452,7 @@ void Renderer::send_uniform_vector1fui(int uniform_index, uint const* values, in
     print_conditional_errors();
 }
 
-void Renderer::send_uniform_Vector2ui(int uniform_index, uint const* values, int count)
+void Renderer::send_uniform_Vector2ui(int uniform_index, uint32_t const* values, int count)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1457,7 +1461,7 @@ void Renderer::send_uniform_Vector2ui(int uniform_index, uint const* values, int
     print_conditional_errors();
 }
 
-void Renderer::send_uniform_Vector3ui(int uniform_index, uint const* values, int count)
+void Renderer::send_uniform_Vector3ui(int uniform_index, uint32_t const* values, int count)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1466,7 +1470,7 @@ void Renderer::send_uniform_Vector3ui(int uniform_index, uint const* values, int
     print_conditional_errors();
 }
 
-void Renderer::send_uniform_Vector4ui(int uniform_index, uint const* values, int count)
+void Renderer::send_uniform_Vector4ui(int uniform_index, uint32_t const* values, int count)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1547,7 +1551,7 @@ void Renderer::send_uniform_color(int uniform_index, float const* values, int co
     print_conditional_errors();
 }
 
-void Renderer::generate_framebuffers(int count, uint* indices)
+void Renderer::generate_framebuffers(int count, uint32_t* indices)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1556,11 +1560,11 @@ void Renderer::generate_framebuffers(int count, uint* indices)
     print_conditional_errors();
 }
 
-void Renderer::bind_framebuffer(uint index, FramebufferType type)
+void Renderer::bind_framebuffer(uint32_t index, FramebufferType type)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glBindFramebuffer(static_cast<uint>(type), index);
+    glBindFramebuffer(static_cast<uint32_t>(type), index);
 
 #if !defined(NDEBUG) && !defined(XEN_SKIP_RENDERER_ERRORS)
     const ErrorCodes error_codes = recover_errors();
@@ -1575,7 +1579,7 @@ FramebufferStatus Renderer::get_framebuffer_status(FramebufferType type)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    uint const status = glCheckFramebufferStatus(static_cast<uint>(type));
+    uint32_t const status = glCheckFramebufferStatus(static_cast<uint32_t>(type));
 
     print_conditional_errors();
 
@@ -1584,7 +1588,7 @@ FramebufferStatus Renderer::get_framebuffer_status(FramebufferType type)
 
 #if !defined(USE_OPENGL_ES)
 void Renderer::set_framebuffer_texture(
-    FramebufferAttachment attachment, uint texture_index, uint mipmap_level, FramebufferType type
+    FramebufferAttachment attachment, uint32_t texture_index, uint32_t mipmap_level, FramebufferType type
 )
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
@@ -1592,14 +1596,15 @@ void Renderer::set_framebuffer_texture(
     TracyGpuZone("Renderer::set_framebuffer_texture")
 
         glFramebufferTexture(
-            static_cast<uint>(type), static_cast<uint>(attachment), texture_index, static_cast<int>(mipmap_level)
+            static_cast<uint32_t>(type), static_cast<uint32_t>(attachment), texture_index,
+            static_cast<int>(mipmap_level)
         );
 
     print_conditional_errors();
 }
 
 void Renderer::set_framebuffer_texture_1d(
-    FramebufferAttachment attachment, uint texture_index, uint mipmap_level, FramebufferType type
+    FramebufferAttachment attachment, uint32_t texture_index, uint32_t mipmap_level, FramebufferType type
 )
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
@@ -1607,8 +1612,8 @@ void Renderer::set_framebuffer_texture_1d(
     TracyGpuZone("Renderer::set_framebuffer_texture_1d")
 
         glFramebufferTexture1D(
-            static_cast<uint>(type), static_cast<uint>(attachment), static_cast<uint>(TextureType::TEXTURE_1D),
-            texture_index, static_cast<int>(mipmap_level)
+            static_cast<uint32_t>(type), static_cast<uint32_t>(attachment),
+            static_cast<uint32_t>(TextureType::TEXTURE_1D), texture_index, static_cast<int>(mipmap_level)
         );
 
     print_conditional_errors();
@@ -1616,7 +1621,7 @@ void Renderer::set_framebuffer_texture_1d(
 #endif
 
 void Renderer::set_framebuffer_texture_2d(
-    FramebufferAttachment attachment, uint texture_index, uint mipmap_level, TextureType textureType,
+    FramebufferAttachment attachment, uint32_t texture_index, uint32_t mipmap_level, TextureType textureType,
     FramebufferType type
 )
 {
@@ -1625,8 +1630,8 @@ void Renderer::set_framebuffer_texture_2d(
     TracyGpuZone("Renderer::set_framebuffer_texture_2d")
 
         glFramebufferTexture2D(
-            static_cast<uint>(type), static_cast<uint>(attachment), static_cast<uint>(textureType), texture_index,
-            static_cast<int>(mipmap_level)
+            static_cast<uint32_t>(type), static_cast<uint32_t>(attachment), static_cast<uint32_t>(textureType),
+            texture_index, static_cast<int>(mipmap_level)
         );
 
     print_conditional_errors();
@@ -1634,7 +1639,8 @@ void Renderer::set_framebuffer_texture_2d(
 
 #if !defined(USE_OPENGL_ES)
 void Renderer::set_framebuffer_texture_3d(
-    FramebufferAttachment attachment, uint texture_index, uint mipmap_level, uint layer, FramebufferType type
+    FramebufferAttachment attachment, uint32_t texture_index, uint32_t mipmap_level, uint32_t layer,
+    FramebufferType type
 )
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
@@ -1642,8 +1648,9 @@ void Renderer::set_framebuffer_texture_3d(
     TracyGpuZone("Renderer::set_framebuffer_texture_3d")
 
         glFramebufferTexture3D(
-            static_cast<uint>(type), static_cast<uint>(attachment), static_cast<uint>(TextureType::TEXTURE_3D),
-            texture_index, static_cast<int>(mipmap_level), static_cast<int>(layer)
+            static_cast<uint32_t>(type), static_cast<uint32_t>(attachment),
+            static_cast<uint32_t>(TextureType::TEXTURE_3D), texture_index, static_cast<int>(mipmap_level),
+            static_cast<int>(layer)
         );
 
     print_conditional_errors();
@@ -1657,7 +1664,7 @@ void Renderer::recover_framebuffer_attachment_parameter(
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
     glGetFramebufferAttachmentParameteriv(
-        static_cast<uint>(type), static_cast<uint>(attachment), static_cast<uint>(param), values
+        static_cast<uint32_t>(type), static_cast<uint32_t>(attachment), static_cast<uint32_t>(param), values
     );
 
     print_conditional_errors();
@@ -1667,16 +1674,16 @@ void Renderer::set_read_buffer(ReadBuffer buffer)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glReadBuffer(static_cast<uint>(buffer));
+    glReadBuffer(static_cast<uint32_t>(buffer));
 
     print_conditional_errors();
 }
 
-void Renderer::set_draw_buffers(uint count, DrawBuffer const* buffers)
+void Renderer::set_draw_buffers(uint32_t count, DrawBuffer const* buffers)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glDrawBuffers(static_cast<int>(count), reinterpret_cast<uint const*>(buffers));
+    glDrawBuffers(static_cast<int>(count), reinterpret_cast<uint32_t const*>(buffers));
 
     print_conditional_errors();
 }
@@ -1692,13 +1699,13 @@ void Renderer::blit_framebuffer(
 
         glBlitFramebuffer(
             read_min_x, read_min_y, read_max_x, read_max_y, write_min_x, write_min_y, write_max_x, write_max_y,
-            static_cast<uint>(mask), static_cast<uint>(filter)
+            static_cast<uint32_t>(mask), static_cast<uint32_t>(filter)
         );
 
     print_conditional_errors();
 }
 
-void Renderer::delete_framebuffers(uint count, uint* indices)
+void Renderer::delete_framebuffers(uint32_t count, uint32_t* indices)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1707,44 +1714,45 @@ void Renderer::delete_framebuffers(uint count, uint* indices)
     print_conditional_errors();
 }
 
-void Renderer::draw_arrays(PrimitiveType type, uint first, uint count)
+void Renderer::draw_arrays(PrimitiveType type, uint32_t first, uint32_t count)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
     TracyGpuZone("Renderer::draw_arrays")
 
-        glDrawArrays(static_cast<uint>(type), static_cast<int>(first), static_cast<int>(count));
+        glDrawArrays(static_cast<uint32_t>(type), static_cast<int>(first), static_cast<int>(count));
 
     print_conditional_errors();
 }
 
-void Renderer::draw_arrays_instanced(PrimitiveType type, uint first, uint primitive_count, uint instance_count)
+void Renderer::draw_arrays_instanced(PrimitiveType type, uint32_t first, uint primitive_count, uint instance_count)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
     TracyGpuZone("Renderer::draw_arrays_instanced")
 
         glDrawArraysInstanced(
-            static_cast<uint>(type), static_cast<int>(first), static_cast<int>(primitive_count),
+            static_cast<uint32_t>(type), static_cast<int>(first), static_cast<int>(primitive_count),
             static_cast<int>(instance_count)
         );
 
     print_conditional_errors();
 }
 
-void Renderer::draw_elements(PrimitiveType type, uint count, ElementDataType data_type, void const* indices)
+void Renderer::draw_elements(PrimitiveType type, uint32_t count, ElementDataType data_type, void const* indices)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
     TracyGpuZone("Renderer::draw_elements")
 
-        glDrawElements(static_cast<uint>(type), static_cast<int>(count), static_cast<uint>(data_type), indices);
+        glDrawElements(static_cast<uint32_t>(type), static_cast<int>(count), static_cast<uint32_t>(data_type), indices);
 
     print_conditional_errors();
 }
 
 void Renderer::draw_elements_instanced(
-    PrimitiveType type, uint primitive_count, ElementDataType data_type, void const* indices, uint instance_count
+    PrimitiveType type, uint32_t primitive_count, ElementDataType data_type, void const* indices,
+    uint32_t instance_count
 )
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
@@ -1752,7 +1760,7 @@ void Renderer::draw_elements_instanced(
     TracyGpuZone("Renderer::draw_elements_instanced")
 
         glDrawElementsInstanced(
-            static_cast<uint>(type), static_cast<int>(primitive_count), static_cast<uint>(data_type), indices,
+            static_cast<uint32_t>(type), static_cast<int>(primitive_count), static_cast<uint32_t>(data_type), indices,
             static_cast<int>(instance_count)
         );
 
@@ -1792,7 +1800,7 @@ void Renderer::set_memory_barrier(BarrierType type)
 
     TracyGpuZone("Renderer::set_memory_barrier")
 
-        glMemoryBarrier(static_cast<uint>(type));
+        glMemoryBarrier(static_cast<uint32_t>(type));
 
     print_conditional_errors();
 }
@@ -1808,12 +1816,12 @@ void Renderer::set_memory_barrier_by_region(RegionBarrierType type)
 
     TracyGpuZone("Renderer::set_memory_barrier_by_region")
 
-        glMemoryBarrierByRegion(static_cast<uint>(type));
+        glMemoryBarrierByRegion(static_cast<uint32_t>(type));
 
     print_conditional_errors();
 }
 
-void Renderer::generate_queries(uint count, uint* indices)
+void Renderer::generate_queries(uint32_t count, uint32_t* indices)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1822,11 +1830,11 @@ void Renderer::generate_queries(uint count, uint* indices)
     print_conditional_errors();
 }
 
-void Renderer::begin_query(QueryType type, uint index)
+void Renderer::begin_query(QueryType type, uint32_t index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glBeginQuery(static_cast<uint>(type), index);
+    glBeginQuery(static_cast<uint32_t>(type), index);
 
     print_conditional_errors();
 }
@@ -1835,13 +1843,13 @@ void Renderer::end_query(QueryType type)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
-    glEndQuery(static_cast<uint>(type));
+    glEndQuery(static_cast<uint32_t>(type));
 
     print_conditional_errors();
 }
 
 #if !defined(USE_OPENGL_ES)
-void Renderer::recover_query_result(uint index, int64_t& result)
+void Renderer::recover_query_result(uint32_t index, int64_t& result)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1850,7 +1858,7 @@ void Renderer::recover_query_result(uint index, int64_t& result)
     print_conditional_errors();
 }
 
-void Renderer::recover_query_result(uint index, uint64_t& result)
+void Renderer::recover_query_result(uint32_t index, uint64_t& result)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1860,7 +1868,7 @@ void Renderer::recover_query_result(uint index, uint64_t& result)
 }
 #endif
 
-void Renderer::delete_queries(uint count, uint* indices)
+void Renderer::delete_queries(uint32_t count, uint32_t* indices)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
 
@@ -1875,12 +1883,12 @@ void Renderer::set_label(RenderObjectType type, uint object_index, const char* l
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
     Log::rt_assert(check_version(4, 3), "Error: Setting an object label requires OpenGL 4.3+.");
 
-    glObjectLabel(static_cast<uint>(type), object_index, -1, label);
+    glObjectLabel(static_cast<uint32_t>(type), object_index, -1, label);
 
     print_conditional_errors();
 }
 
-std::string Renderer::recover_label(RenderObjectType type, uint object_index)
+std::string Renderer::recover_label(RenderObjectType type, uint32_t object_index)
 {
     Log::rt_assert(is_initialized(), "Error: The Renderer must be initialized before calling its functions.");
     Log::rt_assert(check_version(4, 3), "Error: Recovering an object label requires OpenGL 4.3+.");
@@ -1889,7 +1897,7 @@ std::string Renderer::recover_label(RenderObjectType type, uint object_index)
     std::array<char, 256> label_name{};
 
     glGetObjectLabel(
-        static_cast<uint>(type), object_index, static_cast<int>(label_name.size()), &label_length, label_name.data()
+        static_cast<uint32_t>(type), object_index, static_cast<int>(label_name.size()), &label_length, label_name.data()
     );
 
     std::string label;
@@ -1925,13 +1933,13 @@ void Renderer::pop_debug_group()
 ErrorCodes Renderer::recover_errors()
 {
     static constexpr auto recover_error_code_index = [](ErrorCode code) constexpr -> uint8_t {
-        return static_cast<uint8_t>(static_cast<uint>(code) - static_cast<uint>(ErrorCode::INVALID_ENUM));
+        return static_cast<uint8_t>(static_cast<uint32_t>(code) - static_cast<uint32_t>(ErrorCode::INVALID_ENUM));
     };
 
     ErrorCodes error_codes;
 
     while (true) {
-        uint const error_code = glGetError();
+        uint32_t const error_code = glGetError();
 
         if (error_code == GL_NO_ERROR) {
             break;
@@ -1960,7 +1968,7 @@ void Renderer::print_errors()
 
     for (uint8_t error_index = 0; error_index < static_cast<uint8_t>(error_codes.codes.size()); ++error_index) {
         if (error_codes.codes[error_index]) {
-            uint const error_value = error_index + static_cast<uint>(ErrorCode::INVALID_ENUM);
+            uint32_t const error_value = error_index + static_cast<uint32_t>(ErrorCode::INVALID_ENUM);
             Log::verror("[OpenGL] {} (code {})", recover_gl_error_str(error_value), error_value);
         }
     }

@@ -1,6 +1,6 @@
 #include "threading.hpp"
 
-#ifdef RAZ_THREADS_AVAILABLE
+#ifdef XEN_THREADS_AVAILABLE
 
 namespace xen {
 ThreadPool& get_default_thread_pool()
@@ -9,7 +9,7 @@ ThreadPool& get_default_thread_pool()
     return thread_pool;
 }
 
-void parallelize(std::function<void()> const& action, uint task_count)
+void parallelize(std::function<void()> const& action, uint32_t task_count)
 {
     if (task_count == 0) {
         throw std::invalid_argument("[Threading] The number of tasks cannot be 0.");
@@ -21,7 +21,7 @@ void parallelize(std::function<void()> const& action, uint task_count)
     std::vector<std::promise<void>> promises;
     promises.resize(task_count);
 
-    for (uint task_index = 0; task_index < task_count; ++task_index) {
+    for (uint32_t task_index = 0; task_index < task_count; ++task_index) {
         thread_pool.add_task([&action, &promises, task_index]() {
             action();
             promises[task_index].set_value();
@@ -34,7 +34,7 @@ void parallelize(std::function<void()> const& action, uint task_count)
     }
 
 #else
-    for (uint i = 0; i < task_count; ++i) {
+    for (uint32_t i = 0; i < task_count; ++i) {
         action();
     }
 #endif
@@ -48,7 +48,7 @@ void parallelize(std::initializer_list<std::function<void()>> actions)
     std::vector<std::promise<void>> promises;
     promises.resize(actions.size());
 
-    for (uint task_index = 0; task_index < actions.size(); ++task_index) {
+    for (uint32_t task_index = 0; task_index < actions.size(); ++task_index) {
         thread_pool.add_task([&actions, &promises, task_index]() {
             std::function<void()> const& action = *(actions.begin() + task_index);
             action();
@@ -69,4 +69,4 @@ void parallelize(std::initializer_list<std::function<void()>> actions)
 }
 }
 
-#endif // RAZ_THREADS_AVAILABLE
+#endif // XEN_THREADS_AVAILABLE

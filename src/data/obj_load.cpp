@@ -341,7 +341,7 @@ std::pair<Mesh, MeshRendererData> load(FilePath const& filepath)
     auto const tex_count = static_cast<int64_t>(texcoords.size());
     auto const norm_count = static_cast<int64_t>(normals.size());
 
-    std::map<std::array<size_t, 3>, uint> indices_map;
+    std::map<std::array<size_t, 3>, uint32_t> indices_map;
 
     for (size_t submesh_index = 0; submesh_index < mesh.get_submeshes().size(); ++submesh_index) {
         Submesh& submesh = mesh.get_submeshes()[submesh_index];
@@ -425,8 +425,8 @@ std::pair<Mesh, MeshRendererData> load(FilePath const& filepath)
                     face_positions[vert_part_index], face_texcoords[vert_part_index], face_normals[vert_part_index]
                 };
 
-                submesh.get_triangle_indices().emplace_back(static_cast<uint>(indices_map.size()));
-                indices_map.emplace(vert_indices[vert_part_index], static_cast<uint>(indices_map.size()));
+                submesh.get_triangle_indices().emplace_back(static_cast<uint32_t>(indices_map.size()));
+                indices_map.emplace(vert_indices[vert_part_index], static_cast<uint32_t>(indices_map.size()));
                 submesh.get_vertices().emplace_back(std::move(vert));
             }
         }

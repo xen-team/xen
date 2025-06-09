@@ -14,8 +14,8 @@
 
 namespace xen {
 
-enum class ImageAccess : uint;
-enum class ImageInternalFormat : uint;
+enum class ImageAccess : uint32_t;
+enum class ImageInternalFormat : uint32_t;
 
 enum class ImageTextureUsage : uint8_t { READ = 0, WRITE, READ_WRITE };
 
@@ -31,7 +31,7 @@ public:
 
     virtual ~ShaderProgram();
 
-    [[nodiscard]] uint get_index() const { return index; }
+    [[nodiscard]] uint32_t get_index() const { return index; }
 
     /// Checks if an attribute has been set with the given uniform name.
     /// \param uniform_name Uniform name to be checked.
@@ -197,7 +197,7 @@ public:
     /// Sends an uinteger as uniform.
     /// \param index Index of the uniform to send the data to.
     /// \param value Unsigned integer to be sent.
-    void send_uniform(int index, uint value) const;
+    void send_uniform(int index, uint32_t value) const;
 
     /// Sends a floating-point value as uniform.
     /// \param index Index of the uniform to send the data to.
@@ -214,7 +214,7 @@ public:
     /// \param index Index of the uniform to send the data to.
     /// \param values Unsigned integers to be sent.
     /// \param count Number of values to be sent.
-    void send_uniform(int index, uint const* values, size_t count) const;
+    void send_uniform(int index, uint32_t const* values, size_t count) const;
 
     /// Sends a list of floating-point values as uniform.
     /// \param index Index of the uniform to send the data to.
@@ -233,7 +233,7 @@ public:
     /// Sends a list of uintegers as uniform.
     /// \param index Index of the uniform to send the data to.
     /// \param values Unsigned integers to be sent.
-    void send_uniform(int index, std::vector<uint> const& values) const
+    void send_uniform(int index, std::vector<uint32_t> const& values) const
     {
         send_uniform(index, values.data(), values.size());
     }
@@ -319,7 +319,7 @@ public:
     /// Sends an uinteger as uniform, which location will be retrieved with its name.
     /// \param name Name of the uniform to retrieve the location from.
     /// \param value Unsigned integer to be sent.
-    void send_uniform(std::string const& name, uint value) const
+    void send_uniform(std::string const& name, uint32_t value) const
     {
         send_uniform(recover_uniform_location(name), value);
     }
@@ -345,7 +345,7 @@ public:
     /// \param name Name of the uniform to retrieve the location from.
     /// \param values Unsigned integers to be sent.
     /// \param count Number of values to be sent.
-    void send_uniform(std::string const& name, uint const* values, size_t count) const
+    void send_uniform(std::string const& name, uint32_t const* values, size_t count) const
     {
         send_uniform(recover_uniform_location(name), values, count);
     }
@@ -370,7 +370,7 @@ public:
     /// Sends a list of uintegers as uniform, which location will be retrieved with its name.
     /// \param name Name of the uniform to retrieve the location from.
     /// \param values Unsigned integers to be sent.
-    void send_uniform(std::string const& name, std::vector<uint> const& values) const
+    void send_uniform(std::string const& name, std::vector<uint32_t> const& values) const
     {
         send_uniform(recover_uniform_location(name), values);
     }
@@ -491,8 +491,8 @@ protected:
     struct Attribute {
         int location = -1;
         std::variant<
-            int, uint, float, Vector2i, Vector3i, Vector4i, Vector2ui, Vector3ui, Vector4ui, Vector2f, Vector3f,
-            Vector4f, Matrix2, Matrix3, Matrix4, Color, std::vector<int>, std::vector<uint>, std::vector<float>>
+            int, uint32_t, float, Vector2i, Vector3i, Vector4i, Vector2ui, Vector3ui, Vector4ui, Vector2f, Vector3f,
+            Vector4f, Matrix2, Matrix3, Matrix4, Color, std::vector<int>, std::vector<uint32_t>, std::vector<float>>
             value{};
     };
 
@@ -502,7 +502,7 @@ protected:
         ImageInternalFormat format{};
     };
 
-    OwnerValue<uint> index{};
+    OwnerValue<uint32_t> index{};
 
     std::unordered_map<std::string, Attribute> attributes{};
     std::vector<std::pair<TexturePtr, std::string>> textures{};

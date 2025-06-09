@@ -39,13 +39,14 @@ void LuaWrapper::register_texture_types()
             "Texture1D",
             sol::constructors<
                 Texture1D(TextureColorspace), Texture1D(TextureColorspace, TextureDataType),
-                Texture1D(uint, TextureColorspace), Texture1D(uint, TextureColorspace, TextureDataType),
-                Texture1D(Color const&), Texture1D(Color const&, uint)>(),
+                Texture1D(uint32_t, TextureColorspace), Texture1D(uint32_t, TextureColorspace, TextureDataType),
+                Texture1D(Color const&), Texture1D(Color const&, uint32_t)>(),
             sol::base_classes, sol::bases<Texture>()
         );
         texture1D["get_width"] = &Texture1D::get_width;
-        texture1D
-            ["create"] = sol::overload(&Texture1D::create<TextureColorspace>, &Texture1D::create<TextureColorspace, TextureDataType>, &Texture1D::create<uint, TextureColorspace>, &Texture1D::create<uint, TextureColorspace, TextureDataType>, &Texture1D::create<Color const&>, &Texture1D::create<Color const&, uint>);
+        texture1D["create"] =
+            sol::
+                overload(&Texture1D::create<TextureColorspace>, &Texture1D::create<TextureColorspace, TextureDataType>, &Texture1D::create<uint32_t, TextureColorspace>, &Texture1D::create<uint32_t, TextureColorspace, TextureDataType>, &Texture1D::create<Color const&>, &Texture1D::create<Color const&, uint32_t>);
         texture1D["resize"] = &Texture1D::resize;
         texture1D["fill"] = &Texture1D::fill;
     }

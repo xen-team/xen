@@ -31,7 +31,7 @@ public:
 
 private:
 #if !defined(USE_OPENGL_ES)
-    OwnerValue<uint, std::numeric_limits<uint>::max()> index{};
+    OwnerValue<uint32_t, std::numeric_limits<uint32_t>::max()> index{};
 #endif
 };
 }

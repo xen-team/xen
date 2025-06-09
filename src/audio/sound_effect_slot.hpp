@@ -16,7 +16,7 @@ public:
 
     ~SoundEffectSlot() { destroy(); }
 
-    [[nodiscard]] uint get_index() const { return index; }
+    [[nodiscard]] uint32_t get_index() const { return index; }
 
     /// Initializes the sound effect slot.
     /// \note A SoundEffectSlot must be initialized again after opening an audio device.
@@ -31,6 +31,6 @@ public:
     void destroy();
 
 private:
-    OwnerValue<uint, std::numeric_limits<uint>::max()> index{};
+    OwnerValue<uint32_t, std::numeric_limits<uint32_t>::max()> index{};
 };
 }

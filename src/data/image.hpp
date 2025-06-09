@@ -133,9 +133,9 @@ public:
 
     Vector2ui get_size() const { return size; }
 
-    uint get_width() const { return size.x; }
+    uint32_t get_width() const { return size.x; }
 
-    uint get_height() const { return size.y; }
+    uint32_t get_height() const { return size.y; }
 
     ImageColorspace get_colorspace() const { return colorspace; }
 

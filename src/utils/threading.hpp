@@ -6,10 +6,10 @@
     "Warning: Threads are not available with your compiler; check that you're using POSIX threads and not Win32 ones." \
 )
 #else
-#define RAZ_THREADS_AVAILABLE
+#define XEN_THREADS_AVAILABLE
 #endif
 
-#if defined(RAZ_THREADS_AVAILABLE)
+#if defined(XEN_THREADS_AVAILABLE)
 
 namespace xen {
 class ThreadPool;
@@ -38,7 +38,7 @@ private:
 /// Gets the number of concurrent threads available to the system.
 /// This number doesn't necessarily represent the CPU's actual number of threads.
 /// \return Number of threads available.
-inline uint get_system_thread_count()
+inline uint32_t get_system_thread_count()
 {
     return std::max(std::thread::hardware_concurrency(), 1u);
 }
@@ -70,7 +70,7 @@ template <typename FuncT, typename... Args, typename ResultT = std::invoke_resul
 /// \note If using Emscripten this call will be synchronous, threads being unsupported with it for now.
 /// \param action Action to be performed in parallel.
 /// \param task_count Amount of tasks to start.
-void parallelize(std::function<void()> const& action, uint task_count = get_system_thread_count());
+void parallelize(std::function<void()> const& action, uint32_t task_count = get_system_thread_count());
 
 /// Calls the given functions in parallel.
 /// \note If using Emscripten this call will be synchronous, threads being unsupported with it for now.
@@ -91,7 +91,7 @@ template <
     typename BegIndexT, typename EndIndexT, typename FuncT,
     typename = std::enable_if_t<std::is_integral_v<BegIndexT> && std::is_integral_v<EndIndexT>>>
 void parallelize(
-    BegIndexT begin_index, EndIndexT end_index, FuncT const& action, uint task_count = get_system_thread_count()
+    BegIndexT begin_index, EndIndexT end_index, FuncT const& action, uint32_t task_count = get_system_thread_count()
 );
 
 /// Calls a function in parallel over an iterator range.
@@ -105,7 +105,7 @@ void parallelize(
 /// \param action Action to be performed in parallel, taking an iterator range as boundaries.
 /// \param task_count Amount of tasks to start.
 template <typename IterT, typename FuncT, typename = typename std::iterator_traits<IterT>::iterator_category>
-void parallelize(IterT begin, IterT end, FuncT const& action, uint task_count = get_system_thread_count());
+void parallelize(IterT begin, IterT end, FuncT const& action, uint32_t task_count = get_system_thread_count());
 
 /// Calls a function in parallel over a collection.
 /// The given collection is automatically split, providing a separate start/past-the-end iterator sub-range to each
@@ -118,7 +118,7 @@ void parallelize(IterT begin, IterT end, FuncT const& action, uint task_count = 
 /// \param action Action to be performed in parallel, taking an iterator range as boundaries.
 /// \param task_count Amount of tasks to start.
 template <typename ContainerT, typename FuncT, typename = decltype(std::begin(std::declval<ContainerT>()))>
-void parallelize(ContainerT&& collection, FuncT&& action, uint task_count = get_system_thread_count())
+void parallelize(ContainerT&& collection, FuncT&& action, uint32_t task_count = get_system_thread_count())
 {
     parallelize(std::begin(collection), std::end(collection), std::forward<FuncT>(action), task_count);
 }
@@ -126,4 +126,4 @@ void parallelize(ContainerT&& collection, FuncT&& action, uint task_count = get_
 
 #include "threading.inl"
 
-#endif // RAZ_THREADS_AVAILABLE
+#endif // XEN_THREADS_AVAILABLE

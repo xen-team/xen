@@ -26,13 +26,13 @@ private:
     XrContext context;
     XrSession session;
 
-    std::vector<uint> view_config_types;
-    uint view_config_type{0};
+    std::vector<uint32_t> view_config_types;
+    uint32_t view_config_type{0};
     std::vector<XrViewConfigurationView> view_config_views;
     Vector2ui optimal_view_size;
 
-    std::vector<uint> environment_blend_modes;
-    uint environment_blend_mode{0};
+    std::vector<uint32_t> environment_blend_modes;
+    uint32_t environment_blend_mode{0};
 
 private:
     void recover_view_configurations();

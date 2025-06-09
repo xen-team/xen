@@ -14,7 +14,7 @@ enum class AudioFormat : int {
 
 struct AudioData {
     AudioFormat format{};
-    uint frequency{0};
+    uint32_t frequency{0};
     std::vector<uint8_t> buffer;
 };
 }

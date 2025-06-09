@@ -33,7 +33,7 @@ void BoxBlur::set_output_buffer(Texture2DPtr color_buffer)
     MonoPass::set_output_buffer(std::move(color_buffer), 0);
 }
 
-void BoxBlur::set_strength(uint strength) const
+void BoxBlur::set_strength(uint32_t strength) const
 {
     pass.get_program().set_attribute(static_cast<int>(strength), "uniKernelSize");
     pass.get_program().send_attributes();

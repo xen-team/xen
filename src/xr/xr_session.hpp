@@ -27,13 +27,13 @@ public:
 
     ~XrSession();
 
-    void begin(uint view_config_type);
+    void begin(uinuint32_tt view_config_type);
 
     void end();
 
     bool render_frame(
-        std::vector<XrViewConfigurationView> const& view_config_views, uint view_config_type,
-        uint environment_blend_mode, ViewRenderFunc const& view_render_func
+        std::vector<XrViewConfigurationView> const& view_config_views, uint32_t view_config_type,
+        uint32_t environment_blend_mode, ViewRenderFunc const& view_render_func
     ) const;
 
 private:

@@ -272,7 +272,7 @@ Mesh Mesh::clone() const
     Mesh mesh;
     mesh.submeshes.reserve(submeshes.size());
     for (auto const& submesh : submeshes) {
-        mesh.submeshes.emplace_back(submesh.clone());   
+        mesh.submeshes.emplace_back(submesh.clone());
     }
     mesh.bounding_box = bounding_box;
     return mesh;
@@ -293,13 +293,13 @@ void Mesh::create_uv_sphere(Sphere const& sphere, Vector2ui const& lines_count)
     float const height_step = std::numbers::pi_v<float> / static_cast<float>(lines_count.y);
     Vector3f const center = sphere.get_center();
 
-    for (uint height_index = 0; height_index <= lines_count.y; ++height_index) {
+    for (uint32_t height_index = 0; height_index <= lines_count.y; ++height_index) {
         float const height_angle = std::numbers::pi_v<float> / 2 - static_cast<float>(height_index) * height_step;
 
         float const xz = sphere.get_radius() * std::cos(height_angle);
         float const y = sphere.get_radius() * std::sin(height_angle);
 
-        for (uint width_index = 0; width_index <= lines_count.x; ++width_index) {
+        for (uint32_t width_index = 0; width_index <= lines_count.x; ++width_index) {
             float const width_angle = static_cast<float>(width_index) * width_step;
 
             float const x = xz * std::cos(width_angle);
@@ -318,23 +318,23 @@ void Mesh::create_uv_sphere(Sphere const& sphere, Vector2ui const& lines_count)
         }
     }
 
-    std::vector<uint>& indices = submesh.get_triangle_indices();
+    std::vector<uint32_t>& indices = submesh.get_triangle_indices();
     indices.reserve(lines_count.x * 6 + (lines_count.y - 2) * lines_count.x * 6);
 
     // Upper circle
-    for (uint width_index = 0; width_index < lines_count.x; ++width_index) {
-        uint const width_stride = lines_count.x + width_index;
+    for (uint32_t width_index = 0; width_index < lines_count.x; ++width_index) {
+        uint32_t const width_stride = lines_count.x + width_index;
 
         indices.push_back(width_stride + 1);
         indices.push_back(width_index + 1);
         indices.push_back(width_stride + 2);
     }
 
-    for (uint height_index = 1; height_index < lines_count.y - 1; ++height_index) {
-        uint cur_height_stride = height_index * (lines_count.x + 1);
-        uint next_height_stride = cur_height_stride + lines_count.x + 1;
+    for (uint32_t height_index = 1; height_index < lines_count.y - 1; ++height_index) {
+        uint32_t cur_height_stride = height_index * (lines_count.x + 1);
+        uint32_t next_height_stride = cur_height_stride + lines_count.x + 1;
 
-        for (uint width_index = 0; width_index < lines_count.x;
+        for (uint32_t width_index = 0; width_index < lines_count.x;
              ++width_index, ++cur_height_stride, ++next_height_stride) {
             indices.push_back(next_height_stride);
             indices.push_back(cur_height_stride);
@@ -348,10 +348,10 @@ void Mesh::create_uv_sphere(Sphere const& sphere, Vector2ui const& lines_count)
 
     // Lower circle
     {
-        uint cur_height_stride = (lines_count.y - 1) * (lines_count.x + 1);
-        uint next_height_stride = cur_height_stride + lines_count.x + 1;
+        uint32_t cur_height_stride = (lines_count.y - 1) * (lines_count.x + 1);
+        uint32_t next_height_stride = cur_height_stride + lines_count.x + 1;
 
-        for (uint width_index = 0; width_index < lines_count.x;
+        for (uint32_t width_index = 0; width_index < lines_count.x;
              ++width_index, ++cur_height_stride, ++next_height_stride) {
             indices.push_back(next_height_stride);
             indices.push_back(cur_height_stride);
@@ -360,7 +360,7 @@ void Mesh::create_uv_sphere(Sphere const& sphere, Vector2ui const& lines_count)
     }
 }
 
-void Mesh::create_icosphere(Sphere const& sphere, uint32_t /* subdiv_count */)
+void Mesh::create_icosphere(Sphere const& sphere, uint32_t)
 {
     // Algorithm based on the icosphere presented here:
     // - http://www.songho.ca/opengl/gl_sphere.html#icosphere
@@ -493,7 +493,7 @@ void Mesh::create_icosphere(Sphere const& sphere, uint32_t /* subdiv_count */)
     //    std::vector<Vertex> newVertices;
     //    newVertices.reserve(vertices.size() * 2);
     //
-    //    std::vector<uint> newIndices;
+    //    std::vector<uint32_t> newIndices;
     //    newIndices.reserve(indices.size() * 9);
     //
     //    const size_t index_count = indices.size();

@@ -91,7 +91,7 @@ void SubmeshRenderer::load_vertices(Submesh const& submesh)
         vertices.data(), BufferDataUsage::STATIC_DRAW
     );
 
-    vbo.vertex_count = static_cast<uint>(vertices.size());
+    vbo.vertex_count = static_cast<uint32_t>(vertices.size());
 
     constexpr uint8_t stride = sizeof(vertices.front());
 
@@ -142,7 +142,7 @@ void SubmeshRenderer::load_indices(Submesh const& submesh)
     ibo.bind();
 
     // Mapping the indices to lines' if asked, and triangles' otherwise
-    std::vector<uint> const& indices =
+    std::vector<uint32_t> const& indices =
         (render_mode == RenderMode::LINE ? submesh.get_line_indices() : submesh.get_triangle_indices());
 
     Renderer::send_buffer_data(
@@ -150,8 +150,8 @@ void SubmeshRenderer::load_indices(Submesh const& submesh)
         indices.data(), BufferDataUsage::STATIC_DRAW
     );
 
-    ibo.line_index_count = static_cast<uint>(submesh.get_line_index_count());
-    ibo.triangle_index_count = static_cast<uint>(submesh.get_triangle_index_count());
+    ibo.line_index_count = static_cast<uint32_t>(submesh.get_line_index_count());
+    ibo.triangle_index_count = static_cast<uint32_t>(submesh.get_triangle_index_count());
 
     ibo.unbind();
     vao.unbind();

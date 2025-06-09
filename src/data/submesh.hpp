@@ -38,15 +38,15 @@ public:
 
     size_t get_vertex_count() const { return vertices.size(); }
 
-    std::vector<uint> const& get_line_indices() const { return line_indices; }
+    std::vector<uint32_t> const& get_line_indices() const { return line_indices; }
 
-    std::vector<uint>& get_line_indices() { return line_indices; }
+    std::vector<uint32_t>& get_line_indices() { return line_indices; }
 
     size_t get_line_index_count() const { return line_indices.size(); }
 
-    std::vector<uint> const& get_triangle_indices() const { return triangle_indices; }
+    std::vector<uint32_t> const& get_triangle_indices() const { return triangle_indices; }
 
-    std::vector<uint>& get_triangle_indices() { return triangle_indices; }
+    std::vector<uint32_t>& get_triangle_indices() { return triangle_indices; }
 
     size_t get_triangle_index_count() const { return triangle_indices.size(); }
 
@@ -63,8 +63,8 @@ public:
 
 private:
     std::vector<Vertex> vertices{};
-    std::vector<uint> line_indices{};
-    std::vector<uint> triangle_indices{};
+    std::vector<uint32_t> line_indices{};
+    std::vector<uint32_t> triangle_indices{};
 
     AABB bounding_box = AABB(Vector3f(0.f), Vector3f(0.f));
 };

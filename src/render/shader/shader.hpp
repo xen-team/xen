@@ -14,7 +14,7 @@ public:
 
     virtual ~Shader() { destroy(); }
 
-    [[nodiscard]] uint get_index() const { return index; }
+    [[nodiscard]] uint32_t get_index() const { return index; }
 
     [[nodiscard]] FilePath const& get_path() const { return path; }
 
@@ -39,7 +39,7 @@ protected:
     void load_source(std::string const& source) const;
 
 protected:
-    OwnerValue<uint> index{};
+    OwnerValue<uint32_t> index{};
     FilePath path{};
 };
 

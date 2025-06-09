@@ -22,7 +22,7 @@ using InputCallbacks =
     std::tuple<KeyboardCallbacks, MouseButtonCallbacks, MouseScrollCallback, MouseMoveCallback, InputActions>;
 using CloseCallback = std::function<void()>;
 
-enum class WindowSetting : uint {
+enum class WindowSetting : uint32_t {
     FOCUSED = 1,   ///< Forces the window to take the focus.
     RESIZABLE = 2, ///< Makes the window able to be resized, either by dragging the edges & corners or by maximizing it.
     VISIBLE = 4,   ///< Makes the window visible.
@@ -75,9 +75,9 @@ public:
 
     Vector2ui get_size() const { return size; }
 
-    uint get_width() const { return size.x; }
+    uint32_t get_width() const { return size.x; }
 
-    uint get_height() const { return size.y; }
+    uint32_t get_height() const { return size.y; }
 
 #if !defined(XEN_NO_OVERLAY)
     Overlay& get_overlay() { return overlay; }

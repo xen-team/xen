@@ -99,7 +99,7 @@ public:
     /// Adds a write color buffer texture.
     /// \param texture Color buffer texture to be added; must have a non-depth colorspace.
     /// \param index Buffer's index (location of the shader's output value).
-    void add_write_color_texture(Texture2DPtr texture, uint index)
+    void add_write_color_texture(Texture2DPtr texture, uint32_t index)
     {
         write_framebuffer.add_color_buffer(std::move(texture), index);
     }

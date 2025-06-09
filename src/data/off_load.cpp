@@ -31,7 +31,7 @@ Mesh load(FilePath const& filepath)
     std::vector<Vertex>& vertices = submesh.get_vertices();
     vertices.resize(vertex_count * 3);
 
-    std::vector<uint>& indices = submesh.get_triangle_indices();
+    std::vector<uint32_t>& indices = submesh.get_triangle_indices();
     indices.reserve(face_count * 3);
 
     for (size_t vertex_index = 0; vertex_index < vertex_count; ++vertex_index) {
@@ -46,16 +46,16 @@ Mesh load(FilePath const& filepath)
         std::vector<size_t> parts_indices(part_count);
         file >> parts_indices[0] >> parts_indices[1] >> parts_indices[2];
 
-        indices.emplace_back(static_cast<uint>(parts_indices[0]));
-        indices.emplace_back(static_cast<uint>(parts_indices[1]));
-        indices.emplace_back(static_cast<uint>(parts_indices[2]));
+        indices.emplace_back(static_cast<uint32_t>(parts_indices[0]));
+        indices.emplace_back(static_cast<uint32_t>(parts_indices[1]));
+        indices.emplace_back(static_cast<uint32_t>(parts_indices[2]));
 
         for (uint16_t part_index = 3; part_index < part_count; ++part_index) {
             file >> parts_indices[part_index];
 
-            indices.emplace_back(static_cast<uint>(parts_indices[0]));
-            indices.emplace_back(static_cast<uint>(parts_indices[part_index - 1]));
-            indices.emplace_back(static_cast<uint>(parts_indices[part_index]));
+            indices.emplace_back(static_cast<uint32_t>(parts_indices[0]));
+            indices.emplace_back(static_cast<uint32_t>(parts_indices[part_index - 1]));
+            indices.emplace_back(static_cast<uint32_t>(parts_indices[part_index]));
         }
     }
 

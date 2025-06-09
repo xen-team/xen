@@ -8,7 +8,6 @@ class Texture2D;
 using Texture2DPtr = std::shared_ptr<Texture2D>;
 class VertexShader;
 
-/// Framebuffer class, handling buffers used for deferred rendering.
 class Framebuffer {
     friend class RenderPass;
 
@@ -22,7 +21,7 @@ public:
 
     ~Framebuffer();
 
-    [[nodiscard]] uint get_index() const { return index; }
+    [[nodiscard]] uint32_t get_index() const { return index; }
 
     [[nodiscard]] bool empty() const { return (!has_depth_buffer() && color_buffers.empty()); }
 
@@ -52,7 +51,7 @@ public:
     /// Adds a write color buffer texture.
     /// \param texture Color buffer texture to be added; must have a non-depth colorspace.
     /// \param index Buffer's index (location of the shader's output value).
-    void add_color_buffer(Texture2DPtr texture, uint index);
+    void add_color_buffer(Texture2DPtr texture, uint32_t index);
 
     /// Removes a write buffer texture.
     /// \param texture Buffer texture to be removed.
@@ -85,8 +84,8 @@ public:
     void display() const;
 
 private:
-    OwnerValue<uint> index{};
+    OwnerValue<uint32_t> index{};
     Texture2DPtr depth_buffer{};
-    std::vector<std::pair<Texture2DPtr, uint>> color_buffers{};
+    std::vector<std::pair<Texture2DPtr, uint32_t>> color_buffers{};
 };
 }

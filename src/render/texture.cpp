@@ -301,20 +301,20 @@ void Texture::generate_mipmaps() const
 #if !defined(USE_OPENGL_ES)
 Texture1D::Texture1D() : Texture(TextureType::TEXTURE_1D) {}
 
-Texture1D::Texture1D(uint width, TextureColorspace colorspace, TextureDataType data_type) :
+Texture1D::Texture1D(uint32_t width, TextureColorspace colorspace, TextureDataType data_type) :
     Texture1D(colorspace, data_type)
 {
     resize(width);
 }
 
-Texture1D::Texture1D(Color const& color, uint width) : Texture1D()
+Texture1D::Texture1D(Color const& color, uint32_t width) : Texture1D()
 {
     this->width = width;
 
     fill(color);
 }
 
-void Texture1D::resize(uint width)
+void Texture1D::resize(uint32_t width)
 {
     this->width = width;
 
@@ -531,7 +531,7 @@ void Texture3D::load(std::vector<Image> const& image_slices, bool create_mipmaps
 
     size.x = image_slices.front().get_width();
     size.y = image_slices.front().get_height();
-    size.z = static_cast<uint>(image_slices.size());
+    size.z = static_cast<uint32_t>(image_slices.size());
     colorspace = recover_colorspace(first_image_colorspace, should_use_srgb);
     data_type = (first_image_data_type == ImageDataType::FLOAT ? TextureDataType::FLOAT16 : TextureDataType::BYTE);
 
@@ -561,8 +561,8 @@ void Texture3D::load(std::vector<Image> const& image_slices, bool create_mipmaps
             throw std::invalid_argument("[Texture3D] The given images have different attributes.");
 
         Renderer::send_image_sub_data_3d(
-            TextureType::TEXTURE_3D, 0, Vector3ui(0, 0, static_cast<uint>(image_index)), Vector3ui(size.x, size.y, 1),
-            texture_format, pixel_data_type, image.data()
+            TextureType::TEXTURE_3D, 0, Vector3ui(0, 0, static_cast<uint32_t>(image_index)),
+            Vector3ui(size.x, size.y, 1), texture_format, pixel_data_type, image.data()
         );
     }
 

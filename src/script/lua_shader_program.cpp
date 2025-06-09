@@ -136,7 +136,7 @@ void LuaWrapper::register_shader_program_types()
         );
 #endif
         shader_program["set_int_attribute"] = &ShaderProgram::set_attribute<int>;
-        shader_program["set_uint_attribute"] = &ShaderProgram::set_attribute<uint>;
+        shader_program["set_uint_attribute"] = &ShaderProgram::set_attribute<uint32_t>;
         shader_program["set_float_attribute"] = &ShaderProgram::set_attribute<float>;
         shader_program
             ["set_attribute"] =

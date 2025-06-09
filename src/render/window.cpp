@@ -220,7 +220,7 @@ bool Window::recover_vertical_sync_state() const
     return true;
 #elif defined(XEN_IS_PLATFORM_LINUX)
     if (glXQueryExtensionsString(glXGetCurrentDisplay(), 0)) {
-        uint interval{};
+        uint32_t interval{};
         glXQueryDrawable(glXGetCurrentDisplay(), glXGetCurrentDrawable(), GLX_SWAP_INTERVAL_EXT, &interval);
 
         return static_cast<bool>(interval);
@@ -247,7 +247,7 @@ void Window::enable_vertical_sync([[maybe_unused]] bool value) const
 #elif defined(XEN_IS_PLATFORM_LINUX)
     if (glXQueryExtensionsString(glXGetCurrentDisplay(), 0)) {
         glXSwapIntervalEXT(glXGetCurrentDisplay(), glXGetCurrentDrawable(), value);
-        glXSwapIntervalMESA(static_cast<uint>(value));
+        glXSwapIntervalMESA(static_cast<uint32_t>(value));
         return;
     }
 #elif defined(XEN_IS_PLATFORM_MAC)
@@ -356,7 +356,7 @@ void Window::update_callbacks() const
 
 #if !defined(XEN_NO_OVERLAY)
     // Unicode character inputs
-    glfwSetCharCallback(window_handle, [](GLFWwindow* window_handle, uint codePoint) {
+    glfwSetCharCallback(window_handle, [](GLFWwindow* window_handle, uint32_t codePoint) {
         ImGui_ImplGlfw_CharCallback(window_handle, codePoint);
     });
 #endif

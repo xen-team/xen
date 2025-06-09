@@ -63,7 +63,7 @@ void MonoPass::set_input_buffer(Texture2DPtr input_buffer, std::string const& un
     pass.add_read_texture(std::move(input_buffer), uniform_name);
 }
 
-void MonoPass::set_output_buffer(Texture2DPtr output_buffer, uint index)
+void MonoPass::set_output_buffer(Texture2DPtr output_buffer, uint32_t index)
 {
     pass.add_write_color_texture(std::move(output_buffer), index);
 

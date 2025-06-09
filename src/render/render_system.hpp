@@ -55,9 +55,9 @@ public:
 
     Vector2ui get_scene_size() const { return size; }
 
-    uint get_scene_width() const { return size.x; }
+    uint32_t get_scene_width() const { return size.x; }
 
-    uint get_scene_height() const { return size.y; }
+    uint32_t get_scene_height() const { return size.y; }
 
 #if !defined(XEN_NO_WINDOW)
     bool has_window() const { return (window != nullptr); }
@@ -187,7 +187,7 @@ private:
     /// instead to fully take that change into account.
     /// \param entity Light entity to be updated; if not a directional light, needs to have a Transform component.
     /// \param light_index Index of the light to be updated.
-    void update_light(Entity const& entity, uint light_index) const;
+    void update_light(Entity const& entity, uint32_t light_index) const;
 
 #if defined(XEN_USE_XR)
     void render_xr_frame();

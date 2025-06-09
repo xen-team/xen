@@ -13,6 +13,6 @@ public:
 
     void set_output_buffer(Texture2DPtr color_buffer);
 
-    void set_strength(uint strength) const;
+    void set_strength(uint32_t strength) const;
 };
 }

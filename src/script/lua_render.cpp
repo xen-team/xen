@@ -196,19 +196,19 @@ void LuaWrapper::register_render_types()
 
     {
         sol::usertype<UniformBuffer> uniform_buffer = state.new_usertype<UniformBuffer>(
-            "UniformBuffer", sol::constructors<UniformBuffer(uint), UniformBuffer(uint, UniformBufferUsage)>()
+            "UniformBuffer", sol::constructors<UniformBuffer(uint32_t), UniformBuffer(uint32_t, UniformBufferUsage)>()
         );
         uniform_buffer["get_index"] = &UniformBuffer::get_index;
         uniform_buffer["bind_uniform_block"] = sol::overload(
-            PickOverload<ShaderProgram const&, uint, uint>(&UniformBuffer::bind_uniform_block),
-            PickOverload<ShaderProgram const&, std::string const&, uint>(&UniformBuffer::bind_uniform_block)
+            PickOverload<ShaderProgram const&, uint32_t, uint32_t>(&UniformBuffer::bind_uniform_block),
+            PickOverload<ShaderProgram const&, std::string const&, uint32_t>(&UniformBuffer::bind_uniform_block)
         );
         uniform_buffer["bind_base"] = &UniformBuffer::bind_base;
         uniform_buffer["bind_range"] = &UniformBuffer::bind_range;
         uniform_buffer["bind"] = &UniformBuffer::bind;
         uniform_buffer["unbind"] = &UniformBuffer::unbind;
         // uniform_buffer["send_int_data"] = &UniformBuffer::send_data<int>;
-        // uniform_buffer["send_uint_data"] = &UniformBuffer::send_data<uint>;
+        // uniform_buffer["send_uint_data"] = &UniformBuffer::send_data<uint32_t>;
         // uniform_buffer["send_float_data"] = &UniformBuffer::send_data<float>;
         // uniform_buffer
         // ["send_data"] = sol::overload(&UniformBuffer::send_data<Vector2i const&>, &UniformBuffer::send_data<Vector3i

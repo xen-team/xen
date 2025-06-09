@@ -332,7 +332,7 @@ public:
     void set_texture(Texture2D const& texture);
 
 private:
-    uint index{};
+    uint32_t index{};
     Vector2f size;
 };
 

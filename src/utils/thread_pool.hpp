@@ -6,16 +6,16 @@
     "Warning: Threads are not available with your compiler; check that you're using POSIX threads and not Win32 ones." \
 )
 #else
-#define RAZ_THREADS_AVAILABLE
+#define XEN_THREADS_AVAILABLE
 #endif
 
-#if defined(RAZ_THREADS_AVAILABLE)
+#if defined(XEN_THREADS_AVAILABLE)
 
 namespace xen {
 class ThreadPool {
 public:
     ThreadPool();
-    explicit ThreadPool(uint thread_count);
+    explicit ThreadPool(uint32_t thread_count);
     ~ThreadPool();
 
     void add_task(std::function<void()> task);
@@ -30,4 +30,4 @@ private:
 };
 }
 
-#endif // RAZ_THREADS_AVAILABLE
+#endif // XEN_THREADS_AVAILABLE
